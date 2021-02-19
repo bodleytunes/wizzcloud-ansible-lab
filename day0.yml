@@ -37,6 +37,9 @@
         name: install_required_packages
       tags: ['install_required_packages']
     - import_role:
+        name: storage_configuration
+      tags: ['storage_configuration']
+    - import_role:
         name: proxmox
       tags: ['proxmox']
     - import_role:
@@ -44,3 +47,14 @@
       tags: ['networking']
   # if condition      
   #when: groups.get(mgr_group_name, []) | length == 0
+
+
+
+- hosts: terraform_vms
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role:
+        name: terraform
+      tags: ['terraform']

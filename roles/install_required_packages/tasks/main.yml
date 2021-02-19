@@ -1,4 +1,5 @@
 - include_tasks: install_required_packages.yml
+- include_tasks: backblaze_s3fs.yml
 
 
 
