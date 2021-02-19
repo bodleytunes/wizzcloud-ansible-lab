@@ -40,8 +40,8 @@
     - import_role:
         name: day0_pre
     - import_role:
-        name: ssh-keys
-      tags: ['ssh-keys']
+        name: ssh_keys
+      tags: ['ssh_keys']
     - import_role:
         name: install_required_packages
       tags: ['install_required_packages']
