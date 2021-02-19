@@ -1,0 +1,46 @@
+---
+
+- hosts:
+  - baremetal_hosts
+  - proxmox_nodes
+  - terraform_vms
+  - virtual_machines
+  - load_balancers
+  - plex
+  - kubernetes_vms
+  - lisk
+
+  gather_facts: false
+  any_errors_fatal: true
+  become: true
+
+  tags: always
+
+  vars:
+    delegate_facts_host: True
+
+  tasks:
+    - import_role:
+        name: common
+
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role:
+        name: day0_pre
+    - import_role:
+        name: ssh-keys
+      tags: ['ssh-keys']
+    - import_role:
+        name: install_required_packages
+      tags: ['install_required_packages']
+    - import_role:
+        name: proxmox
+      tags: ['proxmox']
+    - import_role:
+        name: networking
+      tags: ['networking']
+  # if condition      
+  #when: groups.get(mgr_group_name, []) | length == 0
