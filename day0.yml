@@ -36,6 +36,7 @@
   gather_facts: false
   become: True
   any_errors_fatal: true
+  strategy: free
   tasks:
     - import_role:
         name: day0_pre

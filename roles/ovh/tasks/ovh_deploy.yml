@@ -7,5 +7,20 @@
     consumer_key: "{{ consumer_key }}"
     server_inventory: "{{ servers }}"
   register: result
+  failed_when:
+    - result.rc == 0
+    - '"An intervention is being carried out on this server" not in result.stdout'
 
 
+- name: Wait for completion...
+  ovh_status:
+    endpoint: "{{ endpoint }}"
+    application_key: "{{ application_key }}"
+    application_secret: "{{ application_secret }}"
+    consumer_key: "{{ consumer_key }}"
+    server_inventory: "{{ servers }}"
+  register: result
+  retries: 60
+  delay: 10
+  until: 
+    - '"True" in result.stdout'
