@@ -1,0 +1,5 @@
+---
+- name: Run a script using an executable in a system path
+  ansible.builtin.script: ovh_deploy.py
+  args:
+    executable: python3
