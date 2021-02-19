@@ -47,7 +47,7 @@
         name: networking
       tags: ['networking']
   # if condition      
-  #when: groups.get(mgr_group_name, []) | length == 0
+  #when: groups.get(my_group_name, []) | length == 0
 
 
 
