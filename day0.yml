@@ -49,6 +49,9 @@
         name: storage_configuration
       tags: ['storage_configuration']
     - import_role:
+        name: zerotier_networking
+      tags: ['zerotier_networking']
+    - import_role:
         name: proxmox
       tags: ['proxmox']
     - import_role:
