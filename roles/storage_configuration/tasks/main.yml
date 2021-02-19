@@ -1,0 +1,12 @@
+
+- include_tasks: partitioning.yml
+- include_tasks: formatting.yml
+- include_tasks: zfs.yml
+- include_tasks: linstor.yml
+- include_tasks: glusterfs.yml
+- include_tasks: lizardfs.yml
+
+
+
+
+  

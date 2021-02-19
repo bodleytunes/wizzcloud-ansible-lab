@@ -1,1 +1,4 @@
-- include_tasks: hosts_dns.yml
+- include_tasks: proxmox.yml
+- include_tasks: proxmox_clustering.yml
+- include_tasks: proxmox_storage.yml
+
