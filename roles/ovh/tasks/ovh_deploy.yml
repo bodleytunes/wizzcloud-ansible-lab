@@ -1,5 +1,11 @@
 ---
-- name: Run a script using an executable in a system path
-  ansible.builtin.script: ovh_deploy.py
-  args:
-    executable: python3
+- name: Deploy bare metal nodes using ovh API (via custom python exec module)
+  ovh_deploy:
+    endpoint: "{{ endpoint }}"
+    application_key: "{{ application_key }}"
+    application_secret: "{{ application_secret }}"
+    consumer_key: "{{ consumer_key }}"
+    server_inventory: "{{ servers }}"
+  register: result
+
+
