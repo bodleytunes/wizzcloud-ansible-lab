@@ -3,10 +3,11 @@
 - hosts:
   - baremetal_hosts
   - proxmox_nodes
+  - proxmox_qnodes
   - terraform_vms
   - virtual_machines
   - load_balancers
-  - plex
+  - plex_servers
   - kubernetes_vms
   - lisk
 
