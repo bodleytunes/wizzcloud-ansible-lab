@@ -38,6 +38,30 @@
     hostname: "{{ ansible_hostname }}"
   register: auth_result
 
+- name: Zerotier Set IP 
+  zt_set_ip:
+    token: "{{ zt_token }}"
+    zt_network_id: "{{ zt_network_id }}"
+    zt_node_id: "{{ zt_node_id.data.address }}"
+    ip_address: "{{ zt_ip }}"
+  register: auth_result
+
+- name: Zerotier Set Name 
+  zt_set_name:
+    token: "{{ zt_token }}"
+    zt_network_id: "{{ zt_network_id }}"
+    zt_node_id: "{{ zt_node_id.data.address }}"
+    zt_name: "{{ ansible_hostname }}"
+  register: auth_result
+
+- name: Zerotier Set Description 
+  zt_set_description:
+    token: "{{ zt_token }}"
+    zt_network_id: "{{ zt_network_id }}"
+    zt_node_id: "{{ zt_node_id.data.address }}"
+    zt_description: "{{ ansible_hostname }}"
+  register: auth_result
+
 - name: print var for debugging purposes
   ansible.builtin.debug:
     msg: " {{ auth_result.data }} "
