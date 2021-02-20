@@ -1,4 +1,5 @@
-- include_tasks: zerotier.yml
+- include_tasks: zerotier_install.yml
+- include_tasks: zerotier_configure.yml
 
 
 

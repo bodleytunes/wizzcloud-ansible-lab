@@ -1,30 +1,26 @@
 #!/usr/bin/python3
 
+
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.basic import *
-import ovh
+import requests
+import json
 
 
 def run_module():
     # define available arguments/parameters a user can pass to the module
-    module_args = dict(
-        endpoint=dict(type="str", required=True),
-        application_key=dict(type="str", required=True),
-        application_secret=dict(type="str", required=True),
-        consumer_key=dict(type="str", required=True),
-        server_inventory=dict(type="list", required=True),
-    )
+    module_args = dict(token=dict(type="str", required=True))
 
     # seed the result dict in the object
     # we primarily care about changed and state
     # changed is if this module effectively modified the target
     # state will include any data that you want your module to pass back
     # for consumption, for example, in a subsequent task
-    result = dict(changed=False, original_message="", message="")
+    result = dict(changed=False, original_message="", message="", data={})
 
     # the AnsibleModule object will be our abstraction working with Ansible
     # this includes instantiation, a couple of common attr would be the
@@ -41,45 +37,24 @@ def run_module():
     # manipulate or modify the state as needed (this is going to be the
     # part where your module will do what it needs to do)
     # reinstall_servers
-    result = get_install_status(module)
+    result["data"] = get_node_id(module)
 
     # in the event of a successful module execution, you will want to
     # simple AnsibleModule.exit_json(), passing the key/value results
     module.exit_json(**result)
 
 
-def get_install_status(module):
-    secrets = get_secrets(module)
-    client = get_client(secrets)
-    server_inventory = module.params["server_inventory"]
+def get_node_id(module):
 
-    for item in server_inventory:
-        service_name = item["hostname"]
-        try:
-            status = client.get(f"/dedicated/server/{service_name}/install/status")
-            return status
-        except:
-            print("Not installing ")
+    token = module.params["token"]
 
+    headers = {"X-ZT1-Auth": str(token)}
 
-def get_secrets(module) -> dict:
-    ovh_secrets = {}
-    ovh_secrets["endpoint"] = module.params["endpoint"]
-    ovh_secrets["application_key"] = module.params["application_key"]
-    ovh_secrets["application_secret"] = module.params["application_secret"]
-    ovh_secrets["consumer_key"] = module.params["consumer_key"]
-    return ovh_secrets
-
-
-def get_client(secrets):
-    ovh_secrets = secrets
-    client = ovh.Client(
-        endpoint=ovh_secrets["endpoint"],
-        application_key=ovh_secrets["application_key"],
-        application_secret=ovh_secrets["application_secret"],
-        consumer_key=ovh_secrets["consumer_key"],
-    )
-    return client
+    if token is not None:
+        response = requests.get("http://localhost:9993/status", headers=headers)
+        data = response.json()
+        return data
+    return {}
 
 
 def main():
