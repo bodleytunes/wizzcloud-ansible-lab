@@ -62,6 +62,14 @@
     zt_description: "{{ ansible_hostname }}"
   register: auth_result
 
+  - name: Zerotier Advertise Networks 
+  zt_set_networks:
+    token: "{{ zt_token }}"
+    zt_network_id: "{{ zt_network_id }}"
+    zt_node_id: "{{ zt_node_id.data.address }}"
+    zt_networks: "{{ zt.networks }}"
+  register: auth_result
+
 - name: print var for debugging purposes
   ansible.builtin.debug:
     msg: " {{ auth_result.data }} "
