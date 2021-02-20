@@ -21,6 +21,14 @@
   ansible.builtin.debug:
     msg: " {{ zt_node_id.data.address }} "
 
+- name: Zerotier Join Network
+  command: zerotier-cli join {{ zt_network_id }}
+  # skip this if already existing config file
+  args:
+    creates: /var/lib/zerotier-one/networks.d/{{ zt_network_id }}.conf
+  register: join_output
+    
+
 - name: Authorize Zerotier Node
   zt_authorize:
     token: "{{ zt_token }}"
@@ -33,6 +41,11 @@
 - name: print var for debugging purposes
   ansible.builtin.debug:
     msg: " {{ auth_result.data }} "
+
+- name: print var for debugging purposes
+  ansible.builtin.debug:
+    msg: " {{ join_output.stdout }} "
+
   #failed_when:
   #  - result.rc == 0
   #  - '"An intervention is being carried out on this server" not in result.stdout'
