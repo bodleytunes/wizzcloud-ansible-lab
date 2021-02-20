@@ -33,7 +33,7 @@
         name: common
 
 - hosts: baremetal_hosts
-  gather_facts: false
+  gather_facts: true
   become: True
   any_errors_fatal: true
   strategy: free

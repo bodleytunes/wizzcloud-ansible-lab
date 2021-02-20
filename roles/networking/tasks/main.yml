@@ -1,8 +1,8 @@
-- include_tasks: ifupdown2.yml
-- include_tasks: cloud_init.yml
+#- include_tasks: ifupdown2.yml
+#- include_tasks: cloud_init.yml
 - include_tasks: install_frr.yml
-- include_tasks: configure_frr.yml
-- include_tasks: configure_ifupdown.yml
+#- include_tasks: configure_frr.yml
+#- include_tasks: configure_ifupdown.yml
 
 
   
