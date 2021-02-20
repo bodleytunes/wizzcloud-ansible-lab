@@ -24,8 +24,8 @@
 - name: Zerotier Join Network
   command: zerotier-cli join {{ zt_network_id }}
   # skip this if already existing config file
-  args:
-    creates: /var/lib/zerotier-one/networks.d/{{ zt_network_id }}.conf
+  #args:
+  #  creates: /var/lib/zerotier-one/networks.d/{{ zt_network_id }}.conf
   register: join_output
     
 
@@ -62,12 +62,13 @@
     zt_description: "{{ ansible_hostname }}"
   register: auth_result
 
-  - name: Zerotier Advertise Networks 
+- name: Zerotier Advertise Networks 
   zt_set_networks:
     token: "{{ zt_token }}"
     zt_network_id: "{{ zt_network_id }}"
     zt_node_id: "{{ zt_node_id.data.address }}"
     zt_networks: "{{ zt.networks }}"
+    zt_subnet: "{{ zt_subnet }}"
   register: auth_result
 
 - name: print var for debugging purposes
