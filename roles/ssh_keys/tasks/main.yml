@@ -1,0 +1,2 @@
+---
+- include_tasks: ssh_keys.yml
