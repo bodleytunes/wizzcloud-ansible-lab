@@ -43,6 +43,9 @@
         name: day0_pre
       tags: ['day0_pre']
     - import_role:
+        name: users
+      tags: ['users']
+    - import_role:
         name: ssh_keys
       tags: ['ssh_keys']
     - import_role:

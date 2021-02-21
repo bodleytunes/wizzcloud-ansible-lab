@@ -1,0 +1,4 @@
+- name: 99 disable network config
+  ansible.builtin.template:
+    src: 99-disable-network-config.cfg
+    dest: /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg

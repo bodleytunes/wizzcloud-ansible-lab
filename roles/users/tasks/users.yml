@@ -1,0 +1,29 @@
+- name: Add Users
+  user:
+    name: "{{ item.name }}"
+    shell: /bin/bash
+    password: "{{ item.password }}"
+    groups: sudo
+  with_items: "{{ users }}"
+
+- name: deploy SSH public keys
+  ansible.posix.authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.ssh_pubkey }}"
+    state: present
+  with_items: "{{ users }}"
+
+- name: Allow 'sudo' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%sudo'
+    line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+    validate: visudo -cf %s
+
+- name: Add sudoers users to sudo group
+  user:
+    name: "{{ item }}"
+    groups: sudo
+    append: yes
+  with_items: "{{ sudoers }}"
