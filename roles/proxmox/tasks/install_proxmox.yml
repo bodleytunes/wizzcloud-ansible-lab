@@ -1,0 +1,51 @@
+- name: Add Proxmox GPG Key
+  ansible.builtin.apt_key:
+    url: http://download.proxmox.com/debian/proxmox-ve-release-6.x.gpg
+    state: present
+
+
+- name: Add specified Proxmox repository into sources list
+  ansible.builtin.apt_repository:
+    repo: deb http://download.proxmox.com/debian/pve buster pve-no-subscription
+    filename: pve-install-repo.list
+    state: present
+
+- name: Remove specified repository from sources list
+  ansible.builtin.apt_repository:
+    repo: "deb https://enterprise.proxmox.com/debian/pve buster pve-enterprise"
+    state: absent
+
+- name: Update the cache first
+  ansible.builtin.apt:
+    update_cache: yes
+   
+- name: apt install
+  ansible.builtin.apt:
+    pkg:
+      - proxmox-ve
+  ignore_errors: true
+
+- name: Remove specified repository from sources list
+  ansible.builtin.apt_repository:
+    repo: "deb https://enterprise.proxmox.com/debian/pve buster pve-enterprise"
+    state: absent
+  #notify: "restart server"
+
+- name: Check for PVE directory /etc/pve   
+  ansible.builtin.stat:
+    path: /etc/pve
+  register: p
+  #when: p.stat.isdir is defined and p.stat.isdir
+
+  # restart server but note there is now MOLLY GUARD INSTALLED
+- name: restart server
+  reboot:
+    msg: "Reboot initiated by Ansible"
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: whoami
+    search_paths:
+     - '/lib/molly-guard'
+  when: p.stat.isdir is defined and p.stat.isdir

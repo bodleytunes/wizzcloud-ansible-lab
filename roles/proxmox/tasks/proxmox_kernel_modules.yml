@@ -1,0 +1,7 @@
+- name: Load kernel modules for proxmox hosts
+  community.general.modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ kernel_modules }}"
+  ignore_errors: true
