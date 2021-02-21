@@ -1,4 +1,5 @@
 ---
+# only run this first one with specific tags
 - hosts: ovh
   gather_facts: false
   become: True
@@ -40,6 +41,7 @@
   tasks:
     - import_role:
         name: day0_pre
+      tags: ['day0_pre']
     - import_role:
         name: ssh_keys
       tags: ['ssh_keys']

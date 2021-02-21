@@ -1,1 +1,2 @@
 - include_tasks: hosts_dns.yml
+- include_tasks: sysctl.yml
