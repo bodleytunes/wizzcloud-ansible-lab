@@ -2,9 +2,12 @@
   user:
     name: "{{ item.name }}"
     shell: /bin/bash
-    password: "{{ item.password }}"
+    password: "{{ item.password | password_hash('sha512') }}"
     groups: sudo
+    # make idempotent so it only runs when created
+    update_password: on_create
   with_items: "{{ users }}"
+  no_log: true
 
 - name: deploy SSH public keys
   ansible.posix.authorized_key:
@@ -12,6 +15,7 @@
     key: "{{ item.ssh_pubkey }}"
     state: present
   with_items: "{{ users }}"
+  no_log: true
 
 - name: Allow 'sudo' group to have passwordless sudo
   lineinfile:
@@ -27,3 +31,12 @@
     groups: sudo
     append: yes
   with_items: "{{ sudoers }}"
+
+- name: Add coresponding PVE user which will map to PAM
+  command: pveum user add {{ item.name }}@pam
+  with_items: "{{ users }}"
+  # dont show passwords
+  no_log: true
+
+
+  
