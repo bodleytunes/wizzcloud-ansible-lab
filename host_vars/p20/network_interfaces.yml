@@ -1,0 +1,11 @@
+interfaces:
+  bridges:
+    container_bridges:
+      - name: lxdbr0
+        ip: 10.100.0.1
+        mask: 255.255.255.0
+        mtu: 1350
+      - name: lxdbr1
+        ip: 10.200.0.1
+        mask: 255.255.255.0
+        mtu: 1350
