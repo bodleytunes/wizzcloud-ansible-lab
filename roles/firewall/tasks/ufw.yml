@@ -24,11 +24,4 @@
   when: "'baremetal_hosts' in group_names"
   register: ufw_output
 
-- name: print var for debugging purposes
-  ansible.builtin.debug:
-    msg: " {{ ufw_output.stdout }} "
-
-- name: UFW enable
-  command: ufw enable
-  when: "'baremetal_hosts' in group_names"
 
