@@ -10,6 +10,16 @@
   notify: restart frr
   when: "'baremetal_hosts' in group_names"
 
+- name: Create FRR Configuration File - Load_balancer Hosts
+  ansible.builtin.template:
+    src: frr/frr.conf.load_balancers.j2
+    dest: /etc/frr/frr.conf
+  vars:
+    hello: world
+    foo: bar
+  notify: restart frr
+  when: "'load_balancers' in group_names"
+
 - name: Configure FRR Daemons
   ansible.builtin.template:
     src: frr/frr_daemons.j2
