@@ -16,9 +16,9 @@ interfaces:
         mask: 255.255.255.0
         mtu: 1350
         anycast_mac: 26:13:8e:83:01:01
-    vxlan:
+    vxlan_bridges:
       - name: vxlan100
-        vxlan-id: 100
+        vxlan_id: 100
       - name: vxlan101
-        vxlan-id: 101
+        vxlan_id: 101
 

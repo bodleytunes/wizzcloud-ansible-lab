@@ -27,14 +27,19 @@ iface {{ c.name }} inet static
 {% endfor %}
 
 
-{% for v in interfaces.bridges.vxlan %}
+{% for v in interfaces.bridges.vxlan_bridges %}
 auto {{ v.name }}
 iface {{ v.name }}
-  vxlan-id {{ v.vxlan-id }}
-  vxlan-local-tunnelip {{ interfaces.bridges.vxlan_host_settings.vxlan-local-tunnelip }} 
+  vxlan-id {{ v.vxlan_id }}
+  vxlan-local-tunnelip {{ interfaces.bridges.vxlan_host_settings.vxlan_local_tunnelip }} 
   bridge-learning {{ interfaces.bridges.vxlan_settings.bridge_arp_nd_suppress }}
   bridge-arp-nd-suppress {{ interfaces.bridges.vxlan_settings.bridge_arp_nd_suppress }}
   bridge-unicast-flood {{ interfaces.bridges.vxlan_settings.bridge_unicast_flood }}
   bridge-multicast-flood {{ interfaces.bridges.vxlan_settings.bridge_multicast_flood }}
 
+
 {% endfor %}
+
+{#
+
+#}
