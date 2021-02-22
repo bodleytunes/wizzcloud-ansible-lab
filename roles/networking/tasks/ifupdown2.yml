@@ -1,0 +1,5 @@
+- name: Install ifupdown2
+  ansible.builtin.apt:
+    pkg:
+      - ifupdown2
+    dpkg_options: 'force-confold,force-confdef'

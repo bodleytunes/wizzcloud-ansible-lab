@@ -11,11 +11,13 @@ interfaces:
         mask: 255.255.255.0
         mtu: 1350
         anycast_mac: 26:13:8e:83:01:00
+        bridge_ports: vxlan100
       - name: evpn101
         ip: 10.1.1.1
         mask: 255.255.255.0
         mtu: 1350
         anycast_mac: 26:13:8e:83:01:01
+        bridge_ports: vxlan101
     vxlan_bridges:
       - name: vxlan100
         vxlan_id: 100

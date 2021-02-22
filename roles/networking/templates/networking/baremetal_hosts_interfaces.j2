@@ -10,6 +10,7 @@ auto {{ e.name }}
 iface {{ e.name }} inet static
   address {{ e.ip }}
   netmask {{ e.mask }}
+  bridge_ports {{ e.bridge_ports }}
   mtu {{ e.mtu }}
   hwaddress ether {{ e.anycast_mac }}
 {% endfor %}
