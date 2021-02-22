@@ -4,3 +4,10 @@
     name: frr
     state: restarted
   listen: restart frr
+
+- name: restart networking
+  ansible.builtin.service:
+    name: networking
+    state: restarted
+  listen: restart networking
+ 

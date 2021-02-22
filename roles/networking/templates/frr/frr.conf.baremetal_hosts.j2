@@ -86,6 +86,7 @@ router ospf
  no passive-interface {{ b.name }}
  {% endif %}
 {% endfor %}
+ no passive-interface {{ zt_iface.data.zt_interface_name }}
 !
 !
 !

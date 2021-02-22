@@ -1,12 +1,19 @@
 # gen configuration file
+- name: Pre-req - Install Netifaces
+  pip: 
+    name: netifaces
+
+- name: Get ZT secret local auth token
+  zt_get_interface_name:
+  register: zt_iface
 
 - name: Create FRR Configuration File - Baremetal Hosts
   ansible.builtin.template:
     src: frr/frr.conf.baremetal_hosts.j2
     dest: /etc/frr/frr.conf
   vars:
-    hello: world
-    foo: bar
+    zt_iface: zt_iface
+#    foo: bar
   notify: restart frr
   when: "'baremetal_hosts' in group_names"
 

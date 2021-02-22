@@ -1,0 +1,9 @@
+- name: Create Network Configuration File - Baremetal Hosts
+  ansible.builtin.template:
+    src: networking/networking.j2
+    dest: /etc/network/interfaces
+# vars:
+#   zt_iface: zt_iface
+#    foo: bar
+  #notify: restart networking
+  #when: "'baremetal_hosts' in group_names"

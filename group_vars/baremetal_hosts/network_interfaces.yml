@@ -1,14 +1,24 @@
 interfaces:
   bridges:
+    vxlan_settings:
+      bridge_arp_nd_suppress: on
+      bridge_learning: off
+      bridge_multicast_flood: off
+      bridge_unicast_flood: off
     evpn:
       - name: evpn100
         ip: 10.0.0.1
         mask: 255.255.255.0
         mtu: 1350
+        anycast_mac: 26:13:8e:83:01:00
       - name: evpn101
         ip: 10.1.1.1
         mask: 255.255.255.0
         mtu: 1350
+        anycast_mac: 26:13:8e:83:01:01
     vxlan:
       - name: vxlan100
-      - name: vxlan101 
+        vxlan-id: 100
+      - name: vxlan101
+        vxlan-id: 101
+
