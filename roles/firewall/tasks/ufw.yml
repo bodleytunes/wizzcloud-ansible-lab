@@ -1,0 +1,34 @@
+- name: Create UFW Defaults - Baremetal Hosts
+  ansible.builtin.template:
+    src: baremetal_hosts/ufw_defaults.j2
+    dest: /etc/default/ufw
+ # notify: restart ufw
+  when: "'baremetal_hosts' in group_names"
+
+- name: Create UFW Defaults - Baremetal Hosts
+  ansible.builtin.template:
+    src: baremetal_hosts/ufw_before_rules.j2
+    dest: /etc/ufw/before.rules
+ # notify: restart ufw
+  when: "'baremetal_hosts' in group_names"
+
+- name: UFW input rules - Baremetal Hosts
+  shell: |
+    ufw allow ssh;
+    ufw allow 9993/udp;
+    ufw allow in on zt+;
+    ufw allow in on lxdbr+;
+    ufw allow in on evpn+;
+    ufw --force enable ;
+    iptables -t nat -F && ufw reload;
+  when: "'baremetal_hosts' in group_names"
+  register: ufw_output
+
+- name: print var for debugging purposes
+  ansible.builtin.debug:
+    msg: " {{ ufw_output.stdout }} "
+
+- name: UFW enable
+  command: ufw enable
+  when: "'baremetal_hosts' in group_names"
+

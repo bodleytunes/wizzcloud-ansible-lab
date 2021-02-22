@@ -1,0 +1,14 @@
+ufw:
+  input_rules:
+    - name: ssh
+      cmd: ufw allow ssh
+      port: 22/tcp
+    - name: zerotier
+      cmd: ufw allow 
+      port: 9993/udp
+  interface_based:
+    command: ufw allow in on
+    rules:
+      - name: zt+
+      - name: lxdbr+
+      - name: evpn+
