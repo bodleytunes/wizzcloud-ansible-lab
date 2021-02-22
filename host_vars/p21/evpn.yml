@@ -1,0 +1,5 @@
+evpn:
+  peers:
+    - name: p20
+      ip: 10.55.0.20
+      bgp_peer_as: 20

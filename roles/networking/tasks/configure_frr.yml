@@ -1,0 +1,18 @@
+# gen configuration file
+
+- name: Create FRR Configuration File - Baremetal Hosts
+  ansible.builtin.template:
+    src: frr/frr.conf.baremetal_hosts.j2
+    dest: /etc/frr/frr.conf
+  vars:
+    hello: world
+    foo: bar
+  notify: restart frr
+  when: "'baremetal_hosts' in group_names"
+
+- name: Configure FRR Daemons
+  ansible.builtin.template:
+    src: frr/frr_daemons.j2
+    dest: /etc/frr/daemons
+  notify: restart frr
+  #when: "'baremetal_hosts' in group_names"

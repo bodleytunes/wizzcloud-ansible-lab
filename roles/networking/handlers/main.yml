@@ -1,1 +1,6 @@
 # restart free range routing service
+- name: restart frr
+  ansible.builtin.service:
+    name: frr
+    state: restarted
+  listen: restart frr
