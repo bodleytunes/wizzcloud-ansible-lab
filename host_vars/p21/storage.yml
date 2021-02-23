@@ -4,7 +4,6 @@ storage:
       - name: zpool1
         datasets:
           proxmox: zpool1/proxmox_vm
-          pve: zpool/proxmox_vm
           k3s: zpool1/k3s
           gluster: zpool1/gluster
           lizardfs: zpool1/lizardfs
