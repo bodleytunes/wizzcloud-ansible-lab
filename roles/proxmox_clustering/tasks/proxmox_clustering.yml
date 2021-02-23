@@ -1,0 +1,5 @@
+- name: Create Proxmox Cluster
+  command: pvecm create {{ proxmox_cluster.cluster_name }} --link0 {{ zt_ip }}
+  args:
+    creates: /etc/pve/corosync.conf
+  when: "'proxmox_master' in group_names"

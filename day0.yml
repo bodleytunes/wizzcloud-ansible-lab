@@ -47,20 +47,11 @@
         name: install_required_packages
       tags: ['install_required_packages']
     - import_role:
-        name: storage_configuration
-      tags: ['storage_configuration']
-    - import_role:
         name: zerotier_networking
       tags: ['zerotier_networking']
     - import_role:
         name: proxmox
       tags: ['proxmox']
-    - import_role:
-        name: networking
-      tags: ['networking']
-    - import_role:
-        name: firewall
-      tags: ['firewall']
 
    # - import_role:
    #     name: vm_groundwork
@@ -68,6 +59,37 @@
   # if condition      
   #when: groups.get(my_group_name, []) | length == 0
 
+# break out to clustering role which needs to be linear
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  strategy: linear
+  tasks:
+    - import_role:
+        name: proxmox_clustering
+      tags: ['proxmox_clustering']
+
+
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  strategy: free
+  tasks:
+    - import_role:
+        name: networking
+      tags: ['networking']
+    - import_role:
+        name: firewall
+      tags: ['firewall']
+    - import_role:
+        name: lxd
+      tags: ['lxd']
+    - import_role:
+        name: storage_configuration
+      tags: ['storage_configuration']
 
 
 - hosts: terraform_control

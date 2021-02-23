@@ -5,7 +5,7 @@
     password: "{{ item.password | password_hash('sha512') }}"
     groups: sudo
     # make idempotent so it only runs when created
-    update_password: on_create
+    #update_password: on_create
   with_items: "{{ users }}"
   no_log: true
 

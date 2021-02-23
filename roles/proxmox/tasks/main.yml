@@ -3,7 +3,6 @@
 - include_tasks: proxmox_users.yml
 
 
-#- include_tasks: proxmox_storage.yml
-#- include_tasks: proxmox_clustering.yml
+
 
 

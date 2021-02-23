@@ -1,0 +1,12 @@
+
+{% for z in storage.zfs.zpools %}
+
+zfspool: {{ z.name }}
+        pool {{ z.datasets.proxmox }} 
+        content rootdir,images
+        mountpoint /{{ z.datasets.proxmox }}
+        nodes {% for node in groups['baremetal_hosts'] -%}{{node}}
+        {%- if not loop.last %},{% endif %}
+        {%- endfor %}
+
+{% endfor %}
