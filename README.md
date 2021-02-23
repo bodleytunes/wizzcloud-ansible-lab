@@ -6,8 +6,8 @@ Examples:
 ###### Run the whole playbook
 
 ```
-   ansible-playbook -i inventory.ini day0.yml --tags ovh_deploy
-   ansible-playbook -i inventory.ini day0.yml 
+ansible-playbook -i inventory.ini day0.yml --tags ovh_deploy
+ansible-playbook -i inventory.ini day0.yml 
 ```
 
 ##### Run specific Roles
@@ -17,4 +17,4 @@ Examples:
  ansible-playbook -i inventory.ini day0.yml --tags users
  ansible-playbook -i inventory.ini day0.yml --tags networking
  ansible-playbook -i inventory.ini day0.yml --tags firewall
- ```
+```

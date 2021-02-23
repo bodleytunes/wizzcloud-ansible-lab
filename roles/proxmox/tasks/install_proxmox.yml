@@ -49,3 +49,7 @@
     search_paths:
      - '/lib/molly-guard'
   when: p.stat.isdir is defined and p.stat.isdir
+
+
+
+  

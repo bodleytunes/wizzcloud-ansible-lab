@@ -3,3 +3,4 @@
     pkg:
       - ifupdown2
     dpkg_options: 'force-confold,force-confdef'
+  notify: restart ifupdown2

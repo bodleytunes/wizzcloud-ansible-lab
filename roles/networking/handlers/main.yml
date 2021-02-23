@@ -11,3 +11,6 @@
     state: restarted
   listen: restart networking
  
+- name: restart ifupdown2
+  shell: ifreload -a
+  listen: restart ifupdown2

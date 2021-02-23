@@ -1,0 +1,9 @@
+- name: Add coresponding PVE user which will map to PAM
+  command: pveum user add {{ item.name }}@pam
+  with_items: "{{ users }}"
+  # dont show passwords
+  no_log: True
+  ignore_errors: True
+
+
+  

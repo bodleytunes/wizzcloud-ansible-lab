@@ -5,5 +5,5 @@
 # vars:
 #   zt_iface: zt_iface
 #    foo: bar
-  notify: restart networking
+  #notify: restart networking
   #when: "'baremetal_hosts' in group_names"
