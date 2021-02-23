@@ -25,7 +25,7 @@
   with_items: "{{ storage.zfs.zpools[0].datasets | dict2items }}"
   ignore_errors: true
      
-- name: LXD create dummy bridge
-  shell: |
-        /snap/bin/lxc launch images:alpine/edge/amd64 alpine1 -s zpool1 -n lxdbr1
-        /snap/bin/lxc config set alpine1 boot.autostart=1
+#- name: LXD create dummy bridge
+#  shell: |
+#        /snap/bin/lxc launch images:alpine/edge/amd64 alpine1 -s zpool1 -n lxdbr1
+#        /snap/bin/lxc config set alpine1 boot.autostart=1

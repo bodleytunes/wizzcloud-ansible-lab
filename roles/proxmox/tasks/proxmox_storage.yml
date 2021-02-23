@@ -1,0 +1,6 @@
+- name: Copy Proxmox Storage Configuration File
+  ansible.builtin.template:
+    src: proxmox/storage.cfg.j2
+    dest: /etc/pve/storage.cfg
+  become: yes
+  when: "'proxmox_master' in group_names"

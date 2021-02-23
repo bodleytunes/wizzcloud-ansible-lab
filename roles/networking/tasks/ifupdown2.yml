@@ -3,4 +3,7 @@
     pkg:
       - ifupdown2
     dpkg_options: 'force-confold,force-confdef'
+
+- name: trigger ifreload
+  command: /bin/true
   notify: restart ifupdown2

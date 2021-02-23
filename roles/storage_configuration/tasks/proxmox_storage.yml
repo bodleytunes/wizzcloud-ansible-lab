@@ -1,6 +1,0 @@
-- name: Proxmox Storage Configuration File
-  remote_user: debian
-  ansible.builtin.template:
-    src: proxmox/storage.cfg.j2
-    dest: /etc/pve/storage.cfg
-  become: yes
