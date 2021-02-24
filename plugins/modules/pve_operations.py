@@ -47,7 +47,7 @@ def run_module():
     module.exit_json(**result)
 
 
-def pve_operations(module):
+def pve_operations(module) -> dict:
 
     func = module.params["func"]
 
@@ -87,7 +87,7 @@ def set_zfs_storage(module):
             stderr=subprocess.PIPE,
         )
     stdout, stderr = process.communicate()
-    return stdout, stderr
+    return {"stdout:": stdout, "stderr": stderr}
 
 
 def main():
