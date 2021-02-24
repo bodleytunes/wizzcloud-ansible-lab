@@ -1,6 +1,41 @@
-- name: Copy Proxmox Storage Configuration File
-  ansible.builtin.template:
-    src: proxmox/storage.cfg.j2
-    dest: /etc/pve/storage.cfg
-  become: yes
-  when: "'proxmox_master' in group_names"
+
+- name: Custom module for PVE set storage
+  pve_operations:
+    func: set_zfs_storage
+    group_storage_dict: "{{ group_storage }}"
+    host_storage_dict: "{{ storage }}"
+  register: pve_result
+
+- name: print var for debugging purposes
+  ansible.builtin.debug:
+    msg: " {{ pve_result.data }} "
+
+
+
+#- name: Create Proxmox ZFS storage via CLI
+#  command: pvesm add zfspool "{{ item[0].name }}" -pool "{{item[0].datasets.proxmox}}" --nodes p20,p21 --content rootdir,images
+#  with_subelements: 
+#    - "{{ group_storage.zfs.zpools }}"
+#    - nodes
+#  ignore_errors: true
+#  #when: "'proxmox_master' in group_names"
+#
+#- name: Set nodes ZFS storage via CLI
+#  command: pvesm set "{{ item[0].name }}" --nodes p20,p21
+#  with_subelements: 
+#    - "{{ group_storage.zfs.zpools }}"
+#    - nodes
+#  ignore_errors: true
+
+# nested sub elements
+#  with_subelements: 
+#    - "{{ storage.zfs.zpools }}"
+#    - datasets | dict2items
+
+
+#- name: Copy Proxmox Storage Configuration File
+#  ansible.builtin.template:
+#    src: proxmox/storage.cfg.j2
+#    dest: /etc/pve/storage.cfg
+#  become: yes
+#  when: "'proxmox_master' in group_names"

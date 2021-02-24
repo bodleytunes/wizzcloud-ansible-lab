@@ -1,9 +1,3 @@
-- name: Install snap Core
-  shell: snap install core
-
-- name: Install LXD via Snap
-  shell: snap install lxd
-
 - name: Create zpools - OVH
   command: zpool create zpool1 mirror {{ item.disks[0] }} {{ item.disks[1] }}
   with_items: '{{ storage.zfs.zpools }}'
@@ -18,22 +12,11 @@
     creates: /zpool1
   when: "'ovh_nodes' not in group_names"
 
-- name: Create zfs storage using LXD wrapper
-  shell: |
-        /snap/bin/lxc storage create {{ item.name }} zfs source={{ item.name }}
-  with_items: '{{ storage.zfs.zpools }}'
-  args:
-    creates: /zpool1
-
 - name: Create ZFS Datasets 
   community.general.zfs:
     name: "{{ item.value }}"
     state: present
   #with_items: "{{ storage.zfs.zpools[0].datasets | dictsort }}"
-  with_items: "{{ storage.zfs.zpools[0].datasets | dict2items }}"
+  with_items: "{{ group_storage.zfs.zpools[0].datasets | dict2items }}"
   ignore_errors: true
      
-#- name: LXD create dummy bridge
-#  shell: |
-#        /snap/bin/lxc launch images:alpine/edge/amd64 alpine1 -s zpool1 -n lxdbr1
-#        /snap/bin/lxc config set alpine1 boot.autostart=1

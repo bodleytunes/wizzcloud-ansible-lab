@@ -2,3 +2,4 @@
   ansible.builtin.template:
     src: 99-disable-network-config.cfg
     dest: /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+  ignore_errors: true

@@ -30,3 +30,4 @@
     - "{{ ssh_keys.stdout }}"
     - "{{ groups['baremetal_hosts'] }}"
   become: yes
+  ignore_errors: true
