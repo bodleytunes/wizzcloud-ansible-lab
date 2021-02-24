@@ -5,11 +5,13 @@ interfaces:
         ip: 10.101.0.1
         subnet: 10.101.0.0
         mask: 255.255.255.0
+        cidr: 24
         mtu: 1350
       - name: lxdbr1
         ip: 10.201.0.1
         subnet: 10.201.0.0
         mask: 255.255.255.0
+        cidr: 24
         mtu: 1350
     vxlan_host_settings:
       vxlan_local_tunnelip: 10.55.0.21

@@ -8,13 +8,17 @@ interfaces:
     evpn:
       - name: evpn100
         ip: 10.0.0.1
+        subnet: 10.0.0.0
         mask: 255.255.255.0
+        cidr: 24
         mtu: 1350
         anycast_mac: 26:13:8e:83:01:00
         bridge_ports: vxlan100
       - name: evpn101
         ip: 10.1.1.1
+        subnet: 10.1.1.0
         mask: 255.255.255.0
+        cidr: 24
         mtu: 1350
         anycast_mac: 26:13:8e:83:01:01
         bridge_ports: vxlan101
