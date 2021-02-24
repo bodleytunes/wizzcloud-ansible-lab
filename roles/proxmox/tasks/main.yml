@@ -1,8 +1,8 @@
-#- include_tasks: proxmox_kernel_modules.yml
-#- include_tasks: install_proxmox.yml
-#- include_tasks: zfs.yml
+- include_tasks: proxmox_kernel_modules.yml
+- include_tasks: install_proxmox.yml
+- include_tasks: zfs.yml
 - include_tasks: proxmox_storage.yml
-#- include_tasks: proxmox_users.yml
+- include_tasks: proxmox_users.yml
 
 
 
