@@ -5,3 +5,6 @@ storage:
         disks:
           - /dev/sdb
           - /dev/sdc
+  glusterfs:
+    peers:
+      - name: p20

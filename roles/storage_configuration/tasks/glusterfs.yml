@@ -1,1 +1,50 @@
 #- install GlusterFS server
+
+- name: Add Gluster Key
+  ansible.builtin.apt_key:
+    url: https://download.gluster.org/pub/gluster/glusterfs/8/rsa.pub
+    state: present
+
+
+- name: Add specified Proxmox repository into sources list
+  ansible.builtin.apt_repository:
+    repo: deb https://download.gluster.org/pub/gluster/glusterfs/LATEST/Debian/{{ ansible_distribution_release }}/amd64/apt {{ ansible_distribution_release }} main
+    filename: /etc/apt/sources.list.d/gluster.list
+    state: present
+
+- name: Install GlusterFS
+  apt:
+    pkg:
+    - glusterfs-server
+
+- name: enable gluster
+  ansible.builtin.service:
+    name: glusterd
+    enabled: yes
+    state: restarted
+
+
+- name: Gluster Peer status
+  command: gluster peer status
+  retries: 10
+  delay: 3
+  register: status
+  until: status.stdout.find("Connected") != -1
+  when: "'proxmox_master' in group_names"
+  ignore_errors: true
+
+- name: Gluster create volume
+  command: gluster volume create gv1 replica 2 p20:/"{{ group_storage.zfs.zpools.0.datasets.gluster }}" p21:/"{{ group_storage.zfs.zpools.0.datasets.gluster }}" force
+  ignore_errors: true
+
+- name: Gluster volume status
+  command: gluster volume status
+  retries: 10
+  delay: 3
+  register: status
+  until: status.stdout.find("Status of volume:") != -1
+  when: "'proxmox_master' in group_names"
+  ignore_errors: true
+
+- name: Gluster start volume
+  command: gluster volume start gv1 

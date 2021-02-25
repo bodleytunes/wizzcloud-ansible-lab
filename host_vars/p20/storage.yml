@@ -5,3 +5,6 @@ storage:
         disks:
           - /dev/sdc
           - /dev/sdd
+  glusterfs:
+    peers:
+      - name: p21
