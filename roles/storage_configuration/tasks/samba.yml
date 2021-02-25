@@ -1,0 +1,22 @@
+#- install GlusterFS cilent
+- name: Install Samba / SMB client
+  apt:
+    pkg:
+    - samba
+    - cifs-utils
+
+- name: Samba File - Baremetal Hosts
+  ansible.builtin.template:
+    src: baremetal_smb.conf.j2
+    dest: /etc/samba/smb.conf
+  notify: restart smbd
+  when: "'baremetal_hosts' in group_names"
+
+- name: create smbuser
+  ansible.builtin.expect:
+    command: smbpasswd -a "{{item.name}}"
+    responses:
+      (?i)SMB password: "{{ item.password }}" 
+  with_items: "{{ samba_users }}"
+  no_log: true
+  ignore_errors: true

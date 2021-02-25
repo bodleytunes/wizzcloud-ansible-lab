@@ -10,6 +10,10 @@ group_storage:
         nodes:
           - p20
           - p21
+  gluster:
+    volumes:
+      - name: gv1
+        folder: /gv1
 
 
 
