@@ -1,0 +1,20 @@
+#- install GlusterFS cilent
+- name: Install GlusterFS client
+  apt:
+    pkg:
+    - glusterfs-client
+
+- name: Create gv1 dir
+  ansible.builtin.file:
+    path: /gv1
+    state: directory
+
+# clever bit to add a line/block to fstab file but use a template as a basis and add a marker.
+- name: Manage fstab file
+  blockinfile:
+    path: /etc/fstab
+    block: "{{  lookup('template', 'baremetal_fstab_gluster.j2') }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK for Gluster Mount"
+  when: "'baremetal_hosts' in group_names"
+
+  
