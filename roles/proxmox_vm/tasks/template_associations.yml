@@ -1,0 +1,49 @@
+
+- name: attach disk
+  command: |
+    qm set {{ template_id }} -scsihw virtio-scsi-pci -virtio0 {{ zpool_name }}:vm-{{ template_id }}-disk-0
+
+- name: ci custom tweaks
+  command: |
+    qm set {{ template_id }} --cicustom "user=local:snippets/user-data-cicustom.yaml,network=local:snippets/network-data-cicustom.yaml"
+
+- name: attach serial
+  command: |
+    qm set {{ template_id }} -serial0 socket
+
+- name: set bootdisk
+  command: |
+    qm set {{ template_id }} -boot c -bootdisk virtio0
+
+- name: set startup delay timer
+  command: |
+    qm set {{ template_id }} --startup up=300  
+
+- name: set qemu agent
+  command: |
+        qm set {{ template_id }} -agent 1
+
+- name: set hotplug
+  command: |
+        qm set {{ template_id }} -hotplug disk,network,usb
+
+- name: set cpus
+  command: |
+        qm set {{ template_id }} -vcpus 1
+
+- name: display adapter
+  command: |
+        qm set {{ template_id }} -vga qxl
+
+- name: cloud init drive
+  command: |
+        qm set {{ template_id }} -ide2 {{ zpool_name }}:cloudinit
+
+- name: resize drive 
+  command: |
+        qm resize {{ template_id }} virtio0 8G
+
+# Convert the VM to the template
+- name: convert to a template
+  command: |
+        qm template {{ template_id }}

@@ -31,11 +31,14 @@
     state: absent
   #notify: "restart server"
 
-- name: Check for PVE directory /etc/pve   
-  ansible.builtin.stat:
-    path: /etc/pve
-  register: p
-  #when: p.stat.isdir is defined and p.stat.isdir
+
+- name: wait for stable quorum
+  command: pvecm 
+  retries: 10
+  delay: 3
+  register: status
+  until: status.stdout.find("no command specified") != -1
+  when: "'proxmox_master' in group_names"
 
   # restart server but note there is now MOLLY GUARD INSTALLED
 - name: restart server
@@ -48,7 +51,7 @@
     test_command: whoami
     search_paths:
      - '/lib/molly-guard'
-  when: p.stat.isdir is defined and p.stat.isdir
+  when: status.stdout.find("no command specified") == -1
 
 
 

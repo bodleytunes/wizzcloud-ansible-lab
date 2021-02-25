@@ -1,0 +1,4 @@
+- name: Get ubuntu 18.04
+  get_url:
+    url: https://cloud-images.ubuntu.com/releases/{{release_name}}/release/{{image_name}}
+    dest: /var/lib/vz/template/iso/{{image_name}}

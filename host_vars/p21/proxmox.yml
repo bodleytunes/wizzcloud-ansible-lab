@@ -1,0 +1,4 @@
+proxmox:
+  host_templates:
+    - name: template1
+      vm_template_id: 9004

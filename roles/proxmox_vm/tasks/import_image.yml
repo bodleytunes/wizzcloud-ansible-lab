@@ -1,0 +1,6 @@
+- name: import image
+  command: |
+    qm importdisk {{ template_id }} /var/lib/vz/template/iso/{{image_name}} {{zpool_name}}
+
+
+- include_tasks: template_associations.yml

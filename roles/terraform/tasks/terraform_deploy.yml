@@ -1,0 +1,9 @@
+- name: Terraform Deploy
+  ansible.builtin.shell:
+    cmd: terraform apply -auto-approve
+    chdir: /root/vscode/salt-infra-master/terraform/proxmox
+  environment:
+    PM_PASS: "{{ terraform_password }}"
+ # tags: ['never', 'deploy']
+  ignore_errors: True
+

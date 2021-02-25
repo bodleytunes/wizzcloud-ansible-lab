@@ -1,0 +1,5 @@
+proxmox:
+  group_templates:
+    - name: template1
+      vm_image_name: ubuntu-20.04-server-cloudimg-amd64.img
+      vm_release_name: focal

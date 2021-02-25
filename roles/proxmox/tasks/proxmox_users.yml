@@ -5,5 +5,13 @@
   no_log: True
   ignore_errors: True
 
+- name: Add terraform PVE user which will map to PAM
+  command: pveum user add terraform-prov@pve --password {{ terraform_password }} 
+  # dont show passwords
+  no_log: True
+  ignore_errors: True
 
+- name: Assign PVE role to Terraform user
+  command: pveum aclmod / -user terraform-prov@pve -role Administrator 
+  ignore_errors: True
   

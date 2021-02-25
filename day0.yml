@@ -91,6 +91,9 @@
     - import_role:
         name: storage_configuration
       tags: ['storage_configuration']
+    - import_role:
+        name: proxmox_vm
+      tags: ['proxmox_vm']
 
 
 - hosts: terraform_control
@@ -100,4 +103,4 @@
   tasks:
     - import_role:
         name: terraform
-      tags: ['terraform']
+    #  tags: ['terraform_deploy']
