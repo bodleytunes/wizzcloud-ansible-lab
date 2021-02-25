@@ -12,7 +12,7 @@
     filename: /etc/apt/sources.list.d/gluster.list
     state: present
 
-- name: Install GlusterFS
+- name: Install GlusterFS Server
   apt:
     pkg:
     - glusterfs-server
@@ -21,8 +21,13 @@
   ansible.builtin.service:
     name: glusterd
     enabled: yes
-    state: restarted
+    state: started
 
+- name: Gluster Peer Probe
+  command: gluster peer probe "{{ item.name }}"
+  with_items:
+    - "{{ storage.glusterfs.peers }}"
+  ignore_errors: true
 
 - name: Gluster Peer status
   command: gluster peer status
