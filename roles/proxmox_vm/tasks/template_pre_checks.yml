@@ -1,16 +1,16 @@
  
 - name: check template exists and register variable
   shell: |
-    zfs list | grep base-{{ template_id }}-disk-0
+    zfs list | grep base-{{ template_id }}-disk
   register: template_existing_dataset
   ignore_errors: true
 
 - name: check vm exists then register variable
   shell: |
-    zfs list | grep vm-{{ template_id }}-disk-0
+    zfs list | grep vm-{{ template_id }}
   register: vm_existing_dataset
   ignore_errors: true
 
 - name: debug stuff
   debug:
-    msg: "{{ template_existing_dataset.stdout }}"
+    msg: "{{ vm_existing_dataset.stdout }}"

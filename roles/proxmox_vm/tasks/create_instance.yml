@@ -1,7 +1,7 @@
 
 - name: create instance
   command: |
-    qm create {{ template_id }} -name ubuntu-cloudinit-{{ template_id }} -memory 1024 -net0 virtio,bridge=lxdbr0 -cores 1 -sockets 1
+    qm create {{ template_id }} -name ubuntu-cloudinit-{{ template_id }} -memory 1024 -net0 virtio,bridge=lxdbr0 -cores 1 -sockets 1 -cpu cputype=kvm64 -description "Ubuntu 20.04 Cloud" -kvm 1 -numa 1
   ignore_errors: True
 
 
