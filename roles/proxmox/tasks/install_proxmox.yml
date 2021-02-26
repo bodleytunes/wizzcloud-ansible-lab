@@ -33,12 +33,21 @@
 
 
 - name: wait for stable quorum
-  command: pvecm 
+  command: pvecm status
   retries: 10
   delay: 3
   register: status
-  until: status.stdout.find("no command specified") != -1
+  until: (status.stdout.find("Membership information") != -1) or
+        (status.stderr.find("no command specified") != -1)
   when: "'proxmox_master' in group_names"
+
+- name: print var for debugging purposes
+  ansible.builtin.debug:
+    msg: " {{ status.stderr }} "
+
+- name: print var for debugging purposes
+  ansible.builtin.debug:
+    msg: " {{ status.stdout }} "
 
   # restart server but note there is now MOLLY GUARD INSTALLED
 - name: restart server
@@ -51,7 +60,7 @@
     test_command: whoami
     search_paths:
      - '/lib/molly-guard'
-  when: status.stdout.find("no command specified") == -1
+  when: status.stderr.find("no command specified") != -1
 
 
 
