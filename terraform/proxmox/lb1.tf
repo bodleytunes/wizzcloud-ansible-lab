@@ -51,11 +51,6 @@ EOF
   provisioner "remote-exec" {
     inline = [
       "sudo hostnamectl set-hostname ${local.lb1_hostname}",
-      "sudo echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf",
-      "sudo sysctl -p",
-      "sudo wget -O bootstrap-salt.sh https://bootstrap.saltstack.com",
-      "sudo chmod 700 bootstrap-salt.sh",
-      "sudo ./bootstrap-salt.sh -A 10.12.7.149",
     ]
     connection {
       private_key = file(var.ssh_private_key)

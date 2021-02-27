@@ -47,11 +47,6 @@ EOF
   provisioner "remote-exec" {
     inline = [
       "sudo hostnamectl set-hostname ${local.kube[213]["name"]}",
-      "sudo echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf",
-      "sudo sysctl -p",
-      "sudo wget -O bootstrap-salt.sh https://bootstrap.saltstack.com",
-      "sudo chmod 700 bootstrap-salt.sh",
-      "sudo ./bootstrap-salt.sh -A 86.29.22.70",
     ]
     connection {
       private_key = file(var.ssh_private_key)

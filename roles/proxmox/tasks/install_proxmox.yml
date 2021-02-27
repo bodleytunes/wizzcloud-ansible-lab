@@ -32,17 +32,14 @@
   #notify: "restart server"
 
 
-- name: wait for stable quorum
-  command: pvecm status
-  retries: 10
-  delay: 3
-  register: status
-  until: (status.stdout.find("Membership information") != -1) or
-        (status.stderr.find("no command specified") != -1)
-  when: "'proxmox_master' in group_names"
+- name: check if pve installed and wait to reboot
+  command: "uname -r"
+  register: pve_uname_status
 
+- name: PVE Uname / Kernel Module status
+  ansible.builtin.debug:
+    msg: "{{ pve_uname_status }}"
 
-  # restart server but note there is now MOLLY GUARD INSTALLED
 - name: restart server
   reboot:
     msg: "Reboot initiated by Ansible"
@@ -53,7 +50,7 @@
     test_command: whoami
     search_paths:
      - '/lib/molly-guard'
-  when: status.stderr.find("no command specified") != -1
+  when: pve_uname_status.stdout.find("pve") == -1
 
 
 
