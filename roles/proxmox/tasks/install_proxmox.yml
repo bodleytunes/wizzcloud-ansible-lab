@@ -41,13 +41,6 @@
         (status.stderr.find("no command specified") != -1)
   when: "'proxmox_master' in group_names"
 
-- name: print var for debugging purposes
-  ansible.builtin.debug:
-    msg: " {{ status.stderr }} "
-
-- name: print var for debugging purposes
-  ansible.builtin.debug:
-    msg: " {{ status.stdout }} "
 
   # restart server but note there is now MOLLY GUARD INSTALLED
 - name: restart server

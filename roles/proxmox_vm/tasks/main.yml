@@ -5,11 +5,11 @@
   when: template_existing_dataset.stdout.find(template_id) == -1
 
 - include_tasks: create_instance.yml
-   # dont run if the vm related zfs dataset exists
+  # dont run if the vm related zfs dataset exists
   when: template_existing_dataset.stdout.find(template_id) == -1
 
 - include_tasks: import_image.yml
-   # dont run if the vm related zfs dataset exists
+  # dont run if the vm related zfs dataset exists
   when: vm_existing_dataset.stdout.find(template_id) == -1
 
 
