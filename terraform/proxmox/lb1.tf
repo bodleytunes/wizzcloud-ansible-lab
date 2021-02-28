@@ -8,17 +8,17 @@ resource "proxmox_vm_qemu" "lb1" {
   vmid        = 201
   name        = "lb1"
   target_node = "p20"
-  clone       = "ubuntu-cloudinit-9003"
+  clone       = "ubuntu-cloudinit-9005"
   agent       = 1
   # custom cloud init file located on proxmox host in snippets dir
-  cicustom = "user=local:snippets/user-data-cicustom.yaml"
+  #cicustom = "user=local:snippets/user-data-cicustom.yaml"
 
 
   cores   = 1
   sockets = 1
   memory  = 2048
 
-  ipconfig0  = "ip=10.20.10.253/24,gw=10.20.10.1"
+  ipconfig0  = "ip=10.100.0.253/24,gw=10.100.0.1"
   ipconfig1  = "ip=10.0.0.253/24"
   nameserver = "9.9.9.9"
   ciuser     = "jon"

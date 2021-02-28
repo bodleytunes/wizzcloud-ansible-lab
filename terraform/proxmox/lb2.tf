@@ -9,11 +9,11 @@ resource "proxmox_vm_qemu" "lb2" {
   name        = "lb2"
   desc        = "HAproxy Load Balancer 2"
   target_node = "p21"
-  clone       = "ubuntu-cloudinit-9004"
+  clone       = "ubuntu-cloudinit-9006"
   agent       = 1
   # custom cloud init file located on proxmox host in snippets dir
   #os_type  = "cloud-init"
-  cicustom = "user=local:snippets/user-data-cicustom.yaml"
+  #cicustom = "user=local:snippets/user-data-cicustom.yaml"
 
 
 
@@ -22,7 +22,7 @@ resource "proxmox_vm_qemu" "lb2" {
   sockets = 1
   memory  = 2048
 
-  ipconfig0  = "ip=10.21.10.254/24,gw=10.21.10.1"
+  ipconfig0  = "ip=10.200.0.254/24,gw=10.200.0.1"
   ipconfig1  = "ip=10.0.0.254/24"
   nameserver = "9.9.9.9"
   ciuser     = "jon"

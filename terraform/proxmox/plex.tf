@@ -8,10 +8,10 @@ resource "proxmox_vm_qemu" "plex_media_server" {
   vmid        = 0
   name        = "plex"
   target_node = "p20"
-  clone       = "ubuntu-cloudinit-9003"
+  clone       = "ubuntu-cloudinit-9007"
   agent       = 1
   # custom cloud init file located on proxmox host in snippets dir
-  cicustom = "user=local:snippets/user-data-cicustom.yaml"
+  #cicustom = "user=local:snippets/user-data-cicustom.yaml"
 
 
   cores   = 4

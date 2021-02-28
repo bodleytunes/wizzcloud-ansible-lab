@@ -1,8 +1,26 @@
+- name: set some facts
+  set_fact:
+    template_id: "{{ item.vm_template_id }}"
+
+
 
 - name: create instance
   command: |
-    qm create {{ template_id }} -name ubuntu-cloudinit-{{ template_id }} -memory 1024 -net0 virtio,bridge=lxdbr0 -cores 1 -sockets 1 -cpu cputype=kvm64 -description "Ubuntu 20.04 Cloud" -kvm 1 -numa 1
+    qm create {{ template_id }} -name ubuntu-cloudinit-{{ template_id }} -memory 1024 -net0 virtio,bridge=lxdbr0 -cores 1 -sockets 1 -cpu cputype=host -description "Ubuntu 20.04 Cloud" -kvm 1 -numa 1
   ignore_errors: True
+  when: "'9003' in template_id or '9004' in template_id"
+
+  
+
+- name: create instance (load balancer / two nics)
+  command: |
+    qm create {{ template_id }} -name ubuntu-cloudinit-{{ template_id }} -memory 1024 -net0 virtio,bridge=lxdbr0, -net1 virtio,bridge=evpn0 -cores 1 -sockets 1 -cpu cputype=kvm64 -description "Ubuntu 20.04 Cloud - LB" -kvm 1 -numa 1
+  ignore_errors: True
+  when:  "'9005' in template_id or '9006' in template_id"
 
 
-
+- name: create instance (evpn only)
+  command: |
+    qm create {{ template_id }} -name ubuntu-cloudinit-{{ template_id }} -memory 1024 -net0 virtio,bridge=evpn0  -cores 2 -sockets 1 -cpu cputype=host -description "Ubuntu 20.04 Cloud - EVPN" -kvm 1 -numa 1
+  ignore_errors: True
+  when:  "'9007' in template_id or '9008' in template_id"

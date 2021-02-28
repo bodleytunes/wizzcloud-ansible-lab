@@ -1,4 +1,8 @@
 proxmox:
   host_templates:
     - name: template1
-      vm_template_id: 9003
+      vm_template_id: "9003"
+    - name: template_lb
+      vm_template_id: "9005"
+    - name: template_evpn
+      vm_template_id: "9007"

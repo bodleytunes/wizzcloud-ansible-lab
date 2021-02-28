@@ -4,5 +4,7 @@
     release_name: "{{ proxmox.group_templates.0.vm_release_name }}"
     image_name: "{{ proxmox.group_templates.0.vm_image_name }}"
     template_id: "{{ proxmox.host_templates.0.vm_template_id }}"
+    template_id_lb: "{{ proxmox.host_templates.1.vm_template_id }}"
+    template_id_evpn: "{{ proxmox.host_templates.2.vm_template_id }}"
     zpool_name: "{{ group_storage.zfs.zpools.0.name }}"
   

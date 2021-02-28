@@ -9,7 +9,7 @@ resource "proxmox_vm_qemu" "kube_p21" {
   clone       = "ubuntu-cloudinit-9004"
   agent       = 1
   # custom cloud init file located on proxmox host in snippets dir
-  cicustom = "user=local:snippets/user-data-cicustom.yaml"
+  #cicustom = "user=local:snippets/user-data-cicustom.yaml"
 
   cores   = 4
   sockets = 1
