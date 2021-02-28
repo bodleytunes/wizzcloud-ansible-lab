@@ -1,5 +1,5 @@
 locals {
-  lb2_ip       = "10.21.10.254"
+  lb2_ip       = "10.200.0.254"
   lb2_hostname = "lb2"
 }
 

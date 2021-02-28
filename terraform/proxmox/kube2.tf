@@ -15,7 +15,7 @@ resource "proxmox_vm_qemu" "kube_p21" {
   sockets = 1
   memory  = 12000
 
-  ipconfig0  = "ip=10.21.10.100/24,gw=10.21.10.1"
+  ipconfig0  = "ip=10.200.0.100/24,gw=10.200.0.1"
   nameserver = "9.9.9.9"
   ciuser     = "jon"
 
@@ -50,7 +50,7 @@ EOF
     ]
     connection {
       private_key = file(var.ssh_private_key)
-      host        = "10.21.10.100"
+      host        = "10.200.0.100"
       user        = "jon"
     }
   }
