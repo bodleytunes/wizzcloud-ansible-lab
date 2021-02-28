@@ -18,11 +18,16 @@
 - name: Update the cache first
   ansible.builtin.apt:
     update_cache: yes
+
+- name: check if pve installed and wait to reboot
+  command: "uname -r"
+  register: pve_uname_status
    
 - name: apt install
   ansible.builtin.apt:
     pkg:
       - proxmox-ve
+  when: pve_uname_status.stdout.find("pve") == -1
   ignore_errors: true
 
 - name: Remove specified repository from sources list
@@ -32,9 +37,7 @@
   #notify: "restart server"
 
 
-- name: check if pve installed and wait to reboot
-  command: "uname -r"
-  register: pve_uname_status
+
 
 - name: PVE Uname / Kernel Module status
   ansible.builtin.debug:
