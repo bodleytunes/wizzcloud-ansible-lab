@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 import requests
+import subprocess
 
 __metaclass__ = type
 
@@ -14,8 +15,11 @@ def run_module():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         func=dict(type="str", required=True),
-        group_storage_dict=dict(type="dict", required=True),
+        group_storage_dict=dict(type="dict", required=False),
         host_storage_dict=dict(type="dict", required=False),
+        template_ids=dict(type="list", required=False),
+        zpool_name=dict(type=str, required=False),
+        image_name=dict(type=str, required=False),
     )
 
     # seed the result dict in the object
@@ -53,6 +57,9 @@ def pve_operations(module) -> dict:
 
     if func == "set_zfs_storage":
         set_zfs_storage(module)
+    elif func == "create_template":
+        result = create_template(module)
+        return result
     else:
         return {}
 
@@ -88,6 +95,237 @@ def set_zfs_storage(module):
         )
     stdout, stderr = process.communicate()
     return {"stdout:": stdout, "stderr": stderr}
+
+
+def create_template(module):
+
+    template_ids = module.params["template_ids"]
+    zpool_name = module.params["zpool_name"]
+    image_name = module.params["image_name"]
+
+    # qm create {{ template_id }} -name ubuntu-cloudinit-{{ template_id }} -memory 1024 -net0 virtio,bridge=lxdbr0 -cores 1 -sockets 1 -cpu cputype=host -description "Ubuntu 20.04 Cloud" -kvm 1 -numa 1
+
+    result = {}
+
+    for t in template_ids:
+        template = t["vm_template_id"]
+        # check existence
+        existence = check_exists(template)
+        if not existence:
+            # create instance
+            result["instance_result"] = qm_create_instance(template)
+            # import image from iso to a template
+            result["image_result"] = qm_import_image(template, image_name, zpool_name)
+            # image associations
+            result["properties_result"] = set_image_properties(template, zpool_name)
+
+    return result
+
+
+def qm_create_instance(template):
+    process = subprocess.Popen(
+        [
+            "qm",
+            "create",
+            template,
+            "-name",
+            f"ubuntu-cloudinit-{template}",
+            "-memory",
+            "1024",
+            "-net0",
+            "virtio,bridge=lxdbr0",
+            "-cores",
+            "1",
+            "-sockets",
+            "1",
+            "-cpu",
+            "cputype=host",
+            "-description",
+            "Ubuntu 20.04 Cloud",
+            "-kvm",
+            "1",
+            "-numa",
+            "1",
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+
+    stdout, stderr = process.communicate()
+
+    return stdout, stderr
+
+
+def qm_import_image(template, image_name, zpool_name):
+
+    process = subprocess.Popen(
+        [
+            "qm",
+            "importdisk",
+            template,
+            f"/var/lib/vz/template/iso/{image_name}",
+            zpool_name,
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    stdout, stderr = process.communicate()
+
+    return stdout, stderr
+
+
+def set_image_properties(template, zpool_name):
+
+    process = subprocess.Popen(
+        [
+            "qm",
+            "set",
+            template,
+            "--startup",
+            "c",
+            "up=300",
+            "-agent",
+            "1",
+            "-hotplug",
+            "disk,network,usb,memory,cpu",
+            "-vcpus",
+            "1",
+            "-vga",
+            "qx1" "-name",
+            f"{template}-ubuntu-20-04-template",
+            "-ide2",
+            f"{zpool_name}:cloudinit",
+        ]
+    )
+    stdout, stderr = process.communicate()
+
+    process = subprocess.Popen(
+        [
+            "qm",
+            "set",
+            template,
+            "-serial0",
+            "socket",
+        ]
+    )
+    stdout, stderr = process.communicate()
+
+    process = subprocess.Popen(
+        [
+            "qm",
+            "set",
+            template,
+            "-boot",
+            "c" "-bootdisk",
+            "virtio0",
+        ]
+    )
+    stdout, stderr = process.communicate()
+
+    process = subprocess.Popen(
+        [
+            "qm",
+            "set",
+            template,
+            "-scsihw",
+            "virtio-scsi-pci",
+        ]
+    )
+    stdout, stderr = process.communicate()
+
+    process = subprocess.Popen(
+        [
+            "qm",
+            "set",
+            template,
+            "-virtio0",
+            f"{zpool_name}:vm-{template}-disk-0",
+        ]
+    )
+    stdout, stderr = process.communicate()
+
+    process = subprocess.Popen(["qm", "set", template, "--startup", "up=300"])
+    stdout, stderr = process.communicate()
+
+    process = subprocess.Popen(["qm", "set", template, "-agent", "1"])
+    stdout, stderr = process.communicate()
+
+    process = subprocess.Popen(
+        ["qm", "set", template, "-hotplug", "disk,network,usb,memory,cpu"]
+    )
+    stdout, stderr = process.communicate()
+
+    process = subprocess.Popen(["qm", "set", template, "-vcpus", "1"])
+    stdout, stderr = process.communicate()
+
+    process = subprocess.Popen(["qm", "set", template, "-vga", "qx1"])
+    stdout, stderr = process.communicate()
+
+    process = subprocess.Popen(
+        ["qm", "set", template, "-name", "ubuntu-20-04-template"]
+    )
+    stdout, stderr = process.communicate()
+
+    process = subprocess.Popen(
+        ["qm", "set", template, "-ide2", f"{zpool_name}:cloudinit"]
+    )
+    stdout, stderr = process.communicate()
+
+    # modify vnics based on template id
+    if template == ("9005" or "9006"):
+        process = subprocess.Popen(
+            ["qm", "set", template, "-net1", "virtio,bridge=evpn100"]
+        )
+        stdout, stderr = process.communicate()
+    # modify vnics based on template id
+    elif template == ("9007" or "9008"):
+        process = subprocess.Popen(
+            ["qm", "set", template, "-net0", "virtio,bridge=evpn100"]
+        )
+        stdout, stderr = process.communicate()
+
+    # resize disk
+    process = subprocess.Popen(
+        [
+            "qm",
+            "resize",
+            template,
+            "virtio0",
+            "+8G",
+        ]
+    )
+    stdout, stderr = process.communicate()
+
+    # convert to template
+    process = subprocess.Popen(
+        ["qm", "template", template],
+    )
+    stdout = (subprocess.PIPE,)
+    stderr = (subprocess.PIPE,)
+
+    stdout, stderr = process.communicate()
+
+    return stdout, stderr
+
+
+def check_exists(template) -> bool:
+    process = subprocess.Popen(
+        [
+            "zfs",
+            "list",
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    # get returned output of command
+    stdout, stderr = process.communicate()
+    # check output for existence
+    if template in (str(stdout) or str(stderr)):
+        print("true")
+        return True
+    else:
+        print("false")
+        return False
 
 
 def main():

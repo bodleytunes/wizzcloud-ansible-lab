@@ -1,0 +1,14 @@
+
+  
+- name: pve template operations module
+  pve_operations:
+    func: create_template
+    template_ids: "{{ proxmox.host_templates }}"
+    zpool_name: "{{ group_storage.zfs.zpools.0.name }}"
+    image_name: "{{ proxmox.group_templates.0.vm_image_name }}"
+  become: yes
+  register: pve_template_result
+
+- name: print var for debugging purposes
+  ansible.builtin.debug:
+    msg: " {{ pve_template_result.data }} "

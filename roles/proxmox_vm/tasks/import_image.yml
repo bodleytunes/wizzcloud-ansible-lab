@@ -1,3 +1,7 @@
+- name: set some facts
+  set_fact:
+    template_id: "{{ item.vm_template_id }}"
+
 - name: import image
   command: |
     qm importdisk {{ template_id }} /var/lib/vz/template/iso/{{image_name}} {{zpool_name}}

@@ -1,20 +1,6 @@
 - include_tasks: set_vars.yml
-- include_tasks: template_pre_checks.yml
-
 - include_tasks: get_images.yml
-  # dont run if the template related dataset exists
-  when: template_existing_dataset.stdout.find(template_id) == -1
-
-- include_tasks: create_instance.yml
-  # dont run if the vm related zfs dataset exists
-  when: template_existing_dataset.stdout.find(item.vm_template_id) == -1
-  with_items: "{{ proxmox.host_templates }}"
-
-- include_tasks: import_image.yml
-  # dont run if the vm related zfs dataset exists
-  when: vm_existing_dataset.stdout.find(item.vm_template_id) == -1
-  with_items: "{{ proxmox.host_templates }}"
-
+- include_tasks: proxmox_templates.yml
 
 
 
