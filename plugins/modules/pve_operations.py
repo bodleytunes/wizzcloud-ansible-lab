@@ -191,8 +191,7 @@ def set_image_properties(template, zpool_name):
             "-vcpus",
             "1",
             "-vga",
-            "qx1" "-name",
-            f"{template}-ubuntu-20-04-template",
+            "qx1",
             "-ide2",
             f"{zpool_name}:cloudinit",
         ]
@@ -268,6 +267,11 @@ def set_image_properties(template, zpool_name):
 
     process = subprocess.Popen(
         ["qm", "set", template, "-ide2", f"{zpool_name}:cloudinit"]
+    )
+    stdout, stderr = process.communicate()
+
+    process = subprocess.Popen(
+        ["qm", "set", template, "-name", f"{template}-ubuntu-20-04-template"]
     )
     stdout, stderr = process.communicate()
 

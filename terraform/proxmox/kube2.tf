@@ -6,7 +6,7 @@ resource "proxmox_vm_qemu" "kube_p21" {
   vmid        = 0
   name        = local.kube["213"]["name"]
   target_node = "p21"
-  clone       = "ubuntu-cloudinit-9004"
+  clone       = "9004-ubuntu-20-04-template"
   agent       = 1
   # custom cloud init file located on proxmox host in snippets dir
   #cicustom = "user=local:snippets/user-data-cicustom.yaml"
@@ -15,7 +15,7 @@ resource "proxmox_vm_qemu" "kube_p21" {
   sockets = 1
   memory  = 12000
 
-  ipconfig0  = "ip=10.200.0.100/24,gw=10.200.0.1"
+  ipconfig0  = "ip=10.101.0.100/24,gw=10.101.0.1"
   nameserver = "9.9.9.9"
   ciuser     = "jon"
 
@@ -30,12 +30,12 @@ EOF
   disk {
     size    = "8G"
     type    = "scsi"
-    storage = "zfs1"
+    storage = "zpool1"
   }
   disk {
     size    = "100G"
     type    = "scsi"
-    storage = "zfs1"
+    storage = "zpool1"
   }
   lifecycle {
     ignore_changes = [
@@ -50,7 +50,7 @@ EOF
     ]
     connection {
       private_key = file(var.ssh_private_key)
-      host        = "10.200.0.100"
+      host        = "10.101.0.100"
       user        = "jon"
     }
   }

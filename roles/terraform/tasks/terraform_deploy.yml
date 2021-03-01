@@ -4,6 +4,6 @@
     chdir: /root/vscode/salt-infra-master/terraform/proxmox
   environment:
     PM_PASS: "{{ terraform_password }}"
- # tags: ['never', 'deploy']
+  tags: ['deploy']
   ignore_errors: True
 

@@ -8,7 +8,7 @@ resource "proxmox_vm_qemu" "lb1" {
   vmid        = 201
   name        = "lb1"
   target_node = "p20"
-  clone       = "ubuntu-cloudinit-9005"
+  clone       = "9005-ubuntu-20-04-template"
   agent       = 1
   # custom cloud init file located on proxmox host in snippets dir
   #cicustom = "user=local:snippets/user-data-cicustom.yaml"
@@ -32,7 +32,7 @@ EOF
   disk {
     size      = "8G"
     type      = "scsi"
-    storage   = "zfs1"
+    storage   = "zpool1"
     replicate = true
   }
 

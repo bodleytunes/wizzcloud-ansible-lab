@@ -44,6 +44,10 @@
         qm set {{ template_id }} -ide2 {{ zpool_name }}:cloudinit
 
 
+
+
+
+
 - name: resize drive 
   command: |
         qm resize {{ template_id }} virtio0 +8G

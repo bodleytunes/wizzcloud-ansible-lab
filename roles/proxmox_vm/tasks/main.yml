@@ -1,4 +1,6 @@
+# set miscellaneous variables
 - include_tasks: set_vars.yml
+# get cloud image from ubuntu mirror
 - include_tasks: get_images.yml
 - include_tasks: proxmox_templates.yml
 
