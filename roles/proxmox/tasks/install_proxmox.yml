@@ -53,7 +53,7 @@
     test_command: whoami
     search_paths:
      - '/lib/molly-guard'
-#  when: pve_uname_status.stdout.find("pve") == -1
+  when: pve_uname_status.stdout.find("pve") == -1
 
 
 
