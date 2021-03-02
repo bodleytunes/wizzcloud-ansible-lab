@@ -7,6 +7,7 @@ resource "proxmox_vm_qemu" "lb1" {
 
   vmid        = 201
   name        = "lb1"
+  desc        = "HAproxy Load Balancer 1"
   target_node = "p20"
   clone       = "9005-ubuntu-20-04-template"
   agent       = 1
@@ -30,7 +31,7 @@ resource "proxmox_vm_qemu" "lb1" {
 EOF
 
   disk {
-    size      = "8G"
+    size      = "12G"
     type      = "scsi"
     storage   = "zpool1"
     replicate = true
@@ -48,16 +49,16 @@ EOF
 
 
   # basic remote execution script 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo hostnamectl set-hostname ${local.lb1_hostname}",
-    ]
-    connection {
-      private_key = file(var.ssh_private_key)
-      host        = local.lb1_ip
-      user        = "jon"
-    }
-  }
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "sudo hostnamectl set-hostname ${local.lb1_hostname}",
+  #   ]
+  #   connection {
+  #     private_key = file(var.ssh_private_key)
+  #     host        = local.lb1_ip
+  #     user        = "jon"
+  #   }
+  # }
 
   lifecycle {
     ignore_changes = [

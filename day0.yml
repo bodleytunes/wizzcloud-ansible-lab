@@ -7,7 +7,7 @@
   tasks:
     - import_role:
         name: ovh
-      tags: ['ovh_deploy', 'never']
+      tags: ['ovh_wipe', 'never']
 
 - hosts:
   - baremetal_hosts

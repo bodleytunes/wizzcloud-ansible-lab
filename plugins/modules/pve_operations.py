@@ -215,7 +215,8 @@ def set_image_properties(template, zpool_name):
             "set",
             template,
             "-boot",
-            "c" "-bootdisk",
+            "c",
+            "-bootdisk",
             "virtio0",
         ]
     )
@@ -243,7 +244,7 @@ def set_image_properties(template, zpool_name):
     )
     stdout, stderr = process.communicate()
 
-    process = subprocess.Popen(["qm", "set", template, "--startup", "up=300"])
+    process = subprocess.Popen(["qm", "set", template, "--startup", "up=20"])
     stdout, stderr = process.communicate()
 
     process = subprocess.Popen(["qm", "set", template, "-agent", "1"])

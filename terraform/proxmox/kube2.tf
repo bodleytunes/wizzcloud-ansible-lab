@@ -7,6 +7,7 @@ resource "proxmox_vm_qemu" "kube_p21" {
   name        = local.kube["213"]["name"]
   target_node = "p21"
   clone       = "9004-ubuntu-20-04-template"
+  os_type     = "cloud-init"
   agent       = 1
   # custom cloud init file located on proxmox host in snippets dir
   #cicustom = "user=local:snippets/user-data-cicustom.yaml"
@@ -28,7 +29,7 @@ EOF
 
 
   disk {
-    size    = "8G"
+    size    = "12G"
     type    = "scsi"
     storage = "zpool1"
   }
@@ -44,16 +45,16 @@ EOF
   }
 
   # basic remote execution script 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo hostnamectl set-hostname ${local.kube[213]["name"]}",
-    ]
-    connection {
-      private_key = file(var.ssh_private_key)
-      host        = "10.101.0.100"
-      user        = "jon"
-    }
-  }
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "sudo hostnamectl set-hostname ${local.kube[213]["name"]}",
+  #   ]
+  #   connection {
+  #     private_key = file(var.ssh_private_key)
+  #     host        = "10.101.0.100"
+  #     user        = "jon"
+  #   }
+  # }
 
 }
 

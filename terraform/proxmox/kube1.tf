@@ -33,7 +33,7 @@ resource "proxmox_vm_qemu" "kube_p20" {
 EOF
 
   disk {
-    size    = "8G"
+    size    = "12G"
     type    = "scsi"
     storage = "zpool1"
   }
@@ -44,16 +44,16 @@ EOF
   }
 
   # basic remote execution script 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo hostnamectl set-hostname ${local.kube[113]["name"]}",
-    ]
-    connection {
-      private_key = file(var.ssh_private_key)
-      host        = "10.100.0.100"
-      user        = "jon"
-    }
-  }
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "sudo hostnamectl set-hostname ${local.kube[113]["name"]}",
+  #   ]
+  #   connection {
+  #     private_key = file(var.ssh_private_key)
+  #     host        = "10.100.0.100"
+  #     user        = "jon"
+  #   }
+  # }
 
   lifecycle {
     ignore_changes = [

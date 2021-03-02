@@ -1,6 +1,6 @@
 ---
 - name: Deploy bare metal nodes using ovh API (via custom python exec module)
-  ovh_deploy:
+  ovh_wipe:
     endpoint: "{{ endpoint }}"
     application_key: "{{ application_key }}"
     application_secret: "{{ application_secret }}"

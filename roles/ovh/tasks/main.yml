@@ -1,5 +1,5 @@
 
-- include_tasks: ovh_deploy.yml
+- include_tasks: ovh_wipe.yml
 
 
 
