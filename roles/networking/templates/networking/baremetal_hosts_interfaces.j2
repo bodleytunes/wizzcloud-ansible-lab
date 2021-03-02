@@ -8,22 +8,20 @@ iface {{ ansible_default_ipv4.interface }} inet dhcp
 {% for e in interfaces.bridges.evpn %}
 auto {{ e.name }}
 iface {{ e.name }} inet static
-  address {{ e.ip }}
-  netmask {{ e.mask }}
-  bridge_ports {{ e.bridge_ports }}
-  mtu {{ e.mtu }}
-  hwaddress ether {{ e.anycast_mac }}
+          address {{ e.ip }}/{{ e.cidr }}
+          bridge-ports {{ e.bridge_ports }}
+          mtu {{ e.mtu }}
+          hwaddress ether {{ e.anycast_mac }}
 {% endfor %}
 
 {% for c in interfaces.bridges.container_bridges %}
 auto {{ c.name }}
 iface {{ c.name }} inet static
-  address {{ c.ip }}
-  netmask {{ c.mask }}
-  bridge-ports none
-  bridge-stp off
-  bridge-fd 0
-  mtu {{ c.mtu }}
+          address {{ c.ip }}/{{ c.cidr }}
+          bridge-ports none
+          bridge-stp off
+          bridge-fd 0
+          mtu {{ c.mtu }}
 
 {% endfor %}
 

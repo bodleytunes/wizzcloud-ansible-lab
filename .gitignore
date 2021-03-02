@@ -1,1 +1,4 @@
 /collectionscollections/
+terraform/proxmox/terraform.tfstate*
+terraform/proxmox/terraform-pluging*
+

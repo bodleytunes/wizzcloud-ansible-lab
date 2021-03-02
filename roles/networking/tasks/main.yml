@@ -1,7 +1,8 @@
+- include_tasks: ifupdown2.yml
 - include_tasks: networking_config_file.yml
 - include_tasks: install_frr.yml
 - include_tasks: configure_frr.yml
-- include_tasks: ifupdown2.yml
+
 
 
 

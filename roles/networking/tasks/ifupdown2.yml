@@ -4,6 +4,14 @@
       - ifupdown2
     dpkg_options: 'force-confold,force-confdef'
 
+
+
+#- lineinfile:
+#    path: /etc/network/ifupdown2/ifupdown2.conf
+#    regexp: '^ifreload_down_changed=0'
+#    line: 'ifreload_down_changed=1'
+
+
 - name: trigger ifreload
   command: /bin/true
   notify: restart ifupdown2
