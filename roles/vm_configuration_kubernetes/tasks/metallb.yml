@@ -1,0 +1,16 @@
+- name: metal_lb install
+  shell: |
+        kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v{{ kubernetes.k3s.metal_lb_version }}/manifests/namespace.yaml
+        kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v{{ kubernetes.k3s.metal_lb_version }}/manifests/metallb.yaml
+        kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+        kubectl expose deployment rancher -n cattle-system --type=LoadBalancer --name=rancher-lb --port=443
+  ignore_errors: true
+
+- name: metal_lb configuration
+  ansible.builtin.template:
+    src: metallb.j2
+    dest: /root/metallb.yml
+
+
+- name: metal_lb apply config
+  command: kubectl apply -f /root/metallb.yml

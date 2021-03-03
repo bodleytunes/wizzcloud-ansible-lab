@@ -5,6 +5,7 @@ kubernetes:
     metal_lb_version: 0.9.5
     rancher_hostname: rancher.wizznet.co.uk
     k3s_server_ip: 10.100.0.100
+    certmanager_version: 1.1.0
   kubernetes_folders:
     - /bigdata
   kubernetes_subfolders:

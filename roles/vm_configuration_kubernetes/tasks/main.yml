@@ -4,5 +4,11 @@
     
 - include_tasks: k3s.yml
   when: kube_installed.rc == 2
+  ignore_errors: true
 
-#- include_tasks: install_rancher
+- include_tasks: metallb.yml
+  when: " 'kube1' in inventory_hostname "
+
+- include_tasks: install_rancher.yml
+  when: " 'kube1' in inventory_hostname "
+
