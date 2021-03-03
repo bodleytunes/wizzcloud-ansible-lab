@@ -43,7 +43,7 @@
   ignore_errors: true
 
 - name: install certmanager
-  command: helm install   cert-manager jetstack/cert-manager   --namespace cert-manager   --version v{{ certmanager_version }}
+  command: helm install   cert-manager jetstack/cert-manager   --namespace cert-manager   --version v{{ kubernetes.k3s.certmanager_version }}
   environment:
     KUBECONFIG: /etc/rancher/k3s/k3s.yaml
   ignore_errors: true

@@ -1,7 +1,7 @@
 kubernetes:
   k3s:
-    k3s_version: "v1.19.7+k3s1"
-    k3s_token: jons-super-token
+    k3s_version: v1.19.8+k3s1
+    k3s_token: IM_ALAN_PARTRIDGE_AHA!
     metal_lb_version: 0.9.5
     rancher_hostname: rancher.wizznet.co.uk
     k3s_server_ip: 10.100.0.100
