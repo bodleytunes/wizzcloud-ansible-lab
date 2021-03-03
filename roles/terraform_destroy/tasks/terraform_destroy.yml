@@ -2,7 +2,7 @@
 - name: Terraform Destroy
   ansible.builtin.shell:
     cmd: terraform destroy -auto-approve
-    chdir: /root/vscode/salt-infra-master/terraform/proxmox
+    chdir: /root/vscode/wizznet-cloud-ansible/terraform/proxmox
   environment:
     PM_PASS: "{{ terraform_password }}"
   #tags: ['never', 'destroy']

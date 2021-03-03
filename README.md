@@ -41,3 +41,13 @@ ansible-playbook -i inventory.ini day0.yml
  ansible-playbook -i inventory.ini day0.yml --tags networking
  ansible-playbook -i inventory.ini day0.yml --tags firewall
 ```
+
+##### Terraform
+
+###### Deploy (Apply)
+
+`ansible-playbook -i inventory.ini day0.yml --tags terraform_deploy`
+
+###### Destroy
+`ansible-playbook -i inventory.ini day0.yml --tags terraform_destroy`
+
