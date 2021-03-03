@@ -69,7 +69,7 @@ def set_networks(module):
         response_dict = response_data.json()
         current_networks = response_dict["config"]["routes"]
 
-        # check if already routes in zt, if not then skip this loop
+        # check if already routes in zt, if not then skip this
         if len(current_networks) > 0:
 
             for c in current_networks:
@@ -77,7 +77,7 @@ def set_networks(module):
                     if n["target"] in c["target"]:
                         new_networks.remove(n)
 
-            # merge the both lists
+            # merge the both lists of networks
             new_networks = [*current_networks, *new_networks]
 
         if len(new_networks) > 0:

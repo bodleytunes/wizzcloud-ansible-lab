@@ -118,6 +118,8 @@ def create_template(module):
             result["image_result"] = qm_import_image(template, image_name, zpool_name)
             # image associations
             result["properties_result"] = set_image_properties(template, zpool_name)
+            # convert to template
+            result["templates_result"] = convert_to_template(template)
 
     return result
 
@@ -301,12 +303,20 @@ def set_image_properties(template, zpool_name):
     )
     stdout, stderr = process.communicate()
 
+    stdout = (subprocess.PIPE,)
+    stderr = (subprocess.PIPE,)
+
+    stdout, stderr = process.communicate()
+
+    return stdout, stderr
+
+
+def convert_to_template(template):
+
     # convert to template
     process = subprocess.Popen(
         ["qm", "template", template],
     )
-    stdout = (subprocess.PIPE,)
-    stderr = (subprocess.PIPE,)
 
     stdout, stderr = process.communicate()
 
