@@ -3,7 +3,7 @@
 - include_tasks: pre_checks.yml
     
 - include_tasks: k3s.yml
-  when: kube_installed.rc == 2
+  #when: kube_installed.rc == 2
   ignore_errors: true
 
 - include_tasks: metallb.yml
