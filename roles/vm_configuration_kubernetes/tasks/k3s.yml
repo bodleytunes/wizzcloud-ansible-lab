@@ -1,0 +1,27 @@
+- name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
+  shell: |
+    swapoff -a
+
+- name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+
+- name: Install required packages
+  apt:
+    pkg:
+    - open-iscsi
+
+
+
+- name: Install and create master
+  shell: |
+    sudo curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION={{ kubernetes.k3s.k3s_version }} K3S_TOKEN={{ kubernetes.k3s.k3s_token }} sh -s - --cluster-init  --node-ip {{ kubernetes.k3s.node_ip }} --kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10 --disable traefik --disable servicelb
+  when: " 'kube1' in inventory_hostname "
+    
+- name: Install and join
+  shell: |
+    sudo curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION={{ kubernetes.k3s.k3s_version }} K3S_TOKEN={{ kubernetes.k3s.k3s_token }} sh -s - --server https://{{ kubernetes.k3s.k3s_server_ip }}:6443  --node-ip {{ kubernetes.k3s.node_ip}} --kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10 --disable traefik --disable servicelb
+  when: " 'kube1' not in inventory_hostname "
+

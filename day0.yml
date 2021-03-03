@@ -104,3 +104,32 @@
     - import_role:
         name: terraform
       tags: ['terraform_deploy']
+
+
+- hosts: kubernetes_servers
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role:
+        name: vm_configuration_kubernetes
+      tags: ['vm_configuration_kubernetes']
+
+#- hosts: plex_servers
+#  gather_facts: false
+#  become: True
+#  any_errors_fatal: true
+#  tasks:
+#    - import_role:
+#        name: vm_configuration_plex
+#      tags: ['vm_configuration_plex']
+#
+#
+#- hosts: load_balancers
+#  gather_facts: false
+#  become: True
+#  any_errors_fatal: true
+#  tasks:
+#    - import_role:
+#        name: vm_configuration_load_balancers
+#      tags: ['vm_configuration_load_balancers']

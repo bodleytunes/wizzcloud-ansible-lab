@@ -1,0 +1,14 @@
+kubernetes:
+  k3s:
+    k3s_version: "v1.19.7+k3s1"
+    k3s_token: jons-super-token
+    metal_lb_version: 0.9.5
+    rancher_hostname: rancher.wizznet.co.uk
+    k3s_server_ip: 10.100.0.100
+  kubernetes_folders:
+    - /bigdata
+  kubernetes_subfolders:
+    - /bigdata/rancher
+    - /bigdata/longhorn
+    - /bigdata/kubelet
+    - /bigdata/run_k3s
