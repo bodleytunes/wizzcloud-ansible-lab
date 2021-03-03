@@ -1,0 +1,2 @@
+- include_tasks: terraform_destroy.yml
+  tags: ['terraform_destroy', 'never']

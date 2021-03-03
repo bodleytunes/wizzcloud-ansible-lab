@@ -1,7 +1,4 @@
 
 - include_tasks: terraform_deploy.yml
-  tags: ['terraform_deploy', 'always']
+  tags: ['terraform_deploy', 'never']
 
-
-- include_tasks: terraform_destroy.yml
-  tags: ['terraform_destroy', 'never']

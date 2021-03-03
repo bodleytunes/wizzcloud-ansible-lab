@@ -105,6 +105,14 @@
         name: terraform
       tags: ['terraform_deploy']
 
+- hosts: terraform_control
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role:
+        name: terraform_destroy
+      tags: ['terraform_destroy']
 
 - hosts: kubernetes_servers
   gather_facts: false
