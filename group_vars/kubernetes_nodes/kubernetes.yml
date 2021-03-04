@@ -1,2 +1,0 @@
-kubernetes:
-  extra_args: --kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10 --disable traefik --disable servicelb
