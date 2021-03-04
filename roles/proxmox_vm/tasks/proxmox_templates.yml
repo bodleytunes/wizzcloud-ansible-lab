@@ -1,19 +1,19 @@
 
-- name: wait for stable quorum
-  command: pvecm status
-  retries: 10
-  delay: 3
-  register: status
-  until: status.stdout.find("wizzcluster") != -1
-  when: "'proxmox_master' in group_names" 
-
-- name: wait for stable quorum
-  command: pvecm status
-  retries: 10
-  delay: 3
-  register: status
-  until: status.stdout.find("wizzcluster") != -1
-  when: "'proxmox_master' not in group_names" 
+#- name: wait for stable quorum
+#  command: pvecm status
+#  retries: 10
+#  delay: 3
+#  register: status
+#  until: status.stdout.find("wizzcluster") != -1
+#  when: "'proxmox_master' in group_names" 
+#
+#- name: wait for stable quorum
+#  command: pvecm status
+#  retries: 10
+#  delay: 3
+#  register: status
+#  until: status.stdout.find("wizzcluster") != -1
+#  when: "'proxmox_master' not in group_names" 
 
 - name: pve template operations module
   pve_operations:

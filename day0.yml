@@ -91,10 +91,17 @@
     - import_role:
         name: storage_configuration
       tags: ['storage_configuration']
+    
+
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  strategy: linear
+  tasks:
     - import_role:
         name: proxmox_vm
       tags: ['proxmox_vm']
-
 
 - hosts: terraform_control
   gather_facts: false
