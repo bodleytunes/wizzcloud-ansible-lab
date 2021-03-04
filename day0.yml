@@ -9,24 +9,24 @@
         name: ovh
       tags: ['ovh_wipe', 'never']
 
-- hosts:
-  - baremetal_hosts
-  - proxmox_nodes
-  - proxmox_qnodes
-  - terraform_vms
-  - virtual_machines
-  - load_balancers
-  - plex_servers
-  - kubernetes_vms
-  - lisk
-  gather_facts: false
-  any_errors_fatal: true
-  become: true
-  vars:
-    delegate_facts_host: True
-  tasks:
-    - import_role:
-        name: common
+#- hosts:
+#  - baremetal_hosts
+#  - proxmox_nodes
+#  - proxmox_qnodes
+#  - terraform_vms
+#  - virtual_machines
+#  - load_balancers
+#  - plex_servers
+#  - kubernetes_vms
+#  - lisk
+#  gather_facts: false
+#  any_errors_fatal: true
+#  become: true
+#  vars:
+#    delegate_facts_host: True
+#  tasks:
+#    - import_role:
+#        name: common
 
 - hosts: baremetal_hosts
   gather_facts: true

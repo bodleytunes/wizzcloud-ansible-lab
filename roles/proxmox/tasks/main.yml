@@ -3,6 +3,10 @@
 - include_tasks: zfs.yml
 - include_tasks: proxmox_storage.yml
 - include_tasks: proxmox_users.yml
+# dist upgrade from common role
+- include_role:
+    name: common
+    tasks_from: dist_upgrade
 
 
 
