@@ -62,7 +62,7 @@
 
 # break out to clustering role which needs to be linear
 - hosts: baremetal_hosts
-  gather_facts: true
+  gather_facts: false
   become: True
   any_errors_fatal: true
   strategy: linear
@@ -131,7 +131,7 @@
       tags: ['vm_networking']
 
 - hosts: kubernetes_servers
-  gather_facts: true
+  gather_facts: false
   become: True
   any_errors_fatal: true
   tasks:
