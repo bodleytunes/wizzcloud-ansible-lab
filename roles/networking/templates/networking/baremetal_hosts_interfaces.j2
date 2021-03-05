@@ -1,9 +1,4 @@
-# network interfaces
-auto lo
-iface lo inet loopback
 
-auto {{ ansible_default_ipv4.interface }}
-iface {{ ansible_default_ipv4.interface }} inet dhcp
 
 {% for e in interfaces.bridges.evpn %}
 auto {{ e.name }}
@@ -19,7 +14,7 @@ auto {{ c.name }}
 iface {{ c.name }} inet static
           address {{ c.ip }}/{{ c.cidr }}
           bridge-ports none
-          bridge-stp off
+          bridge_stp off
           bridge-fd 0
           mtu {{ c.mtu }}
 
@@ -38,6 +33,8 @@ iface {{ v.name }}
 
 
 {% endfor %}
+
+
 
 {#
 

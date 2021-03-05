@@ -1,11 +1,6 @@
-{% if "baremetal_hosts" in group_names %}
 
-{% include './templates/networking/baremetal_hosts_interfaces.j2' %}
+auto {{ ansible_default_ipv4.interface }}
+iface {{ ansible_default_ipv4.interface }} inet dhcp
 
-{% endif %}
 
-{% if "load_balancers" in group_names %}
-
-{% include './templates/networking/load_balancers_interfaces.j2' %}
-
-{% endif %}
+source /etc/network/interfaces.d/*
