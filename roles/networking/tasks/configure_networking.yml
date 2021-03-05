@@ -1,0 +1,38 @@
+- name: set vars - get dict
+  set_fact:
+    user_passwords: "{{ users | items2dict(key_name='name', value_name='password') }}"
+ # convert the list to dict
+
+- name: set vars - get password
+  set_fact:
+    root_password: "{{ user_passwords.root }}"
+
+#- name: Get properties for all nodes
+#  pve_api:
+#    endpoint: /nodes/p20
+#    method: get
+#    host: 51.77.116.79
+#    user: root@pam
+#    password: Hqwu2mZN1I8ZHtI6
+
+# run this from the local host
+- name: Create a linux bridge in PVE
+  delegate_to: salt
+  pve_api:
+    #node: '/nodes/{{ node }}/qemu/{{ vmid }}/config
+    node: /nodes/p20/network
+    method: post
+    host: 51.77.116.79
+    user: root@pam
+    password: "{{ root_password }}"
+    verify_ssl: false
+    parameters:
+      address: 10.233.0.1
+      netmask: 255.255.255.0
+      mtu: 1350
+      type: bridge
+      iface: lxdbr233
+      autostart: 1
+    
+      
+    

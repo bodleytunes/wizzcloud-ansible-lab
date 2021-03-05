@@ -1,2 +1,1 @@
 - include_tasks: proxmox_clustering.yml
-- include_tasks: proxmox_clustering_join_nodes.yml
