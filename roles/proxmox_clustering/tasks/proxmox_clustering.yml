@@ -3,3 +3,41 @@
   args:
     creates: /etc/pve/corosync.conf
   when: "'proxmox_master' in group_names"
+
+
+
+- name: install python-pip
+  apt:
+    name: python-pip
+    state: present
+  become: yes
+
+- name: install pexpect
+  pip:
+    name: pexpect
+  become: yes
+
+#- name: wait for stable quorum
+#  command: pvecm status
+#  retries: 10
+#  delay: 3
+#  register: status
+#  until: status.stdout.find("wizzcluster") != -1
+#  when: "'proxmox_master' in group_names"
+
+- name: Adding node to proxmox cluster
+  expect:
+    command: pvecm add {{ proxmox_cluster.cluster_master_hostname }} --link0 {{ zt_ip }}
+    responses:
+      'password for': "{{ proxmox_cluster.cluster_master_password }}"
+      '(?i)fingerprint': "yes"
+    echo: yes
+    timeout: 60
+    # don't run if corosync already exists
+    creates: /etc/pve/corosync.conf
+ # when: ansible_hostname != CLUSTER_MASTER_NODE_HOSTNAME
+  no_log: false
+  become: yes
+  when: "'proxmox_master' not in group_names"
+  register: result
+

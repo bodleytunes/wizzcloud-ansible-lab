@@ -33,6 +33,7 @@
   become: True
   any_errors_fatal: true
   strategy: free
+  tags: ['phase1']
   tasks:
     - import_role:
         name: day0_pre
@@ -66,6 +67,7 @@
   become: True
   any_errors_fatal: true
   strategy: linear
+  tags: ['phase2']
   tasks:
     - import_role:
         name: proxmox_clustering
@@ -78,6 +80,7 @@
   become: True
   any_errors_fatal: true
   strategy: free
+  tags: ['phase3']
   tasks:
     - import_role:
         name: networking
@@ -98,6 +101,7 @@
   become: True
   any_errors_fatal: true
   strategy: linear
+  tags: ['phase4']
   tasks:
     - import_role:
         name: proxmox_vm
@@ -107,6 +111,7 @@
   gather_facts: false
   become: True
   any_errors_fatal: true
+  tags: ['phase5']
   tasks:
     - import_role:
         name: terraform
@@ -124,6 +129,7 @@
 - hosts: virtual_machines
   gather_facts: false
   become: True
+  tags: ['phase6']
   #any_errors_fatal: true
   tasks:
     - import_role:
@@ -134,6 +140,7 @@
   gather_facts: false
   become: True
   any_errors_fatal: true
+  tags: ['phase7']
   tasks:
     - import_role:
         name: vm_configuration_kubernetes
