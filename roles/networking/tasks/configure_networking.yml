@@ -7,13 +7,7 @@
   set_fact:
     root_password: "{{ user_passwords.root }}"
 
-#- name: Get properties for all nodes
-#  pve_api:
-#    endpoint: /nodes/p20
-#    method: get
-#    host: 51.77.116.79
-#    user: root@pam
-#    password: Hqwu2mZN1I8ZHtI6
+
 
 # run this from the local host
 - name: Create a linux bridge in PVE
