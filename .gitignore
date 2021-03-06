@@ -2,5 +2,5 @@
 terraform/proxmox/terraform.tfstate*
 terraform/proxmox/terraform-pluging*
 terraform/proxmox/terraform-plugin-proxmox.log
-
+terraform/proxmox/terraform.tfstate
 
