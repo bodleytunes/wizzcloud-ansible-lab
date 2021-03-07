@@ -8,10 +8,10 @@
 - include_tasks: install_frr.yml
 - include_tasks: configure_frr.yml
 
-# final reboot
-#- include_role:
-#    name: common
-#    tasks_from: reboot
+#final reboot
+- include_role:
+    name: common
+    tasks_from: reboot
 
 
 
