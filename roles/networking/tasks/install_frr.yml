@@ -1,3 +1,6 @@
+- name: Re-gather facts
+  setup: ~
+
 - name: Add FRR GPG Key
   ansible.builtin.apt_key:
     url: https://deb.frrouting.org/frr/keys.asc

@@ -25,3 +25,8 @@
     # regexp: '.*{{ item }}$'
     regexp: '- update_etc_hosts'
     state: absent
+
+# set hostname
+- name: Set a hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"

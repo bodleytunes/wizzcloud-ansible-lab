@@ -3,6 +3,11 @@
     src: networking/networking_sourced.j2
     dest: /etc/network/interfaces.d/60-ansible-interfaces
 
+#- name: append sourced line to file 
+#  ansible.builtin.lineinfile:
+#    path: /etc/network/interfaces
+#    line: source /etc/network/interfaces.d/*
+
 - name: Create Network Configuration File - Baremetal Hosts
   ansible.builtin.template:
     src: networking/networking.j2

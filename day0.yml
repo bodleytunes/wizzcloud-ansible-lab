@@ -66,7 +66,7 @@
   gather_facts: false
   become: True
   any_errors_fatal: true
-  strategy: linear
+  serial: 1  # this is used to run in sequence - one host at a time
   tags: ['phase2']
   tasks:
     - import_role:
