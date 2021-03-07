@@ -18,3 +18,8 @@
 #    foo: bar
   #notify: restart networking
   #when: "'baremetal_hosts' in group_names"
+
+  - name: Delete 50-cloud-init
+    ansible.builtin.file:
+      path: /etc/network/interfaces.d/50-cloud-init.yaml
+      state: absent

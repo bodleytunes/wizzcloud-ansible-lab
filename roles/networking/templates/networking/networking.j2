@@ -5,4 +5,7 @@
 # Set this one last, so that cloud-init or user can
 # override defaults.
 
+auto {{ ansible_default_ipv4.interface }}
+iface {{ ansible_default_ipv4.interface }} inet dhcp
+
 source /etc/network/interfaces.d/*
