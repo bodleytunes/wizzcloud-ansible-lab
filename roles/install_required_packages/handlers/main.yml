@@ -1,0 +1,17 @@
+# restart free range routing service
+- name: restart frr
+  ansible.builtin.service:
+    name: frr
+    state: restarted
+  listen: restart frr
+
+- name: restart networking
+  ansible.builtin.service:
+    name: networking
+    state: restarted
+  listen: restart networking
+ 
+- name: restart ifupdown2
+  shell: ifreload -a
+  listen: restart ifupdown2
+

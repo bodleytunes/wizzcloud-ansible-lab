@@ -1,0 +1,35 @@
+- name: Re-gather facts
+  setup: ~
+
+
+- name: Create Network Configuration File - Baremetal Hosts
+  ansible.builtin.template:
+    src: networking/networking_sourced.j2
+    dest: /etc/network/interfaces.d/60-ansible-interfaces
+
+#- name: append sourced line to file 
+#  ansible.builtin.lineinfile:
+#    path: /etc/network/interfaces
+#    line: source /etc/network/interfaces.d/*
+
+- name: Create Network Configuration File - Baremetal Hosts
+  ansible.builtin.template:
+    src: networking/networking.j2
+    dest: /etc/network/interfaces
+
+# vars:
+#   zt_iface: zt_iface
+#    foo: bar
+  #notify: restart networking
+  #when: "'baremetal_hosts' in group_names"
+
+- name: Delete 50-cloud-init
+  ansible.builtin.file:
+    path: /etc/network/interfaces.d/50-cloud-init
+    state: absent
+
+# VERY IMPORTANT TO GET RID OF THIS FILE
+- name: Delete Interfaces.new
+  ansible.builtin.file:
+    path: /etc/network/interfaces.new
+    state: absent

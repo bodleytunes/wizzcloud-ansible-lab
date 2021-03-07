@@ -1,3 +1,6 @@
+- name: Re-gather facts
+  setup: ~
+
 - name: Create UFW Defaults - Baremetal Hosts
   ansible.builtin.template:
     src: baremetal_hosts/ufw_defaults.j2
@@ -19,6 +22,8 @@
     ufw allow in on zt+
     ufw allow in on lxdbr+
     ufw allow in on evpn+
+    ufw allow from 86.29.22.70/32 to any port 8006
+    ufw allow from 10.12.0.0/16 to any port 8006
     ufw logging off
     ufw --force enable
     iptables -t nat -F && ufw reload

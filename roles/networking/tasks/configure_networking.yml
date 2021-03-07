@@ -1,3 +1,5 @@
+
+
 - name: set vars - get dict
   set_fact:
     user_passwords: "{{ users | items2dict(key_name='name', value_name='password') }}"
@@ -9,24 +11,96 @@
 
 
 
-# run this from the local host
-- name: Create a linux bridge in PVE
+
+ # run this from the local host - run through list of bridges
+- name: Create host linux bridges in PVE
   delegate_to: salt
   pve_api:
     #node: '/nodes/{{ node }}/qemu/{{ vmid }}/config
-    node: /nodes/p20/network
+    node: /nodes/{{inventory_hostname}}/network
     method: post
     host: 51.77.116.79
     user: root@pam
     password: "{{ root_password }}"
     verify_ssl: false
     parameters:
-      address: 10.233.0.1
-      netmask: 255.255.255.0
-      mtu: 1350
+      address: "{{ item.ip }}"
+      netmask: "{{ item.mask }}"
+      mtu: "{{ item.mtu }}"
       type: bridge
-      iface: lxdbr233
+      iface: "{{ item.name }}"
       autostart: 1
-    
-      
-    
+  when: " 'baremetal_hosts' in group_names "
+  with_items: "{{interfaces.bridges.container_bridges}}"
+  notify: restart ifupdown2
+  ignore_errors: true
+
+
+ # Setup internet facing interface
+- name: Create host linux bridges in PVE
+  delegate_to: salt
+  pve_api:
+    #node: '/nodes/{{ node }}/qemu/{{ vmid }}/config
+    node: /nodes/{{inventory_hostname}}/network
+    method: post
+    host: 51.77.116.79
+    user: root@pam
+    password: "{{ root_password }}"
+    verify_ssl: false
+    parameters:
+      type: eth
+      iface: "{{ ansible_default_ipv4.interface }}"
+      autostart: 1
+  when: " 'baremetal_hosts' in group_names "
+  #with_items: "{{interfaces.bridges.container_bridges}}"
+  notify: restart ifupdown2
+  ignore_errors: true
+
+
+
+
+
+
+# # run this from the local host
+# - name: Create a linux bridge in PVE
+#   delegate_to: salt
+#   pve_api:
+#     #node: '/nodes/{{ node }}/qemu/{{ vmid }}/config
+#     node: /nodes/p20/network
+#     method: post
+#     host: 51.77.116.79
+#     user: root@pam
+#     password: "{{ root_password }}"
+#     verify_ssl: false
+#     parameters:
+#       address: 10.233.0.1
+#       netmask: 255.255.255.0
+#       mtu: 1350
+#       type: bridge
+#       iface: lxdbr233
+#       autostart: 1
+#   when: " 'p20' in inventory_hostname "
+#   notify: restart ifupdown2
+#   ignore_errors: true
+
+# # run this from the local host
+# - name: Create a linux bridge in PVE
+#   delegate_to: salt
+#   pve_api:
+#     #node: '/nodes/{{ node }}/qemu/{{ vmid }}/config
+#     node: /nodes/p21/network
+#     method: post
+#     host: 51.77.116.79
+#     user: root@pam
+#     password: "{{ root_password }}"
+#     verify_ssl: false
+#     parameters:
+#       address: 10.234.0.1
+#       netmask: 255.255.255.0
+#       mtu: 1350
+#       type: bridge
+#       iface: lxdbr234
+#       autostart: 1  
+#   when: " 'p21' in inventory_hostname "
+#   notify: restart ifupdown2
+#   ignore_errors: true

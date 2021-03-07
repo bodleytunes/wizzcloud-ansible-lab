@@ -1,3 +1,12 @@
+- name: set vars - get dict
+  set_fact:
+    user_passwords: "{{ users | items2dict(key_name='name', value_name='password') }}"
+ # convert the list to dict
+
+- name: set vars - get password
+  set_fact:
+    root_password: "{{ user_passwords.root }}"
+
 - name: Create Proxmox Cluster
   command: pvecm create {{ proxmox_cluster.cluster_name }} --link0 {{ zt_ip }}
   args:
@@ -17,19 +26,12 @@
     name: pexpect
   become: yes
 
-#- name: wait for stable quorum
-#  command: pvecm status
-#  retries: 10
-#  delay: 3
-#  register: status
-#  until: status.stdout.find("wizzcluster") != -1
-#  when: "'proxmox_master' in group_names"
 
 - name: Adding node to proxmox cluster
   expect:
     command: pvecm add {{ proxmox_cluster.cluster_master_hostname }} --link0 {{ zt_ip }}
     responses:
-      'password for': "{{ proxmox_cluster.cluster_master_password }}"
+      'password for': "{{ root_password }}"
       '(?i)fingerprint': "yes"
     echo: yes
     timeout: 60
@@ -38,6 +40,7 @@
  # when: ansible_hostname != CLUSTER_MASTER_NODE_HOSTNAME
   no_log: false
   become: yes
+  #when: "'proxmox_master' in group_names"
   when: "'proxmox_master' not in group_names"
   register: result
 
