@@ -33,6 +33,13 @@ ansible-playbook -i inventory.ini day0.yml --tags ovh_wipe
 ansible-playbook -i inventory.ini day0.yml 
 ```
 
+##### Run plays (groups of roles)
+```
+ansible-playbook -i inventory.ini day0.yml --tags phase1
+ansible-playbook -i inventory.ini day0.yml --tags phase2
+etc..
+```
+
 ##### Run specific Roles
 
 ```
