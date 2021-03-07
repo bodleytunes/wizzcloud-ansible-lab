@@ -9,3 +9,6 @@ storage:
           lizardfs: zpool1/lizardfs
         disks:
           - /dev/sdb
+  glusterfs:
+    peers:
+      - name: p20
