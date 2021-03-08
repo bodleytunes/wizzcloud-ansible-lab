@@ -8,10 +8,6 @@
     regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
     replace: '# \1'
 
-- name: Install required packages
-  apt:
-    pkg:
-    - open-iscsi
 
 
 

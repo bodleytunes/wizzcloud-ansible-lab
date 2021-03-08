@@ -1,0 +1,5 @@
+- name:
+  apt:
+    pkg:
+      - "{{item}}"
+  with_items: "{{ applications.apt }}"

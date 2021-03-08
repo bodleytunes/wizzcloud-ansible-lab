@@ -1,0 +1,5 @@
+storage:
+  glusterfs:
+    peers:
+      - p20
+      - p21

@@ -1,0 +1,5 @@
+applications:
+  apt:
+    - nfs-common
+    - cifs-utils
+    - open-iscsi
