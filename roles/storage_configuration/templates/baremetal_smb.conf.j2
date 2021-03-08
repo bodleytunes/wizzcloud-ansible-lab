@@ -259,3 +259,14 @@ force user = root
 force group = root
 admin users = root, jon
 
+[backblaze]
+comment = Backblaze Backups
+path = "{{ backblaze.backblaze_dir }}"
+writeable = yes
+guest ok = no
+create mask = 0644
+directory mask = 0755
+valid users = root, jon
+force user = root
+force group = root
+admin users = root, jon
