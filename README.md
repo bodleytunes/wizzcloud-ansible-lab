@@ -9,6 +9,7 @@ Starting a new version of the ovh cloud deployment lab but based entirely on Ans
 * Custom python ansible execution module to setup the zerotier Networking, add networks / routes etc
 * Custom python ansible execution module to deal with OVH API
 * Custom Python ansible execution module to control proxmox cli
+* Using exec module to interact with proxmox-ve api for networking etc ( using https://github.com/robinelfrink/ansible-proxmox-api )
 * Setup inter-host bridge evpn/vxlan overlay via FRR / Free range routing (encapped through Zerotier-one)
 * Setup Proxmox cluster
 * Kernel Modules
