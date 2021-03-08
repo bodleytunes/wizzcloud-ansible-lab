@@ -1,6 +1,7 @@
 - include_tasks: glusterfs.yml
 - include_tasks: glusterfs_client.yml
 - include_tasks: samba.yml
+- include_tasks: s3fsfuse.yml
 
 
 

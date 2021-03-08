@@ -1,3 +1,5 @@
+- name: Re-gather facts
+  setup: ~
 #- install GlusterFS server
 
 - name: Add Gluster Key
