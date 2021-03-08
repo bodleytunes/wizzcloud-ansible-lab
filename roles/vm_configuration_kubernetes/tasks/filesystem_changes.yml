@@ -27,6 +27,7 @@
     dest: /var/lib/rancher
     state: link
     force: no
+  ignore_errors: true
 
 - name: symlink rancher folders
   ansible.builtin.file:
@@ -34,3 +35,4 @@
     dest: /run/k3s
     state: link
     force: no
+  ignore_errors: true
