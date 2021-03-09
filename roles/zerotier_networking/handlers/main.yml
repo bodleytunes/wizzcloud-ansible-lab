@@ -1,1 +1,6 @@
-# restart free range routing service
+
+- name: restart zt
+  ansible.builtin.service:
+    name: zerotier-one
+    state: restarted
+  listen: zerotier restart

@@ -1,0 +1,4 @@
+linstor:
+  devices:
+    backing_storage: zpool1/linstor1
+ 

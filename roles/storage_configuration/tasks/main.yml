@@ -2,6 +2,16 @@
 - include_tasks: glusterfs_client.yml
 - include_tasks: samba.yml
 - include_tasks: s3fsfuse.yml
+- include_tasks: linstor_install.yml
+
+
+- import_tasks: linstor_zfs.yml
+  tags: ['linstor_configure']
+  
+- import_tasks: linstor_configure.yml
+  when: " 'proxmox_master' in group_names "
+  tags: ['linstor_configure']
+  ignore_errors: true
 
 
 

@@ -7,6 +7,7 @@ group_storage:
           k3s: zpool1/k3s
           gluster: zpool1/gluster
           lizardfs: zpool1/lizardfs
+          linstor: zpool1/linstor
         nodes:
           - p20
           - p21

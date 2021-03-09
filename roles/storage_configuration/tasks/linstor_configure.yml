@@ -1,0 +1,36 @@
+
+  
+
+- name: Linstor peer configuration
+  shell: |
+    linstor node create p20 {{  linstor.main_address }} --node-type combined
+    linstor node create p21 {{  linstor.peer_address }}
+
+- name: Linstor storage pool - master
+  command: |
+    linstor storage-pool create zfsthin p20 linstor.devices.storage_pool.name}} {{ linstor.devices.backing_storage }}
+
+- name: Linstor storage pool - slave
+  command: |
+    linstor storage-pool create zfsthin p21 linstor.devices.storage_pool.name}} {{ linstor.devices.backing_storage }}
+
+- name: Linstor resource group
+  command: |
+    linstor resource-group create linstor.devices.storage_pool.resource_group.name }} --storage-pool linstor.devices.storage_pool.name}} --place-count 2
+
+- name: Linstor volume group
+  command: |
+    linstor volume-group create linstor.devices.storage_pool.resource_group.name }}
+
+- name: Linstor Resource Definition
+  command: |
+    linstor rd create linstor.devices.storage_pool.resource_definition.name}}
+
+- name: Linstor volume Definition
+  command: |
+    linstor vd create linstor.devices.storage_pool.resource_definition.name}} 80G --storage-pool linstor.devices.storage_pool.name}} -n {{ linstor.devices.storage_pool.resource_definition.volume_definition.volume_number }}
+
+- name: Linstor resource create
+  shell: |
+    linstor resource create p20 linstor.devices.storage_pool.resource_definition.name}}
+    linstor resource create p21 linstor.devices.storage_pool.resource_definition.name}}

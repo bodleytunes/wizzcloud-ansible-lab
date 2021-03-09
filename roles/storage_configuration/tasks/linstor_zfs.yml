@@ -1,0 +1,5 @@
+- name: Create backup zfs datasets
+  community.general.zfs:
+    name: "{{ linstor.devices.backing_storage }}"
+    state: present
+  ignore_errors: true
