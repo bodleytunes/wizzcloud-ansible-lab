@@ -43,6 +43,8 @@
 # option cannot handle dynamic or non-broadcast interfaces correctly.
 ;   bind interfaces only = yes
 
+socket options = TCP_NODELAY IPTOS_LOWDELAY SO_KEEPALIVE SO_RCVBUF=131072 SO_SNDBUF=131072
+
 
 
 #### Debugging/Accounting ####
@@ -262,6 +264,19 @@ admin users = root, jon
 [backblaze]
 comment = Backblaze Backups
 path = "{{ backblaze.backblaze_dir }}"
+writeable = yes
+guest ok = no
+create mask = 0644
+directory mask = 0755
+valid users = root, jon
+force user = root
+force group = root
+admin users = root, jon
+
+
+[drbd1000]
+comment = Backblaze Backups
+path = /mnt/drbd1000
 writeable = yes
 guest ok = no
 create mask = 0644

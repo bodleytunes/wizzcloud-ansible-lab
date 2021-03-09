@@ -2,9 +2,11 @@
 - name: Gathering facts
   setup:
 
-- include_tasks: filesystem_changes.yml
+- include_role:
+    name: common
+    tasks_from: hosts_dns
 
-- include_tasks: miscellaneous.yml
+- include_tasks: filesystem_changes.yml
 
 - include_tasks: pre_checks.yml
 

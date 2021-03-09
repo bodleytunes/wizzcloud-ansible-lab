@@ -46,6 +46,8 @@
     ip_address: "{{ zt_ip }}"
   register: auth_result
 
+
+
 - name: Zerotier Set Name 
   zt_set_name:
     token: "{{ zt_token }}"
@@ -84,6 +86,15 @@
     zt_subnet: "{{ zt_subnet }}"
   when: networks_existence.data == False
   register: auth_result
+
+- name: Zerotier Set Network MTU 
+  zt_set_mtu:
+    token: "{{ zt_token }}"
+    zt_network_id: "{{ zt_network_id }}"
+    mtu: "{{ zt_mtu }}"
+  register: auth_result
+  notify: zerotier restart
+
 
 - name: print var for debugging purposes
   ansible.builtin.debug:

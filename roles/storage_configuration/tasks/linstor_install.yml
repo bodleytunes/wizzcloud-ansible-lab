@@ -1,0 +1,36 @@
+- name: Add linstor GPG Key
+  ansible.builtin.apt_key:
+    url: https://packages.linbit.com/package-signing-pubkey.asc
+    state: present
+
+- name: Add specified linstor repository into sources list
+  ansible.builtin.apt_repository:
+    repo: "deb http://packages.linbit.com/proxmox/ proxmox-6 drbd-9.0"
+    filename: /etc/apt/sources.list.d/linbit.list
+    state: present
+  
+- name: Install required packages
+  apt:
+    pkg:
+    - linstor-proxmox
+    - pve-headers
+    - drbd-dkms 
+    - drbd-utils
+    - linstor-controller
+    - linstor-satellite
+
+- name: enable linstor services
+  ansible.builtin.service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  ignore_errors: true
+  with_items:
+    - linstor-controller
+    - linstor-satellite
+
+- name: Load kernel modules for drbd
+  community.general.modprobe:
+    name: drbd
+    state: present
+  ignore_errors: true
