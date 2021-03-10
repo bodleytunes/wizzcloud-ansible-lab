@@ -1,18 +1,27 @@
-- include_tasks: glusterfs.yml
-- include_tasks: glusterfs_client.yml
-- include_tasks: samba.yml
-- include_tasks: s3fsfuse.yml
-- include_tasks: linstor_install.yml
-
-- include_tasks: linstor_zfs.yml
+#- include_tasks: glusterfs.yml
+#- include_tasks: glusterfs_client.yml
+#- include_tasks: samba.yml
+#- include_tasks: s3fsfuse.yml
+#- include_tasks: linstor_install.yml
+#
+#- include_tasks: linstor_zfs.yml
 
 - include_tasks: linstor_configure.yml
   when: " 'proxmox_master' in group_names "
+  loop: "{{ linstor.devices.storage_pool }}"
   # new way of looping as with_items or with_subelements is depracated!
-  loop: "{{ linstor.devices.storage_pool|subelements('resource_definition') }}"
   #tags: ['linstor_configure']
 
+- include_tasks: linstor_configure_volumes.yml
+  when: " 'proxmox_master' in group_names "
+  loop: "{{ linstor.devices.storage_pool|subelements('resource_definition') }}"
+
+
 - include_tasks: linstor_mount_filesystem.yml
-  #loop: "{{ linstor.devices.storage_pool|subelements('resource_definition') }}"
+  loop: "{{ linstor.devices.storage_pool|subelements('resource_definition') }}"
 
   
+
+# finally mount everything
+- name: mount all storage
+  command: mount -a

@@ -27,19 +27,12 @@
     linstor volume-group create {{ item.0.resource_group.name }}
   ignore_errors: true
 
-- name: Linstor Resource Definition
-  command: |
-    linstor rd create {{ item.1.name }}
-  ignore_errors: true
+# force p20 as drbadm primary
 
+- name: force secondary on p21
+  command: drbdadm secondary all
+  when: " 'proxmox_master' not in group_names "
 
-- name: Linstor volume Definition
-  command: |
-    linstor vd create {{ item.1.name }} {{ item.1.volume_definition.size }} --storage-pool {{ item.0.name }} -n {{ item.1.volume_definition.volume_number }}
-  ignore_errors: true
-
-- name: Linstor resource create
-  shell: |
-    linstor resource create p20 {{ item.1.name }}
-    linstor resource create p21 {{ item.1.name }}
-  ignore_errors: true
+- name: force primary on p20
+  command: drbdadm primary all
+  when: " 'proxmox_master' in group_names "
