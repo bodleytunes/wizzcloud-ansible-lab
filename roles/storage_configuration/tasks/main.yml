@@ -8,8 +8,9 @@
 
 - include_tasks: linstor_configure.yml
   when: " 'proxmox_master' in group_names "
+  # new way of looping as with_items or with_subelements is depracated!
   loop: "{{ linstor.devices.storage_pool|subelements('resource_definition') }}"
-  tags: ['linstor_configure']
+  #tags: ['linstor_configure']
 
 
 

@@ -18,6 +18,7 @@
     - drbd-utils
     - linstor-controller
     - linstor-satellite
+    - linstor-client
 
 - name: enable linstor services
   ansible.builtin.service:
@@ -25,7 +26,7 @@
     enabled: yes
     state: started
   ignore_errors: true
-  with_items:
+  loop:
     - linstor-controller
     - linstor-satellite
 

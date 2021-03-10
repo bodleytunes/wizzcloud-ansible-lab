@@ -35,7 +35,7 @@
 
 - name: Linstor volume Definition
   command: |
-    linstor vd create {{ item.1.name }} 80G --storage-pool {{ item.0.name }} -n {{ item.1.volume_definition.volume_number }}
+    linstor vd create {{ item.1.name }} {{ item.1.size }} --storage-pool {{ item.0.name }} -n {{ item.1.volume_definition.volume_number }}
   ignore_errors: true
 
 - name: Linstor resource create
