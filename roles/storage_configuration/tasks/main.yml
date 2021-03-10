@@ -12,6 +12,7 @@
   loop: "{{ linstor.devices.storage_pool|subelements('resource_definition') }}"
   #tags: ['linstor_configure']
 
-
+- include_tasks: linstor_mount_filesystem.yml
+  #loop: "{{ linstor.devices.storage_pool|subelements('resource_definition') }}"
 
   

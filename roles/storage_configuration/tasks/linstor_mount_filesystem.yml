@@ -1,0 +1,17 @@
+
+- name: create linstor directories
+  ansible.builtin.file:
+    path: /drbd1001
+    state: directory
+
+- name: Create a xfs filesystem on linstor
+  filesystem:
+    fstype: xfs
+    dev: /dev/drbd1001
+
+- name: Mount Linstor
+  ansible.posix.mount:
+    path: /drbd1001
+    src: /dev/drbd1001
+    fstype: xfs
+    state: mounted
