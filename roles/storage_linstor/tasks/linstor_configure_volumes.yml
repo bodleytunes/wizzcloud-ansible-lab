@@ -5,11 +5,10 @@
 
 - name: Linstor volume Definition
   command: |
-    linstor vd create {{ item.1.name }} {{ item.1.volume_definition.size }} --storage-pool {{ item.0.name }} -n {{ item.1.volume_definition.volume_number }}
+    linstor vd create {{ item.1.name }} {{ item.1.volume_definition.size }} --storage-pool {{ item.0.name }} -n {{ item.1.volume_definition.volume_number }} -m {{ item.1.volume_definition.volume_number }}
   ignore_errors: true
 
 - name: Linstor resource create
   shell: |
-    linstor resource create p20 {{ item.1.name }}
-    linstor resource create p21 {{ item.1.name }}
+    linstor resource create test1 {{ item.1.name }}
   ignore_errors: true

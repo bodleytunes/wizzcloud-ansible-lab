@@ -1,21 +1,25 @@
 
+# - name: Wait for linstor client
   
 
 - name: Linstor peer configuration
-  shell: |
-    linstor node create p20 {{  linstor.main_address }} --node-type combined
-    linstor node create p21 {{  linstor.peer_address }}
-  ignore_errors: true
+  command: |
+    linstor node create test1 {{  linstor.main_address }} --node-type combined
+  register: result
+  retries: 10
+  delay: 5
+  # keep trying until the result is "succeeded / success"
+  until: result is succeeded
+  # keep attempting command until we get the peer online signal
+  
+  #ignore_errors: true
 
 - name: Linstor storage pool - master
   command: |
-    linstor storage-pool create zfsthin p20 {{ item.name }} {{ linstor.devices.backing_storage }}
+    linstor storage-pool create zfsthin test1 {{ item.name }} {{ linstor.devices.backing_storage }}
   ignore_errors: true
 
-- name: Linstor storage pool - slave
-  command: |
-    linstor storage-pool create zfsthin p21 {{ item.name }} {{ linstor.devices.backing_storage }}
-  ignore_errors: true
+
 
 - name: Linstor resource group
   command: |

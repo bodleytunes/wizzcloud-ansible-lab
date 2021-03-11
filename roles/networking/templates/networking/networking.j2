@@ -6,6 +6,9 @@
 # override defaults.
 
 auto {{ ansible_default_ipv4.interface }}
-iface {{ ansible_default_ipv4.interface }} inet dhcp
+iface {{ ansible_default_ipv4.interface }} inet static
+  address 10.12.12.100/24
+  gateway 10.12.12.1
+  dns-nameservers 1.1.1.1,9.9.9.9,8.8.4.4
 
 source /etc/network/interfaces.d/*

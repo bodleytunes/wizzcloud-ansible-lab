@@ -4,3 +4,5 @@ terraform/proxmox/terraform-pluging*
 terraform/proxmox/terraform-plugin-proxmox.log
 terraform/proxmox/terraform.tfstate
 group_vars/all/backblaze.yml
+inventory.ini
+roles/networking/templates/networking/networking.j2
