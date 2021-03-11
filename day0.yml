@@ -95,6 +95,9 @@
     - import_role:
         name: storage_configuration
       tags: ['storage_configuration']
+    - import_role:
+        name: storage_linstor
+      tags: ['storage_linstor']
     
 
 - hosts: baremetal_hosts

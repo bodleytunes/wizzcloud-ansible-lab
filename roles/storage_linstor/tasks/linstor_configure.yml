@@ -9,22 +9,22 @@
 
 - name: Linstor storage pool - master
   command: |
-    linstor storage-pool create zfsthin p20 {{ item.0.name }} {{ linstor.devices.backing_storage }}
+    linstor storage-pool create zfsthin p20 {{ item.name }} {{ linstor.devices.backing_storage }}
   ignore_errors: true
 
 - name: Linstor storage pool - slave
   command: |
-    linstor storage-pool create zfsthin p21 {{ item.0.name }} {{ linstor.devices.backing_storage }}
+    linstor storage-pool create zfsthin p21 {{ item.name }} {{ linstor.devices.backing_storage }}
   ignore_errors: true
 
 - name: Linstor resource group
   command: |
-    linstor resource-group create {{ item.0.resource_group.name }} --storage-pool {{ item.0.name }} --place-count 2
+    linstor resource-group create {{ item.resource_group.name }} --storage-pool {{ item.name }} --place-count 2
   ignore_errors: true
 
 - name: Linstor volume group
   command: |
-    linstor volume-group create {{ item.0.resource_group.name }}
+    linstor volume-group create {{ item.resource_group.name }}
   ignore_errors: true
 
 # force p20 as drbadm primary
@@ -32,7 +32,9 @@
 - name: force secondary on p21
   command: drbdadm secondary all
   when: " 'proxmox_master' not in group_names "
+  ignore_errors: true
 
 - name: force primary on p20
   command: drbdadm primary all
   when: " 'proxmox_master' in group_names "
+  ignore_errors: true
