@@ -42,16 +42,47 @@
   command: helm repo update
   ignore_errors: true
 
+
+  # check certman
+- name: check certman
+  command: kubectl get namespaces cert-manager
+  retries: 3
+  delay: 2
+  register: result
+  until: result is succeeded
+  ignore_errors: true
+
 - name: install certmanager
   command: helm install   cert-manager jetstack/cert-manager   --namespace cert-manager   --version v{{ kubernetes.k3s.certmanager_version }}
   environment:
     KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  retries: 15
+  delay: 10
+  when: result is not succeeded
+  register: cert_result
+  until: cert_result is succeeded
   ignore_errors: true
 
+
+  # check rancher
+- name: check rancher
+  command: kubectl get namespaces cattle-system
+  retries: 3
+  delay: 2
+  register: result
+  until: result is succeeded
+  ignore_errors: true
+
+# this sometimes can faile due etcd busy
 - name: install rancher
   command: helm install rancher rancher-stable/rancher   --namespace cattle-system   --set hostname={{ kubernetes.k3s.rancher_hostname }}
+  retries: 15
+  delay: 10
+  when: result is not succeeded
+  register: result
   environment:
     KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  until: result is succeeded
   ignore_errors: true
 
 - name: install rancher status
