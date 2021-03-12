@@ -1,4 +1,13 @@
 ---
+
+# wait for vm up and ready
+- name: wait for vm up and ready
+  command: whoami
+  retries: 60
+  delay: 3
+  register: result
+  until: result is succeeded
+
 - name: Configuring Netplan
   template:
     src: netplan.config.yaml.j2

@@ -9,6 +9,8 @@
 
 - name: Create Proxmox Cluster
   command: pvecm create {{ proxmox_cluster.cluster_name }} --link0 {{ zt_ip }}
+  register: result
+  until: result is succeeded
   args:
     creates: /etc/pve/corosync.conf
   when: "'proxmox_master' in group_names"
@@ -34,7 +36,7 @@
       'password for': "{{ root_password }}"
       '(?i)fingerprint': "yes"
     echo: yes
-    timeout: 60
+    timeout: 120
     # don't run if corosync already exists
     creates: /etc/pve/corosync.conf
  # when: ansible_hostname != CLUSTER_MASTER_NODE_HOSTNAME
