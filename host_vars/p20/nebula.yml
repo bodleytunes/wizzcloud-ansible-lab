@@ -3,6 +3,8 @@ nebula_external_addr: 51.77.116.79
 
 nebula_ip: "10.140.140.20"
 
+nebula_groups: "nebula,node,bare_metal_hosts,ovh,hub"
+
 # per host inbound rules
 nebula_inbound_rules: |
   

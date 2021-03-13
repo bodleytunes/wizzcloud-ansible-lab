@@ -3,3 +3,7 @@
 - include_tasks: install_nebula.yml
 - include_tasks: gen_ca.yml
 - include_tasks: gen_cert.yml
+
+# if updating groups, then have to regen the certs and run this manually
+- import_tasks: regen_cert.yml
+  tags: ['never','regen_certs']

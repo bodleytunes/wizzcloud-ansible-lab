@@ -60,3 +60,6 @@ etc..
 ###### Destroy
 `ansible-playbook -i inventory.ini day0.yml --tags terraform_destroy`
 
+###### Regenerate Nebula Certs
+If you modify the groups the node belongs to you will have to regen and load new certs on the nodes - this is an adhoc run via a tag
+`ansible-playbook -i inventory.ini day0.yml --tags regen_certs`
