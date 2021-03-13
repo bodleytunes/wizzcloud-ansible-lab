@@ -4,7 +4,8 @@ nebula_external_addr: 188.165.235.210
 nebula_ip: "10.140.140.21"
 
 # per host inbound rules
-rules: |
+nebula_inbound_rules: |
+ 
   - port: 443
     proto: tcp
     host: any
@@ -13,9 +14,6 @@ rules: |
     proto: tcp
     host: any
 
-  - port: any
-    proto: icmp
-    host: any
 
 nebula_outbound_rules: |
   - port: any

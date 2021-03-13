@@ -5,6 +5,7 @@ nebula_ip: "10.140.140.20"
 
 # per host inbound rules
 nebula_inbound_rules: |
+  
   - port: 443
     proto: tcp
     host: any
@@ -13,9 +14,6 @@ nebula_inbound_rules: |
     proto: tcp
     host: any
 
-  - port: any
-    proto: icmp
-    host: any
 
 nebula_outbound_rules: |
   - port: any
