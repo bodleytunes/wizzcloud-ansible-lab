@@ -24,6 +24,7 @@
     ufw allow in on evpn+
     ufw allow from 86.29.22.70/32 to any port 8006
     ufw allow from 10.12.0.0/16 to any port 8006
+    ufw allow 4242/udp
     ufw logging off
     ufw --force enable
     iptables -t nat -F && ufw reload

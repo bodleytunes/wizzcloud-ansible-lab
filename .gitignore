@@ -4,3 +4,4 @@ terraform/proxmox/terraform-pluging*
 terraform/proxmox/terraform-plugin-proxmox.log
 terraform/proxmox/terraform.tfstate
 group_vars/all/backblaze.yml
+terraform/proxmox/terraform.tfstate
