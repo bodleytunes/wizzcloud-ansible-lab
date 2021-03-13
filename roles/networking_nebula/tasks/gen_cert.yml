@@ -10,8 +10,25 @@
     path: /var/lib/nebula/"{{ inventory_hostname }}".crt
   register: local_cert
 
+
+# get networks, only select the dict attribute/key of "network"
+- name: get subnets into list
+  set_fact:
+    list_unsafe_routes: "{{ nebula_unsafe_routes  |  selectattr('network', 'defined') | map(attribute='network') }}"
+
+# now unpack and concat the list into single string separated by , (comma)
+- name: unpack subnets 
+  set_fact:
+    string_unsafe_routes: "{{ list_unsafe_routes  |  join(',') }}"
+
+- name: show networks
+  debug: var=string_unsafe_routes
+    
+    
+
 - name: Create nebula certificate
-  command: "{{ nebula_cert_bin + ' sign -name ' + inventory_hostname + ' -ip ' + nebula_ip + '/' + nebula_subnet + ' -subnets ' + nebula_unsafe_routes.network + ' -groups ' +nebula_groups }}"
+  shell: |
+      {{ nebula_cert_bin }}  sign -name  {{ inventory_hostname }}  -ip  {{ nebula_ip }}/{{ nebula_subnet }} -subnets {{ string_unsafe_routes }} -groups {{ nebula_groups }}
   args:
     chdir: /var/lib/nebula/
   delegate_to: "{{ cert_authority }}"

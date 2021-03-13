@@ -92,6 +92,9 @@
     - import_role:
         name: lxd
       tags: ['lxd']
+    - import_role:
+        name: networking_nebula
+      tags: ['networking_nebula']
     
 - hosts: baremetal_hosts
   gather_facts: true

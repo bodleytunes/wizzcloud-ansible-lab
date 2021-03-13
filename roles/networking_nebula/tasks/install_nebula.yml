@@ -1,11 +1,12 @@
 ---
 - name: Download nebula binaries
   get_url:
-    url: https://github.com/slackhq/nebula/releases/download/v1.0.0/nebula-linux-amd64.tar.gz
+    url: https://github.com/slackhq/nebula/releases/download/{{nebula_version}}/nebula-linux-amd64.tar.gz
     dest: /tmp/nebula-linux-amd64.tar.gz
 
 - name: Extract nebula binaries to the app directory
   unarchive:
+    remote_src: yes
     src: /tmp/nebula-linux-amd64.tar.gz
     dest: /var/lib/nebula
 
@@ -16,6 +17,9 @@
     owner: nebula
     group: nebula
     mode: '0644'
+  vars:
+    lighthouses: "{{ groups['nebula_lighthouses'] }}"
+
 
 - name: Set Nebula service
   template:
