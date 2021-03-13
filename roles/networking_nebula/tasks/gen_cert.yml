@@ -63,3 +63,5 @@
 - name: Copy the file from master to nebula node
   copy: src=/tmp/ca.crt dest=/var/lib/nebula/
   when: local_cert.stat.exists == False
+  notify:
+    - "Start Nebula node service"
