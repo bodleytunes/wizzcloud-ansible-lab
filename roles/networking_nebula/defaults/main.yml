@@ -66,10 +66,12 @@ nebula_drop_multicast: "false"
 # the address of which depends on the ip/mask encoded in pki.cert
 nebula_drop_local_broadcast: "false"
 
+# global inbound rules
 nebula_inbound_rules: |
   - port: any
     proto: icmp
     host: any
+
 nebula_outbound_rules: |
   - port: any
     proto: any

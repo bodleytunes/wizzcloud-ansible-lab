@@ -1,0 +1,13 @@
+- name: check if ca exists
+  stat:
+    path: "{{ nebula_cert_path + 'ca.crt' }}"
+  register: ca
+  delegate_to: "{{ cert_authority }}"
+
+- name: Create CA certificate
+  shell: |
+      {{ nebula_cert_bin }} ca -name '{{ inventory_hostname }}'
+  args:
+    chdir: /var/lib/nebula/
+  delegate_to: "{{ cert_authority }}"
+  when: (" 'nebula_ca' in group_names ") and (ca.stat.exists == False)

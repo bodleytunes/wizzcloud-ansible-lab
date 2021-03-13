@@ -6,6 +6,7 @@ Starting a new version of the ovh cloud deployment lab but based entirely on Ans
 * Install packages, proxmox etc
 * Setup Linux networking and bridges using ifupdown2
 * Setup encrypted overlay networking via Zerotier-One
+* Setup encryption p2p overlay between nodes using Slack Nebula (similar to ZT)
 * Custom python ansible execution module to setup the zerotier Networking, add networks / routes etc
 * Custom python ansible execution module to deal with OVH API
 * Custom Python ansible execution module to control proxmox cli

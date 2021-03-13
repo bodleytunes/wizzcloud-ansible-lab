@@ -3,7 +3,7 @@ nebula_external_addr: 51.77.116.79
 
 nebula_ip: "10.140.140.20"
 
-
+# per host inbound rules
 nebula_inbound_rules: |
   - port: 443
     proto: tcp

@@ -1,0 +1,5 @@
+# Per-group nebula inbound rules
+nebula_inbound_rules: |
+  - port: 22
+    proto: tcp
+    host: any
