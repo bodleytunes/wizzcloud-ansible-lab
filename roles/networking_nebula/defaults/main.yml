@@ -34,7 +34,7 @@ nebula_log_format: "text"
 nebula_dev_tun: "nebula1"
 
 # Default MTU for every packet, safe setting is 1300 for internet based traffic
-nebula_mtu: 1300
+nebula_mtu: 1400
 
 # Transmit queue length
 nebula_tx_queue: 500
@@ -66,10 +66,14 @@ nebula_drop_multicast: "false"
 # the address of which depends on the ip/mask encoded in pki.cert
 nebula_drop_local_broadcast: "false"
 
-nebula_inbound_rules: |
+# global inbound rules
+global_nebula_inbound_rules: |
+ 
   - port: any
     proto: icmp
     host: any
+
+
 nebula_outbound_rules: |
   - port: any
     proto: any

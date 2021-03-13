@@ -6,6 +6,7 @@ Starting a new version of the ovh cloud deployment lab but based entirely on Ans
 * Install packages, proxmox etc
 * Setup Linux networking and bridges using ifupdown2
 * Setup encrypted overlay networking via Zerotier-One
+* Setup encryption p2p overlay between nodes using Slack Nebula (similar to ZT)
 * Custom python ansible execution module to setup the zerotier Networking, add networks / routes etc
 * Custom python ansible execution module to deal with OVH API
 * Custom Python ansible execution module to control proxmox cli
@@ -59,3 +60,6 @@ etc..
 ###### Destroy
 `ansible-playbook -i inventory.ini day0.yml --tags terraform_destroy`
 
+###### Regenerate Nebula Certs
+If you modify the groups the node belongs to you will have to regen and load new certs on the nodes - this is an adhoc run via a tag
+`ansible-playbook -i inventory.ini day0.yml --tags regen_certs`

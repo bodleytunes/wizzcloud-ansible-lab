@@ -1,0 +1,11 @@
+# Per-group nebula inbound rules
+group_nebula_inbound_rules: |
+ 
+  - port: 22
+    proto: tcp
+    host: any
+  
+  - port: 5201
+    proto: tcp
+    host: any
+

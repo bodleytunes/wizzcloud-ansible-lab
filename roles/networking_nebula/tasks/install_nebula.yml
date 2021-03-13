@@ -10,6 +10,27 @@
     src: /tmp/nebula-linux-amd64.tar.gz
     dest: /var/lib/nebula
 
+
+# get all the inbound rules 
+- name: get all inbound rules
+  set_fact:
+    host_inbound: "{{ nebula_inbound_rules }}"
+    group_inbound: "{{ group_nebula_inbound_rules }}"
+    global_inbound: "{{ global_nebula_inbound_rules }}"
+
+- name: show host
+  debug: var=host_inbound
+- name: show group
+  debug: var=group_inbound
+- name: show global
+  debug: var=global_inbound
+
+# merge all the inbound rules
+- name: merge all inbound rules
+  set_fact:
+    all_inbound_rules: "{{ host_inbound + group_inbound + global_inbound }}"
+
+
 - name: Set Nebula config
   template:
     src: templates/config.yml.j2
@@ -19,6 +40,7 @@
     mode: '0644'
   vars:
     lighthouses: "{{ groups['nebula_lighthouses'] }}"
+    nebula_inbound_rules: "{{ all_inbound_rules }}"
 
 
 - name: Set Nebula service

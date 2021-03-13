@@ -1,4 +1,3 @@
----
 - name: check if rules file exists
   stat:
     path: "{{ nebula_cert_path + inventory_hostname + '.crt' }}"
@@ -24,43 +23,56 @@
 - name: show networks
   debug: var=string_unsafe_routes
 
+
+# delete old certs
+
+- name: Fetch the certificate from nebula cert authority   
+  file: 
+    path: "{{ nebula_cert_path + inventory_hostname + '.crt' }}"
+    state: absent
+  become: true
+  delegate_to: "{{ cert_authority }}"
+
+# delete old keys
+
+- name: Fetch the certificate from nebula cert authority   
+  file: 
+    path: "{{ nebula_cert_path + inventory_hostname + '.key' }}"
+    state: absent
+  become: true
+  delegate_to: "{{ cert_authority }}"
+
+
 - name: Create nebula certificate
   shell: |
       {{ nebula_cert_bin }}  sign -name  {{ inventory_hostname }}  -ip  {{ nebula_ip }}/{{ nebula_subnet }} -subnets {{ string_unsafe_routes }} -groups {{ nebula_groups }}
   args:
     chdir: /var/lib/nebula/
   delegate_to: "{{ cert_authority }}"
-  when: cert.stat.exists == False
-    
-- name: Fetch the certificate from nebula cert authority
+
+- name: Fetch the certificate from nebula cert authority   
   fetch: src={{ nebula_cert_path + inventory_hostname + '.crt' }} dest=/tmp/{{ inventory_hostname }}.crt flat=yes
   become: true
   delegate_to: "{{ cert_authority }}"
-  when: local_cert.stat.exists == False
 
 - name: Copy the file from master to nebula node
   copy: src=/tmp/{{ inventory_hostname }}.crt dest=/var/lib/nebula/
-  when: local_cert.stat.exists == False
 
 - name: Fetch the key from nebula cert authority
   fetch: src={{ nebula_cert_path + inventory_hostname + '.key' }} dest=/tmp/{{ inventory_hostname }}.key flat=yes
   become: true
   delegate_to: "{{ cert_authority }}"
-  when: local_cert.stat.exists == False
 
 - name: Copy the file from master to nebula node
   copy: src=/tmp/{{ inventory_hostname }}.key dest=/var/lib/nebula/
-  when: local_cert.stat.exists == False
 
 - name: Fetch the ca.crt from nebula cert authority
   fetch: src={{ nebula_cert_path }}ca.crt dest=/tmp/ca.crt flat=yes
   become: true
   delegate_to: "{{ cert_authority }}"
-  when: local_cert.stat.exists == False
 
 - name: Copy the file from master to nebula node
   copy: src=/tmp/ca.crt dest=/var/lib/nebula/
-  when: local_cert.stat.exists == False
   notify:
     - "Start Nebula node service"
 
@@ -68,33 +80,3 @@
   ansible.builtin.service:
     name: nebula
     state: restarted
-
-# - name: Check groups changed in cert
-#   shell: |
-#     ./nebula-cert print -path ./{{inventory_hostname}}.crt -json
-#   args:
-#     chdir: /var/lib/nebula/
-#   register: groups_result
-
-# - name: show groups_result
-#   debug:
-#     msg: "{{ groups_result.stdout | from_json }}" 
-
-# - name: set fact groups_result
-#   set_fact:
-#     groups_result_dict: "{{ groups_result.stdout | from_json }}" 
-
-# - name: set fact groups_result - get only the groups
-#   set_fact:
-#     current_groups: "{{ groups_result_dict['details']['groups'] }}" 
-    
-
-# - name: show groups
-#   debug:
-#     msg: "{{ current_groups }}" 
-
-# - name: compare
-
-
-
-
