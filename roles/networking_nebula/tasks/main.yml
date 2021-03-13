@@ -1,0 +1,5 @@
+- include_tasks: user_add.yml
+- include_tasks: prepare_for_nebula.yml
+- include_tasks: install_nebula.yml
+- include_tasks: gen_ca.yml
+- include_tasks: gen_cert.yml

@@ -1,0 +1,67 @@
+---
+- name: check if rules file exists
+  stat:
+    path: "{{ nebula_cert_path + inventory_hostname + '.crt' }}"
+  register: cert
+  delegate_to: "{{ cert_authority }}"
+
+- name: check if rules file exists
+  stat:
+    path: /var/lib/nebula/"{{ inventory_hostname }}".crt
+  register: local_cert
+
+
+# get networks, only select the dict attribute/key of "network"
+- name: get subnets into list
+  set_fact:
+    list_unsafe_routes: "{{ nebula_unsafe_routes  |  selectattr('network', 'defined') | map(attribute='network') }}"
+
+# now unpack and concat the list into single string separated by , (comma)
+- name: unpack subnets 
+  set_fact:
+    string_unsafe_routes: "{{ list_unsafe_routes  |  join(',') }}"
+
+- name: show networks
+  debug: var=string_unsafe_routes
+    
+    
+
+- name: Create nebula certificate
+  shell: |
+      {{ nebula_cert_bin }}  sign -name  {{ inventory_hostname }}  -ip  {{ nebula_ip }}/{{ nebula_subnet }} -subnets {{ string_unsafe_routes }} -groups {{ nebula_groups }}
+  args:
+    chdir: /var/lib/nebula/
+  delegate_to: "{{ cert_authority }}"
+  when: cert.stat.exists == False
+
+- name: Fetch the certificate from nebula cert authority
+  fetch: src={{ nebula_cert_path + inventory_hostname + '.crt' }} dest=/tmp/{{ inventory_hostname }}.crt flat=yes
+  become: true
+  delegate_to: "{{ cert_authority }}"
+  when: local_cert.stat.exists == False
+
+- name: Copy the file from master to nebula node
+  copy: src=/tmp/{{ inventory_hostname }}.crt dest=/var/lib/nebula/
+  when: local_cert.stat.exists == False
+
+- name: Fetch the key from nebula cert authority
+  fetch: src={{ nebula_cert_path + inventory_hostname + '.key' }} dest=/tmp/{{ inventory_hostname }}.key flat=yes
+  become: true
+  delegate_to: "{{ cert_authority }}"
+  when: local_cert.stat.exists == False
+
+- name: Copy the file from master to nebula node
+  copy: src=/tmp/{{ inventory_hostname }}.key dest=/var/lib/nebula/
+  when: local_cert.stat.exists == False
+
+- name: Fetch the ca.crt from nebula cert authority
+  fetch: src={{ nebula_cert_path }}ca.crt dest=/tmp/ca.crt flat=yes
+  become: true
+  delegate_to: "{{ cert_authority }}"
+  when: local_cert.stat.exists == False
+
+- name: Copy the file from master to nebula node
+  copy: src=/tmp/ca.crt dest=/var/lib/nebula/
+  when: local_cert.stat.exists == False
+  notify:
+    - "Start Nebula node service"
