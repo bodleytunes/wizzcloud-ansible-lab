@@ -1,4 +1,7 @@
 
+- name: Re-gather facts
+  setup: ~
+
 
 - name: set vars - get dict
   set_fact:

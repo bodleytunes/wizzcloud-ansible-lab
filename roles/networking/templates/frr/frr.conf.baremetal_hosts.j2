@@ -63,6 +63,9 @@ router bgp {{ bgp.bgp_as }}
  {% for e in interfaces.bridges.evpn %}
   network {{ e.subnet }} mask {{ e.mask }} 
  {% endfor %}
+ {% for n in interfaces.bridges.nebula %}
+  network {{ n.subnet }} mask {{ n.mask }} 
+ {% endfor %}
   network {{ bgp.aggregate_network }} {{ bgp.aggregate_mask }}
   neighbor client soft-reconfiguration inbound
   neighbor evpn-peer soft-reconfiguration inbound
