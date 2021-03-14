@@ -58,7 +58,7 @@
     KUBECONFIG: /etc/rancher/k3s/k3s.yaml
   retries: 15
   delay: 10
-  when: result is not succeeded
+  #when: result is not succeeded
   register: cert_result
   until: cert_result is succeeded
   ignore_errors: true
@@ -76,9 +76,9 @@
 # this sometimes can faile due etcd busy
 - name: install rancher
   command: helm install rancher rancher-stable/rancher   --namespace cattle-system   --set hostname={{ kubernetes.k3s.rancher_hostname }}
-  retries: 15
-  delay: 10
-  when: result is not succeeded
+  retries: 10
+  delay: 5
+  #when: result is not succeeded
   register: result
   environment:
     KUBECONFIG: /etc/rancher/k3s/k3s.yaml

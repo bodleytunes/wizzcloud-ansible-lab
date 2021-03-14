@@ -22,6 +22,11 @@ interfaces:
         mtu: 1350
         anycast_mac: 26:13:8e:83:01:01
         bridge_ports: vxlan101
+    nebula:
+      - name: nebula1
+        subnet: 10.140.140.0
+        mask: 255.255.255.0
+        cidr: 24
     vxlan_bridges:
       - name: vxlan100
         vxlan_id: 100
