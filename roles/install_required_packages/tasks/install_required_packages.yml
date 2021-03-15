@@ -41,3 +41,4 @@
     - python-pip
     - openvswitch-switch
     - byobu
+    - zsh
