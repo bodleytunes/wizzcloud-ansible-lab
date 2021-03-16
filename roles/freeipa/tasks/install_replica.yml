@@ -1,0 +1,48 @@
+
+- name: Docker container for freeipa replica
+  docker_container:
+    name: ipa2
+    image: freeipa/freeipa-server:centos-8
+    hostname: ipa2
+    domainname: wizznet.co.uk
+    dns_servers:
+      - 10.20.66.5
+      - 8.8.4.4
+      - 1.1.1.1
+      - 9.9.9.9
+    etc_hosts:
+      ipa2.wizznet.co.uk: 10.21.66.5
+    networks_cli_compatible: true
+    env:
+      IPA_SERVER_HOSTNAME: ipa2.wizznet.co.uk
+      IPA_SERVER_IP: 10.21.66.5
+      DNS: 10.20.66.5
+#      PASSWORD: password
+    command:
+      - ipa-replica-install
+      - --domain=wizznet.co.uk
+      - --ip-address=10.21.66.5
+      - --server=ipa.wizznet.co.uk
+      - "--admin-password={{ipa_admin_password}}"
+      - --no-dnssec-validation
+      - --no-host-dns
+      - --setup-dns
+      - --setup-ca
+      - --auto-forwarders
+      - --allow-zone-overlap
+      - --unattended
+    volumes:
+      - /docker/ipa_ansible/data:/data
+      - /docker/ipa_ansible/logs:/var/logs
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /run
+      - /var/cache
+      - /tmp
+    capabilities:
+      - SYS_TIME
+    networks:
+      - name: br-freeipa
+        ipv4_address: 10.21.66.5
+    sysctls:
+      net.ipv6.conf.all.disable_ipv6: 0

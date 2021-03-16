@@ -54,12 +54,17 @@
         name: proxmox
       tags: ['proxmox']
 
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  serial: 1
+  tags: ['freeipa']
+  tasks:
+    - import_role:
+        name: freeipa
+      tags: ['freeipa']
 
-   # - import_role:
-   #     name: vm_groundwork
-   #   tags: ['vm_groundwork']
-  # if condition      
-  #when: groups.get(my_group_name, []) | length == 0
 
 # break out to clustering role which needs to be linear
 - hosts: baremetal_hosts

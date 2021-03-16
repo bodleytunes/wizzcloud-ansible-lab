@@ -1,0 +1,21 @@
+- name: create bridge for freeIPA docker - p20
+  docker_network:
+    name: br-freeipa
+    state: present
+    driver: bridge
+    driver_options:
+      com.docker.network.driver.mtu: 1300
+    ipam_options:
+      subnet: 10.20.66.0/24
+  when: " 'ipa_master' in group_names"
+
+- name: create bridge for freeIPA docker - p21
+  docker_network:
+    name: br-freeipa
+    state: present
+    driver: bridge
+    driver_options:
+      com.docker.network.driver.mtu: 1300
+    ipam_options:
+      subnet: 10.21.66.0/24
+  when: " 'ipa_replica' in group_names"

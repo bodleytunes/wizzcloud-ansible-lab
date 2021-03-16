@@ -1,0 +1,4 @@
+# pip3 docker
+- name: Python Docker API
+  pip: 
+    name: docker
