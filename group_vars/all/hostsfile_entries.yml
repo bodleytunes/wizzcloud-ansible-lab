@@ -6,3 +6,5 @@ hostsfile_entries:
   - 10.12.10.7 lm1
   - 10.12.10.10 lm2
   - 10.12.12.100 test1
+  - 10.20.65.5 ipa.wizznet.co.uk
+  - 10.21.65.5 ipa2.wizznet.co.uk

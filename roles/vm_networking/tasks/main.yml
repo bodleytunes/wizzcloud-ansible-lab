@@ -3,3 +3,4 @@
   setup:
 
 - import_tasks: vm_networking.yml
+- import_tasks: vm_dns.yml

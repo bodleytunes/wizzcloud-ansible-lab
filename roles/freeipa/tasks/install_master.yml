@@ -1,0 +1,119 @@
+
+
+- name: Docker container for freeipa
+  docker_container:
+    name: ipa
+    image: freeipa/freeipa-server:centos-8
+    hostname: ipa
+    domainname: wizznet.co.uk
+    dns_servers:
+      - 8.8.4.4
+      - 1.1.1.1
+      - 9.9.9.9
+    etc_hosts:
+      ipa.wizznet.co.uk: 10.20.66.5
+    networks_cli_compatible: true
+    env:
+      IPA_SERVER_HOSTNAME: ipa.wizznet.co.uk
+      IPA_SERVER_IP: 10.20.66.5
+      PASSWORD: "{{ ipa_admin_password }}"
+    command:
+      - -U
+      - --realm=wizznet.co.uk
+      - --domain=wizznet.co.uk
+      - "--ds-password={{ ipa_admin_password }}"
+      - "--admin-password={{ ipa_admin_password }}"
+      - --no-dnssec-validation
+      - --setup-dns
+      - --auto-forwarders
+      - --allow-zone-overlap
+      - --unattended
+    volumes:
+      - /docker/ipa_ansible/data:/data
+      - /docker/ipa_ansible/logs:/var/logs
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /run
+      - /var/cache
+      - /tmp
+    capabilities:
+      - SYS_TIME
+    networks:
+      - name: br-freeipa
+        ipv4_address: 10.20.66.5
+    sysctls:
+      net.ipv6.conf.all.disable_ipv6: 0
+  register: ipa_master
+
+- name: Wait for IPA Master Web server Https to accept connections - don't continue until its up and ready
+  wait_for:
+    host: "{{ ipa_master['ansible_facts'] \
+          ['docker_container'] \
+          ['NetworkSettings'] \
+          ['Networks'] \
+          ['br-freeipa'] \
+          ['IPAddress'] }}"
+    port: 443
+    state: started
+    connect_timeout: 1
+    timeout: 30
+  register: ipa_master_running
+  until: ipa_master_running is success
+  retries: 25
+
+
+
+- name: Wait for IPA Master LDAP / Directory service to accept connections - don't continue until its up and ready
+  wait_for:
+    host: "{{ ipa_master['ansible_facts'] \
+          ['docker_container'] \
+          ['NetworkSettings'] \
+          ['Networks'] \
+          ['br-freeipa'] \
+          ['IPAddress'] }}"
+    port: 389
+    state: started
+    connect_timeout: 1
+    timeout: 30
+  register: ipa_master_running
+  until: ipa_master_running is success
+  retries: 10
+
+
+
+- name: Wait for IPA Master LDAP / Directory service to accept connections - don't continue until its up and ready
+  wait_for:
+    host: "{{ ipa_master['ansible_facts'] \
+          ['docker_container'] \
+          ['NetworkSettings'] \
+          ['Networks'] \
+          ['br-freeipa'] \
+          ['IPAddress'] }}"
+    port: 636
+    state: started
+    connect_timeout: 1
+    timeout: 30
+  register: ipa_master_running
+  until: ipa_master_running is success
+  retries: 10
+
+- name: Pause for 3 minutes for ldap updates to complete
+  pause:
+    minutes: 3
+
+
+- name: Wait for IPA Master LDAP / Directory service to accept connections - don't continue until its up and ready
+  wait_for:
+    host: "{{ ipa_master['ansible_facts'] \
+          ['docker_container'] \
+          ['NetworkSettings'] \
+          ['Networks'] \
+          ['br-freeipa'] \
+          ['IPAddress'] }}"
+    port: 389
+    state: started
+    connect_timeout: 1
+    timeout: 30
+  register: ipa_master_running
+  until: ipa_master_running is success
+  retries: 10

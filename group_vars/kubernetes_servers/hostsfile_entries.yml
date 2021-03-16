@@ -1,8 +1,0 @@
-hostsfile_entries:
-  - 10.55.0.20 p20 mfsmaster metalogger cgiserver
-  - 10.55.0.21 p21 shadowmaster metalogger cgiserver
-  - 10.55.0.10 p10
-  - 10.55.0.11 p12
-  - 10.12.10.7 lm1
-  - 10.12.10.10 lm2
-  - 10.12.12.100 test1

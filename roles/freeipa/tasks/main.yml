@@ -1,0 +1,7 @@
+- include_tasks: setup_network.yml
+
+- include_tasks: install_master.yml
+  when: " 'ipa_master' in group_names "
+
+- include_tasks: install_replica.yml
+  when: " 'ipa_replica' in group_names "

@@ -14,11 +14,11 @@
   loop: "{{ linstor.devices.storage_pool|subelements('resource_definition') }}"
 
 
-- include_tasks: linstor_mount_filesystem.yml
-  loop: "{{ linstor.devices.storage_pool|subelements('resource_definition') }}"
+#- include_tasks: linstor_mount_filesystem.yml
+#  loop: "{{ linstor.devices.storage_pool|subelements('resource_definition') }}"
 
   
 
 # finally mount everything
-- name: mount all storage
-  command: mount -a
+#- name: mount all storage
+#  command: mount -a
