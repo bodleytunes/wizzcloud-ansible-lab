@@ -154,6 +154,9 @@
     - import_role:
         name: vm_networking
       tags: ['vm_networking']
+    - import_role:
+        name: install_required_packages
+      tags: ['install_required_packages']
 
 - hosts: kubernetes_servers
   gather_facts: false
@@ -167,7 +170,7 @@
 
 # enroll to freeipa - requires pre-req of python 2.7 installed on vm :-(
 
-- hosts: plex_servers
+- hosts: ipa_clients
   gather_facts: true
   become: True
   any_errors_fatal: true

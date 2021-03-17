@@ -1,0 +1,5 @@
+- name: Install baseline packages for virtual_machines
+  apt:
+    pkg:
+    - python-is-python3
+ 

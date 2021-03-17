@@ -1,12 +1,12 @@
 locals {
   lb2_ip       = "10.101.0.254"
-  lb2_hostname = "lb2"
+  lb2_hostname = "lb2.wizznet.co.uk"
 }
 
 resource "proxmox_vm_qemu" "lb2" {
 
   vmid        = 202
-  name        = "lb2"
+  name        = "lb2.wizznet.co.uk"
   desc        = "HAproxy Load Balancer 2"
   target_node = "p21"
   clone       = "9006-ubuntu-20-04-template"
@@ -24,7 +24,7 @@ resource "proxmox_vm_qemu" "lb2" {
 
   ipconfig0  = "ip=10.101.0.254/24,gw=10.101.0.1"
   ipconfig1  = "ip=10.0.0.254/24"
-  nameserver = "9.9.9.9"
+  nameserver = "10.21.66.5"
   ciuser     = "jon"
 
   sshkeys = <<EOF
