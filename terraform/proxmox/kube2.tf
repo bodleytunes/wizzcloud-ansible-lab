@@ -17,7 +17,7 @@ resource "proxmox_vm_qemu" "kube_p21" {
   memory  = 12000
 
   ipconfig0  = "ip=10.101.0.100/24,gw=10.101.0.1"
-  nameserver = "9.9.9.9"
+  nameserver = "10.21.66.5"
   ciuser     = "jon"
 
 

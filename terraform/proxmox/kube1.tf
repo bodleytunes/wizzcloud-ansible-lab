@@ -1,5 +1,5 @@
 locals {
-  kube = { 113 = { "name" = "kube1" }, 213 = { "name" = "kube2" } }
+  kube = { 113 = { "name" = "kube1.wizznet.co.uk" }, 213 = { "name" = "kube2.wizznet.co.uk" } }
 }
 
 resource "proxmox_vm_qemu" "kube_p20" {
@@ -19,7 +19,7 @@ resource "proxmox_vm_qemu" "kube_p20" {
   memory  = 12000
 
   ipconfig0  = "ip=10.100.0.100/24,gw=10.100.0.1"
-  nameserver = "9.9.9.9"
+  nameserver = "10.20.66.5"
   network {
     model  = "virtio"
     bridge = "lxdbr0"

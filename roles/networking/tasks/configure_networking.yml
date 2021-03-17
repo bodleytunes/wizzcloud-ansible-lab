@@ -5,7 +5,7 @@
 
 - name: set vars - get dict
   set_fact:
-    user_passwords: "{{ users | items2dict(key_name='name', value_name='password') | user_passwords.jon }}"
+    user_passwords: "{{ users | items2dict(key_name='name', value_name='password') }}"
  # convert the list to dict
 
 - name: set vars - get password

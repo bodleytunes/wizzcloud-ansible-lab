@@ -165,6 +165,20 @@
         name: vm_configuration_kubernetes
       tags: ['vm_configuration_kubernetes']
 
+# enroll to freeipa - requires pre-req of python 2.7 installed on vm :-(
+
+- hosts: plex_servers
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tags: ['freeipa_client']
+  tasks:
+    - import_role:
+        name: freeipa_client
+      tags: ['freeipa_client']
+      #vars:
+      #  - ansible_python_interpreter: "/usr/bin/python2.7"
+
 #- hosts: plex_servers
 #  gather_facts: false
 #  become: True
