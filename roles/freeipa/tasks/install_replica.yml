@@ -1,27 +1,27 @@
 
 - name: Docker container for freeipa replica
   docker_container:
-    name: ipa2
-    image: freeipa/freeipa-server:centos-8
-    hostname: ipa2
-    domainname: wizznet.co.uk
+    name: '{{ freeipa.name }}'
+    image: '{{ ipa_container_image }}'
+    hostname: '{{ freeipa.name }}'
+    domainname: '{{ ipa_domain_name }}'
     dns_servers:
-      - 10.20.66.5
+      - "{{ hostvars['p20'].freeipa.ipa_address }}"
       - 8.8.4.4
       - 1.1.1.1
       - 9.9.9.9
     etc_hosts:
-      ipa2.wizznet.co.uk: 10.21.66.5
+      ipa2.wizznet.co.uk: '{{ freeipa.ipa_address }}'
     networks_cli_compatible: true
     env:
-      IPA_SERVER_HOSTNAME: ipa2.wizznet.co.uk
-      IPA_SERVER_IP: 10.21.66.5
-      DNS: 10.20.66.5
+      IPA_SERVER_HOSTNAME: '{{ freeipa.ipa_hostname }}'
+      IPA_SERVER_IP: '{{ freeipa.ipa_address }}'
+      DNS: "{{ hostvars['p20'].freeipa.ipa_address }}"
 #      PASSWORD: password
     command:
       - ipa-replica-install
-      - --domain=wizznet.co.uk
-      - --ip-address=10.21.66.5
+      - "--domain={{ ipa_domain_name }}"
+      - "--ip-address={{ freeipa.ipa_address }}"
       - --server=ipa.wizznet.co.uk
       - "--admin-password={{ipa_admin_password}}"
       - --no-dnssec-validation
@@ -31,6 +31,7 @@
       - --auto-forwarders
       - --allow-zone-overlap
       - --unattended
+  #    - --force-join
     volumes:
       - /docker/ipa_ansible/data:/data
       - /docker/ipa_ansible/logs:/var/logs
@@ -42,7 +43,7 @@
     capabilities:
       - SYS_TIME
     networks:
-      - name: br-freeipa
-        ipv4_address: 10.21.66.5
+      - name: '{{ ipa_bridge }}'
+        ipv4_address: '{{ freeipa.ipa_address }}'
     sysctls:
       net.ipv6.conf.all.disable_ipv6: 0

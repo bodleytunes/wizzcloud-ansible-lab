@@ -2,25 +2,25 @@
 
 - name: Docker container for freeipa
   docker_container:
-    name: ipa
-    image: freeipa/freeipa-server:centos-8
-    hostname: ipa
-    domainname: wizznet.co.uk
+    name: '{{ freeipa.name }}'
+    image: '{{ ipa_container_image }}'
+    hostname: '{{ freeipa.name }}'
+    domainname: '{{ ipa_domain_name }}'
     dns_servers:
       - 8.8.4.4
       - 1.1.1.1
       - 9.9.9.9
     etc_hosts:
-      ipa.wizznet.co.uk: 10.20.66.5
+      ipa.wizznet.co.uk: '{{ freeipa.ipa_address }}'
     networks_cli_compatible: true
     env:
-      IPA_SERVER_HOSTNAME: ipa.wizznet.co.uk
-      IPA_SERVER_IP: 10.20.66.5
+      IPA_SERVER_HOSTNAME: '{{ freeipa.ipa_hostname }}'
+      IPA_SERVER_IP: '{{ freeipa.ipa_address }}'
       PASSWORD: "{{ ipa_admin_password }}"
     command:
       - -U
-      - --realm=wizznet.co.uk
-      - --domain=wizznet.co.uk
+      - "--realm={{ ipa_domain_name }}"
+      - "--domain={{ ipa_domain_name }}"
       - "--ds-password={{ ipa_admin_password }}"
       - "--admin-password={{ ipa_admin_password }}"
       - --no-dnssec-validation
@@ -39,8 +39,8 @@
     capabilities:
       - SYS_TIME
     networks:
-      - name: br-freeipa
-        ipv4_address: 10.20.66.5
+      - name: '{{ ipa_bridge }}'
+        ipv4_address: '{{ freeipa.ipa_address }}'
     sysctls:
       net.ipv6.conf.all.disable_ipv6: 0
   register: ipa_master
