@@ -19,7 +19,7 @@ resource "proxmox_vm_qemu" "kube_p20" {
   memory  = 12000
 
   ipconfig0  = "ip=10.100.0.100/24,gw=10.100.0.1"
-  nameserver = "10.20.66.5"
+  nameserver = "9.9.9.9"
   network {
     model  = "virtio"
     bridge = "lxdbr0"
