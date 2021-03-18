@@ -21,10 +21,14 @@ Starting a new version of the ovh cloud deployment lab but based entirely on Ans
 * S3FS Backups to backblaze - S3FS Fuse mounts to directory
 * GlusterFS shared storage for stateful apps/storage in rancher/k3s
 * LizardFS shared storage for plex/media programs
+* Install Linstor DRBD replicated storage
 * Users, SSH Keys, login policy
 * Terraform and cloud init templates/images to deploy initial VM's in proxmox
 * Deploy K3s (lightweight kubernetes)
 * Install Rancher to control K3s
+* Install FreeIPA server and replica on main nodes for DNS and IDM
+* Install FreeIPA client and enroll virtual machines
+
 
 Examples:
 
