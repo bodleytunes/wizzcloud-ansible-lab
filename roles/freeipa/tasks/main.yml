@@ -6,5 +6,7 @@
 - include_tasks: install_replica.yml
   when: " 'ipa_replica' in group_names "
 
-- include_tasks: setup_users.yml
+# can run this adhoc via tag
+- import_tasks: setup_users.yml
   when: " 'ipa_master' in group_names "
+  tags: ['ipa_users']

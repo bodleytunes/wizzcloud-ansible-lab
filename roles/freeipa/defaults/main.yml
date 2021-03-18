@@ -1,3 +1,5 @@
 ipa_container_image: freeipa/freeipa-server:centos-8
 ipa_domain_name: wizznet.co.uk
+ipa_master_host: ipa
 ipa_bridge: br-freeipa
+ipa_master_fqdn: "{{ipa_master_host}}.{{ipa_domain_name}}"
