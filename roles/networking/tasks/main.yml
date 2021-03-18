@@ -30,7 +30,7 @@
 
 
 - include_tasks: install_frr.yml
-  when: frr.stat.exists == False
+#  when: frr.stat.exists == False
 
 - include_tasks: configure_frr.yml
   tags: ['reconfigure_frr_routing']
