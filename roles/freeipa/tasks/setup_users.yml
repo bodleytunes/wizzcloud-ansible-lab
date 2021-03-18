@@ -1,0 +1,49 @@
+- name: set fact
+  set_fact:
+    user_ipa_users: "{{ users | items2dict(key_name='name',value_name='name') }}"
+
+- name: set fact
+  set_fact:
+    user_ipa_passwords: "{{ users | items2dict(key_name='name',value_name='password') }}"
+
+- name: Add IPA User Jon
+  community.general.ipa_user:
+    name: "{{ user_ipa_users.jon }}" 
+    state: present
+    givenname: "{{ user_ipa_users.jon }}" 
+    sn: clayton
+    password: "{{ user_ipa_passwords.jon }}"
+    ipa_host: ipa.wizznet.co.uk
+    ipa_user: admin
+    ipa_pass: "{{ ipa_admin_password }}"
+    update_password: on_create
+    validate_certs: no
+
+- name: Add IPA User Wizznetadmin
+  community.general.ipa_user:
+    name: "{{ user_ipa_users.wizznetadmin }}" 
+    state: present
+    givenname: "{{ user_ipa_users.wizznetadmin }}" 
+    sn: "{{ user_ipa_users.wizznetadmin }}"
+    password: "{{ user_ipa_passwords.wizznetadmin }}"
+    ipa_host: ipa.wizznet.co.uk
+    ipa_user: admin
+    ipa_pass: "{{ ipa_admin_password }}"
+    homedirectory: "/home/{{ user_ipa_users.wizznetadmin  }}"
+    update_password: on_create
+    validate_certs: no
+
+- name: Add IPA Users
+  community.general.ipa_user:
+    name: "{{ item.name }}" 
+    state: present
+    givenname: "{{ item.name }}" 
+    sn: "{{ item.name }}"
+    password: "{{ item.password }}"
+    ipa_host: ipa.wizznet.co.uk
+    ipa_user: admin
+    ipa_pass: "{{ ipa_admin_password }}"
+    homedirectory: "/home/{{ item.name  }}"
+    update_password: on_create
+    validate_certs: no
+  loop: "{{ users }}"

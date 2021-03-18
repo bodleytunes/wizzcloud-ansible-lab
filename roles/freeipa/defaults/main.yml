@@ -1,0 +1,3 @@
+ipa_container_image: freeipa/freeipa-server:centos-8
+ipa_domain_name: wizznet.co.uk
+ipa_bridge: br-freeipa

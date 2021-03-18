@@ -1,5 +1,5 @@
 locals {
-  kube = { 113 = { "name" = "kube1" }, 213 = { "name" = "kube2" } }
+  kube = { 113 = { "name" = "kube1.wizznet.co.uk" }, 213 = { "name" = "kube2.wizznet.co.uk" } }
 }
 
 resource "proxmox_vm_qemu" "kube_p20" {

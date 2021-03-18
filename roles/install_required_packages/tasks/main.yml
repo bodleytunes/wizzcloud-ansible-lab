@@ -1,8 +1,15 @@
 - include_tasks: install_required_packages.yml
+  when: "'baremetal_hosts' in group_names"
+
 - include_tasks: python_pip_packages.yml
+  when: "'baremetal_hosts' in group_names"
+
+- include_tasks: install_baseline_packages_vm.yml
+  when: "'virtual_machines' in group_names"
 
 - include_role:
     name: common
     tasks_from: reboot
+  when:  "'baremetal_hosts' in group_names"
 
   

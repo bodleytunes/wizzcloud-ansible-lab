@@ -1,0 +1,4 @@
+freeipa:
+  name: ipa
+  ipa_address: 10.20.66.5
+  ipa_hostname: ipa.wizznet.co.uk

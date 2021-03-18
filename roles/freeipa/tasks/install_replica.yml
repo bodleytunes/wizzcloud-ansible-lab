@@ -28,7 +28,9 @@
       - --no-host-dns
       - --setup-dns
       - --setup-ca
-      - --auto-forwarders
+      - --forwarder=9.9.9.9
+      - --forwarder=1.1.1.1
+      - --forwarder=8.8.4.4
       - --allow-zone-overlap
       - --unattended
   #    - --force-join

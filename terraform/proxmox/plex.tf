@@ -1,12 +1,12 @@
 locals {
   plex_ip       = "10.0.0.10"
-  plex_hostname = "plex"
+  plex_hostname = "plex.wizznet.co.uk"
 }
 
 resource "proxmox_vm_qemu" "plex_media_server" {
 
   vmid        = 0
-  name        = "plex"
+  name        = "plex.wizznet.co.uk"
   target_node = "p20"
   clone       = "9007-ubuntu-20-04-template"
   agent       = 1
@@ -19,7 +19,7 @@ resource "proxmox_vm_qemu" "plex_media_server" {
   memory  = 4096
 
   ipconfig0  = "ip=10.0.0.10/24,gw=10.0.0.1"
-  nameserver = "9.9.9.9"
+  nameserver = "10.20.66.5"
   ciuser     = "jon"
 
   sshkeys = <<EOF
@@ -42,17 +42,17 @@ EOF
 
 
   # basic remote execution script 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo hostnamectl set-hostname ${local.plex_hostname}",
-    ]
-    connection {
-      private_key = file(var.ssh_private_key)
-      host        = local.plex_ip
-      user        = "jon"
-    }
-  }
-
+  #provisioner "remote-exec" {
+  #  inline = [
+  #    "sudo hostnamectl set-hostname ${local.plex_hostname}",
+  #  ]
+  #  connection {
+  #    private_key = file(var.ssh_private_key)
+  #    host        = local.plex_ip
+  #    user        = "jon"
+  #  }
+  #}
+#
   lifecycle {
     ignore_changes = [
       network,

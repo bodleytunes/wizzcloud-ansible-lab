@@ -25,8 +25,12 @@
       - "--admin-password={{ ipa_admin_password }}"
       - --no-dnssec-validation
       - --setup-dns
-      - --auto-forwarders
+      - --forwarder=9.9.9.9
+      - --forwarder=1.1.1.1
+      - --forwarder=8.8.4.4
       - --allow-zone-overlap
+      - --setup-kra
+      - --auto-reverse
       - --unattended
     volumes:
       - /docker/ipa_ansible/data:/data

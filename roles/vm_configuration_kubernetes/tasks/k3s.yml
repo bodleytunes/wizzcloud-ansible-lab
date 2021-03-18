@@ -17,11 +17,14 @@
     dest: /root/k3s.sh
     mode: a+x
 
+
+
 - name: install K3s Master
   shell: |
     /root/k3s.sh --cluster-init  --node-ip {{ kubernetes.k3s.node_ip }} --kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10 --disable traefik --disable servicelb
   environment:
-    INSTALL_K3S_VERSION: "{{ kubernetes.k3s.k3s_version }}"
+#    INSTALL_K3S_VERSION: "{{ kubernetes.k3s.k3s_version }}"
+    INSTALL_K3S_CHANNEL: "{{ kubernetes.k3s.k3s_channel }}"
     K3S_TOKEN: "{{ kubernetes.k3s.k3s_token }}"
   args:
     chdir: /root
@@ -37,7 +40,8 @@
   shell: |
     /root/k3s.sh --server https://{{ kubernetes.k3s.k3s_server_ip }}:6443  --node-ip {{ kubernetes.k3s.node_ip}} --kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10 --disable traefik --disable servicelb
   environment:
-    INSTALL_K3S_VERSION: "{{ kubernetes.k3s.k3s_version }}"
+#    INSTALL_K3S_VERSION: "{{ kubernetes.k3s.k3s_version }}"
+    INSTALL_K3S_CHANNEL: "{{ kubernetes.k3s.k3s_channel }}"
     K3S_TOKEN: "{{ kubernetes.k3s.k3s_token }}"
   args:
     chdir: /root
