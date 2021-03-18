@@ -145,6 +145,7 @@
         name: terraform_destroy
       tags: ['terraform_destroy']
 
+# Virtual Machines prep
 - hosts: virtual_machines
   gather_facts: false
   become: True
@@ -168,8 +169,7 @@
         name: vm_configuration_kubernetes
       tags: ['vm_configuration_kubernetes']
 
-# enroll to freeipa - requires pre-req of python 2.7 installed on vm :-(
-
+# enroll to freeipa 
 - hosts: ipa_clients
   gather_facts: true
   become: True

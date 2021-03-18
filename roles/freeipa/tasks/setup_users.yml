@@ -33,4 +33,17 @@
     update_password: on_create
     validate_certs: no
 
-  
+- name: Add IPA Users
+  community.general.ipa_user:
+    name: "{{ item.name }}" 
+    state: present
+    givenname: "{{ item.name }}" 
+    sn: "{{ item.name }}"
+    password: "{{ item.password }}"
+    ipa_host: ipa.wizznet.co.uk
+    ipa_user: admin
+    ipa_pass: "{{ ipa_admin_password }}"
+    homedirectory: "/home/{{ item.name  }}"
+    update_password: on_create
+    validate_certs: no
+  loop: "{{ users }}"
