@@ -40,7 +40,7 @@
     givenname: "{{ item.name }}" 
     sn: "{{ item.name }}"
     password: "{{ item.password }}"
-    ipa_host: ipa.wizznet.co.uk
+    ipa_host: "{{ ipa_master_fqdn }}"
     ipa_user: admin
     ipa_pass: "{{ ipa_admin_password }}"
     homedirectory: "/home/{{ item.name  }}"

@@ -4,6 +4,7 @@
   docker_container:
     name: '{{ freeipa.name }}'
     image: '{{ ipa_container_image }}'
+    restart_policy: always
     hostname: '{{ freeipa.name }}'
     domainname: '{{ ipa_domain_name }}'
     dns_servers:

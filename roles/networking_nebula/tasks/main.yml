@@ -5,5 +5,6 @@
 - include_tasks: gen_cert.yml
 
 # if updating groups, then have to regen the certs and run this manually
+# having to use import tasks if you want to use adhoc nested tags
 - import_tasks: regen_cert.yml
   tags: ['never','regen_certs']

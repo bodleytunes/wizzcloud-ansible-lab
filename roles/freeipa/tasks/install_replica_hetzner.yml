@@ -1,5 +1,5 @@
 
-- name: Docker container for freeipa replica
+- name: Docker container for freeipa replica - Hetzner cloud
   docker_container:
     name: '{{ freeipa.name }}'
     image: '{{ ipa_container_image }}'
@@ -8,11 +8,12 @@
     domainname: '{{ ipa_domain_name }}'
     dns_servers:
       - "{{ hostvars['p20'].freeipa.ipa_address }}"
+      - "{{ hostvars['p21'].freeipa.ipa_address }}"
       - 8.8.4.4
       - 1.1.1.1
       - 9.9.9.9
     etc_hosts:
-      ipa2.wizznet.co.uk: '{{ freeipa.ipa_address }}'
+      ipa3.wizznet.co.uk: '{{ freeipa.ipa_address }}'
     networks_cli_compatible: true
     env:
       IPA_SERVER_HOSTNAME: '{{ freeipa.ipa_hostname }}'
@@ -34,7 +35,7 @@
       - --forwarder=8.8.4.4
       - --allow-zone-overlap
       - --unattended
-  #    - --force-join
+ #     - --skip-conncheck  # note that this is only used because the hetz cloud server is slow and it fails otherwise.
     volumes:
       - /docker/ipa_ansible/data:/data
       - /docker/ipa_ansible/logs:/var/logs

@@ -1,0 +1,5 @@
+freeipa:
+  name: ipa3
+  ipa_bridge_network: 10.22.66.0/24
+  ipa_address: 10.22.66.5
+  ipa_hostname: ipa3.wizznet.co.uk
