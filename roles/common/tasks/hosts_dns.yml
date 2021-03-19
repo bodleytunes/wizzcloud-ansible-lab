@@ -19,6 +19,12 @@
     regexp: '- update_etc_hosts'
     state: absent
 
+- name: Set Global DNS resolvers 
+  blockinfile:
+    path: /etc/resolv.conf
+    block: "{{  lookup('template', 'resolv.conf.j2') }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK for resolver dns nameservers"
+
 ## TEST TO SEE IF FULLY QUALIFIED CAN BE PRESERVED
 #- name: Stop Cloud-init from messing everything up - remove ability to managed /etc/hosts
 #  lineinfile:
