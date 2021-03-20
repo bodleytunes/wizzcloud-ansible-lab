@@ -26,6 +26,7 @@
     ufw allow in on evpn+
     ufw allow in on nebula+
     ufw allow in on br+
+    ufw allow in on wg+
     ufw allow from 86.29.22.70/32 to any port 8006
     ufw allow from 10.12.0.0/16 to any port 8006
     ufw logging off
