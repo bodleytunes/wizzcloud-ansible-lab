@@ -1,0 +1,9 @@
+# enroll to freeipa 
+- hosts: 
+    - lm1
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role:
+        name: freeipa_client

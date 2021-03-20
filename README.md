@@ -73,3 +73,17 @@ If you modify the groups the node belongs to you will have to regen and load new
 ###### Reconfigure the routing Daemon (FRR)
 If you make modificaations to the templates or to the vars they consume then run this to reconfigure the routing
 `ansible-playbook -i inventory.ini day0.yml --tags reconfigure_frr_routing`
+
+
+###### Notes for kubernetes quorum node on Raspberry Pi4
+
+###### on pi4 list
+cat /boot/cmdline.txt
+---
+```
+ console=tty1 root=PARTUUID=ad09722e-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait net.ifnames=0 cgroup_memory=1 cgroup_enable=memory cgroup_enable=cpuset
+```
+
+###### k3s install on pi4
+
+`curl -fL https://get.k3s.io |  INSTALL_K3S_CHANNEL=stable   K3S_TOKEN=token_goes_here sh -s - --server https://10.100.0.100:6443  --node-ip 10.55.0.11 --node-taint k3s-controlplane=true:NoExecute --disable traefik --disable servicelb`

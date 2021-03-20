@@ -1,0 +1,48 @@
+---
+# Copyright (C) 2018-2020 Robert Wimmer
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+#######################################
+# General settings
+#######################################
+
+# Directory to store WireGuard configuration on the remote hosts
+wireguard_remote_directory: "{{ '/etc/wireguard' if not ansible_os_family == 'Darwin' else '/opt/local/etc/wireguard' }}"
+
+# The default port WireGuard will listen if not specified otherwise.
+wireguard_port: "51820"
+
+# The default interface name that WireGuard should use if not specified otherwise.
+wireguard_interface: "wg0"
+
+# The default owner of the wg.conf file
+wireguard_conf_owner: root
+
+# The default group of the wg.conf file
+wireguard_conf_group: "{{ 'root' if not ansible_os_family == 'Darwin' else 'wheel' }}"
+
+# The default mode of the wg.conf file
+wireguard_conf_mode: 0600
+
+
+#######################################
+# Settings only relevant for Ubuntu
+#######################################
+
+# Set to "false" if package cache should not be updated
+wireguard_ubuntu_update_cache: "true"
+
+# Set package cache valid time
+wireguard_ubuntu_cache_valid_time: "3600"
+
+# This is sensitive: encrypt it with a tool like Ansible Vault.
+# If not set, a new one is generated on a blank configuration.
+# wireguard_private_key:
+
+wireguard_allowed_ips: "172.16.0.0/24"
+#wireguard_endpoint: "host1.domain.tld"
+wireguard_persistent_keepalive: "30"
+wireguard_dns: "10.22.66.5,10.21.66.5,10.20.66.5,1.1.1.1"
+#wireguard_fwmark: "1234"
+#wireguard_mtu: "1492"
+#wireguard_table: "5000"

@@ -1,0 +1,11 @@
+---
+# Copyright (C) 2020 Ties de Kock
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+- name: (Fedora) Install WireGuard packages
+  yum:
+    name:
+      - "wireguard-tools"
+    state: present
+  tags:
+    - wg-install

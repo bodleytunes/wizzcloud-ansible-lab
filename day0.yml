@@ -100,6 +100,9 @@
     - import_role:
         name: networking_nebula
       tags: ['networking_nebula']
+    - import_role:
+        name: githubixx.ansible_role_wireguard
+      tags: ['wireguard']
     
 - hosts: baremetal_hosts
   gather_facts: true

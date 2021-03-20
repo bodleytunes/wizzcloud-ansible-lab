@@ -1,0 +1,138 @@
+---
+# Copyright (C) 2018-2020 Robert Wimmer
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+- name: Gather instance facts
+  setup:
+
+# Installing WireGuard [[[1
+- include_tasks: "{{ item }}"
+  with_first_found:
+    - "setup-{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version }}.yml"
+    - "setup-{{ ansible_distribution|lower }}-{{ ansible_distribution_version }}.yml"
+    - "setup-{{ ansible_distribution|lower }}-{{ ansible_distribution_release }}.yml"
+    - "setup-{{ ansible_distribution|lower }}.yml"
+    - "setup-{{ ansible_os_family|lower }}.yml"
+
+- name: Enable WireGuard kernel module
+  modprobe:
+    name: wireguard
+    state: present
+  register: wireguard__register_module_enabled
+  until:  wireguard__register_module_enabled is succeeded
+  retries: 10
+  delay: 10
+  failed_when: wireguard__register_module_enabled is failure
+  tags:
+    - wg-install
+  when: not ansible_os_family == 'Darwin'
+
+- block:
+  # Key handling [[[1
+  - name: Register if config/private key already exists on target host
+    stat:
+      path: "{{ wireguard_remote_directory }}/{{ wireguard_interface }}.conf"
+    register: wireguard__register_config_file
+
+  - name: Get wg subcommands
+    command: "wg --help"
+    register: wireguard__register_subcommands
+    changed_when: false
+    check_mode: no
+
+  - name: Check if wg syncconf subcommand is available
+    set_fact:
+      wg_syncconf: "{{ 'syncconf:' in wireguard__register_subcommands.stdout }}"
+  tags:
+    - wg-generate-keys
+    - wg-config
+
+- name: Show syncconf subcommand status
+  debug:
+    var: wg_syncconf
+
+- block:
+  - name: Generate WireGuard private key
+    command: "wg genkey"
+    register: wireguard__register_private_key
+    changed_when: false
+    tags:
+      - wg-generate-keys
+
+  - name: Set private key fact
+    set_fact:
+      wireguard_private_key: "{{ wireguard__register_private_key.stdout }}"
+    tags:
+      - wg-generate-keys
+  when:
+    - not wireguard__register_config_file.stat.exists
+    - wireguard_private_key is not defined
+
+- block:
+  - name: Read WireGuard config file
+    slurp:
+      src: "{{ wireguard_remote_directory }}/{{ wireguard_interface }}.conf"
+    register: wireguard__register_config
+    tags:
+      - wg-config
+
+  - name: Set private key fact
+    set_fact:
+      wireguard_private_key: "{{ wireguard__register_config['content'] | b64decode | regex_findall('PrivateKey = (.*)') | first }}"
+    tags:
+      - wg-config
+  when:
+    - wireguard__register_config_file.stat.exists
+    - wireguard_private_key is not defined
+
+- name: Derive WireGuard public key
+  command: "wg pubkey"
+  args:
+    stdin: "{{ wireguard_private_key }}"
+  register: wireguard__register_public_key
+  changed_when: false
+  check_mode: no
+  tags:
+    - wg-config
+
+- name: Set public key fact
+  set_fact:
+    wireguard__fact_public_key: "{{ wireguard__register_public_key.stdout }}"
+  tags:
+    - wg-config
+
+# Configuration [[[1
+- name: Create WireGuard configuration directory
+  file:
+    dest: "{{ wireguard_remote_directory }}"
+    state: directory
+    mode: 0700
+  tags:
+    - wg-config
+
+- name: Generate WireGuard configuration file
+  template:
+    src: etc/wireguard/wg.conf.j2
+    dest: "{{ wireguard_remote_directory }}/{{ wireguard_interface }}.conf"
+    owner: "{{ wireguard_conf_owner }}"
+    group: "{{ wireguard_conf_group }}"
+    mode: "{{ wireguard_conf_mode }}"
+  tags:
+    - wg-config
+  notify:
+    - reconfigure wireguard
+
+- name: Ensure legacy reload-module-on-update is absent
+  file:
+    dest: "{{ wireguard_remote_directory }}/.reload-module-on-update"
+    state: absent
+  tags:
+    - wg-config
+
+# Service [[[1
+- name: Start and enable WireGuard service
+  service:
+    name: "wg-quick@{{ wireguard_interface }}"
+    state: started
+    enabled: yes
+  when: not ansible_os_family == 'Darwin'
