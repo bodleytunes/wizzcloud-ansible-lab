@@ -2,7 +2,7 @@ teleport:
     nodename: "{{ inventory_hostname }}"
     data_dir: /var/lib/teleport
     storage:
-      path: /gv2/var/lib/teleport/backend
+      path: /var/lib/teleport/backend
       type: dir
     auth_servers:
       - "{{ zt_ip }}:3025"
