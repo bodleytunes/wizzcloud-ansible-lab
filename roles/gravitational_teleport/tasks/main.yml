@@ -3,4 +3,4 @@
 
 - include_tasks: install.yml
 - include_tasks: configure_server.yml
-  when: " 'baremetal_servers' in groups"
+  when: " 'teleport_auth_servers' in groups"
