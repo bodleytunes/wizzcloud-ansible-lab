@@ -1,0 +1,5 @@
+- name: Gather facts
+  setup:
+
+- include_tasks: install.yml
+- include_tasks: configure_server.yml

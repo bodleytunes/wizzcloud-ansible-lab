@@ -1,0 +1,39 @@
+teleport:
+    nodename: "{{ inventory_hostname }}"
+    data_dir: /var/lib/teleport
+    storage:
+      path: /gv2/var/lib/teleport/backend
+      type: dir
+    auth_servers:
+      - "{{ zt_ip }}:3025"
+      {% for host in groups['baremetal_hosts'] -%}
+    {%- if inventory_hostname not in host -%}
+      - "{{ hostvars[host].zt_ip }}:3025"
+    {% endif -%}
+    {%- endfor -%}
+    advertise_ip: "{{ zt_ip }}"
+    log:
+        output: stderr
+        severity: ERROR
+auth_service:
+    enabled: yes
+    cluster_name: "{{gravitational_teleport_cluster_name}}"
+    authentication:
+        type: local
+        second_factor: otp
+    listen_addr: "{{ zt_ip }}:3025"
+    session_recording: "node"
+    proxy_checks_host_keys: no
+    client_idle_timeout: never
+    disconnect_expired_cert: no
+ssh_service:
+    enabled: yes
+    labels:
+        role: master
+        type: authenicator
+    commands:
+    - name: arch
+      command: ['/bin/uname', '-p']
+      period: 1h0m0s
+proxy_service:
+    enabled: yes

@@ -1,0 +1,9 @@
+- name: restart teleport
+  service:
+    name: teleport
+    state: "{{ item }}"
+    enabled: yes
+  loop:
+  - stopped
+  - started
+  listen: "restart teleport"

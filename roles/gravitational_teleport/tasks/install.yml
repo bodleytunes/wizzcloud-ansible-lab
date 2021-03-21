@@ -1,0 +1,10 @@
+# https://get.gravitational.com/teleport_6.0.2_amd64.deb
+
+- name: Download gravitational teleport binaries
+  get_url:
+    url: "{{gravitational_download_url}}"
+    dest: /tmp/teleport.deb
+
+- name: Install a .deb package
+  apt:
+    deb: /tmp/teleport.deb
