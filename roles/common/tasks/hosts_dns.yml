@@ -19,6 +19,16 @@
     regexp: '- update_etc_hosts'
     state: absent
 
+- name: Delete resolv.conf
+  ansible.builtin.file:
+    path: /etc/resolv.conf
+    state: absent
+
+- name: Replace resolv.conf
+  ansible.builtin.file:
+    path: /etc/resolv.conf
+    state: touch
+
 - name: Set Global DNS resolvers 
   blockinfile:
     path: /etc/resolv.conf

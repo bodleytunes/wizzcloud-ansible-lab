@@ -1,8 +1,8 @@
 global:
   dns_nameservers:
-    - 10.22.66.5
-    - 10.20.66.5
-    - 10.21.66.5
+    - '{{hostvars["freeipa3"].freeipa.ipa_address}}'
+    - '{{hostvars["p21"].freeipa.ipa_address}}'
+    - '{{hostvars["p20"].freeipa.ipa_address}}'
     - 1.1.1.1
     - 9.9.9.9
     - 8.8.4.4
