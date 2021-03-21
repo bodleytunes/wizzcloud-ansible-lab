@@ -6,6 +6,7 @@ group_storage:
           proxmox: zpool1/proxmox_vm
           k3s: zpool1/k3s
           gluster: zpool1/gluster
+          gluster2: zpool1/gluster2
           lizardfs: zpool1/lizardfs
   #        linstor: zpool1/linstor
         nodes:

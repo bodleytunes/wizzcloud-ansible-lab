@@ -103,6 +103,7 @@
     - import_role:
         name: githubixx.ansible_role_wireguard
       tags: ['wireguard']
+
     
 - hosts: baremetal_hosts
   gather_facts: true
@@ -117,6 +118,9 @@
     - import_role:
         name: storage_linstor
       tags: ['storage_linstor']
+    - import_role:
+        name: gravitational_teleport
+      tags: ['gravitational_teleport']
 
 - hosts: baremetal_hosts
   gather_facts: true
