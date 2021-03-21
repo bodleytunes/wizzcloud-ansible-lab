@@ -1,0 +1,6 @@
+- name: Gather facts
+  setup:
+
+- include_tasks: install.yml
+- include_tasks: configure_server.yml
+  when: " 'teleport_auth_servers' in groups"

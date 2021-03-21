@@ -1,0 +1,10 @@
+---
+# Copyright (C) 2020 Stefan Haun
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+- include_tasks: "setup-debian-raspbian.yml"
+  when: ansible_lsb.id == "Raspbian"
+  register: wireguard__register_raspbian_setup
+
+- include_tasks: "setup-debian-vanilla.yml"
+  when: wireguard__register_raspbian_setup is skipped

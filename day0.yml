@@ -100,6 +100,10 @@
     - import_role:
         name: networking_nebula
       tags: ['networking_nebula']
+    - import_role:
+        name: githubixx.ansible_role_wireguard
+      tags: ['wireguard']
+
     
 - hosts: baremetal_hosts
   gather_facts: true
@@ -114,6 +118,7 @@
     - import_role:
         name: storage_linstor
       tags: ['storage_linstor']
+
 
 - hosts: baremetal_hosts
   gather_facts: true
@@ -158,6 +163,17 @@
     - import_role:
         name: install_required_packages
       tags: ['install_required_packages']
+      
+- hosts: teleport_auth_servers
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  strategy: linear
+  tags: ['teleport_auth']
+  tasks:
+    - import_role:
+        name: gravitational_teleport
+      tags: ['teleport_auth']
 
 - hosts: kubernetes_servers
   gather_facts: false

@@ -1,0 +1,12 @@
+# create template
+- name: Set teleport server config
+  template:
+    src: templates/server/teleport.yaml.j2
+    dest: /etc/teleport.yaml
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - "restart teleport"
+
+
