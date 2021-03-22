@@ -1,4 +1,9 @@
 ---
+- name: Install ChronyD
+  apt:
+    name: chrony
+    state: present
+  ignore_errors: true
 # tasks file for ipaclient
 
 - name: Import variables specific to distribution

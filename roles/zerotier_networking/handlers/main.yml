@@ -3,4 +3,6 @@
   ansible.builtin.service:
     name: zerotier-one
     state: restarted
+    enabled: yes
   listen: zerotier restart
+

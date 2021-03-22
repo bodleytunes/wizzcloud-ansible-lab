@@ -95,6 +95,11 @@
   register: auth_result
   notify: zerotier restart
 
+- name: Set blacklisted interfaces/networks
+  template:
+    src: templates/local.conf.j2
+    dest: /var/lib/zerotier-one/local.conf
+
 
 - name: print var for debugging purposes
   ansible.builtin.debug:

@@ -42,7 +42,6 @@
   service:
     name: zerotier-one
     state: started
+    enabled: yes
   when:
   - zerotier_client is succeeded
-  notify:
-  - enable zerotier-one

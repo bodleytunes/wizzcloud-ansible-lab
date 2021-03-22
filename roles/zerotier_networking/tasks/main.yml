@@ -1,3 +1,7 @@
+# only gather facts during the run as otherwise they would have tried to be gathered before vm instanciation
+- name: Gathering facts
+  setup:
+
 - include_tasks: zerotier_install.yml
 - include_tasks: zerotier_configure.yml
 

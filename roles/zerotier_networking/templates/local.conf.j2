@@ -1,0 +1,12 @@
+{
+     "physical": {
+            "{{interfaces.bridges.nebula.0.subnet}}/{{interfaces.bridges.nebula.0.cidr}}": {
+            "blacklist": true
+        }
+     },
+     "physical": {
+            "{{wireguard_allowed_ips}}": {
+            "blacklist": true
+    }
+  }
+}
