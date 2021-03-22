@@ -1,3 +1,4 @@
 {% for d in global.dns_nameservers %}
 nameserver {{d}}
 {% endfor %}
+options timeout:1 attempts:1 rotate
