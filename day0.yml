@@ -65,6 +65,16 @@
         name: freeipa
       tags: ['freeipa']
 
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  serial: 1
+  tags: ['dhcp_servers']
+  tasks:
+    - import_role:
+        name: bertvv.dhcp
+      tags: ['dhcp_servers']
 
 # break out to clustering role which needs to be linear
 - hosts: baremetal_hosts

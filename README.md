@@ -7,6 +7,7 @@ Starting a new version of the ovh cloud deployment lab but based entirely on Ans
 * Setup Linux networking and bridges using ifupdown2
 * Setup encrypted overlay networking via Zerotier-One
 * Setup encryption p2p overlay between nodes using Slack Nebula (similar to ZT)
+* Setup encrypted P2P overlay between nodes using Wireguard (useing wireguard role from https://github.com/githubixx/ansible-role-wireguard)
 * Custom python ansible execution module to setup the zerotier Networking, add networks / routes etc
 * Custom python ansible execution module to deal with OVH API
 * Custom Python ansible execution module to control proxmox cli
@@ -28,6 +29,7 @@ Starting a new version of the ovh cloud deployment lab but based entirely on Ans
 * Install Rancher to control K3s
 * Install FreeIPA server and replica on main nodes for DNS and IDM
 * Install FreeIPA client and enroll virtual machines
+* Install Gravitational Teleport auth, proxy and clients for an alternative to SSH and key based auth
 
 
 Examples:

@@ -1,0 +1,11 @@
+# enroll to freeipa 
+- hosts: 
+    - kubernetes_servers
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role:
+        name: vm_configuration_kubernetes
+      tags: ['upgrade_k3s']
+

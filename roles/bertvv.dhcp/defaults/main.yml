@@ -1,0 +1,96 @@
+# roles/dhcp/defaults/main.yml
+---
+
+dhcp_apparmor_fix: true
+dhcp_global_includes_missing: false
+dhcp_packages_state: "present"
+# custom stuff
+dhcp_interfaces: "{{interfaces.bridges.container_bridges.0.name}} {{interfaces.bridges.container_bridges.1.name}} {{ interfaces.bridges.evpn.0.name }}"
+dhcp_global_default_lease_time: 28800   # 8hrs
+dhcp_global_max_lease_time: 43200       # 12 hrs
+#dhcp_global_subnet_mask: 255.255.255.0
+#dhcp_global_broadcast_address: 192.168.222.255
+# dhcp_global_routers: 10.0.2.2
+dhcp_global_domain_name: wizznet.co.uk
+dhcp_global_domain_name_servers:
+  - 10.22.66.5
+  - 10.21.66.5
+  - 10.20.66.5
+  - 1.1.1.1
+  - 9.9.9.9
+  - 8.8.8.8
+  - 8.8.4.4
+dhcp_global_bootp: allow
+dhcp_global_booting: allow
+#dhcp_global_next_server: 192.168.222.3
+#dhcp_global_filename: boot.img
+dhcp_subnets:
+  - ip: "{{interfaces.bridges.container_bridges.0.subnet}}"
+    netmask: "{{interfaces.bridges.container_bridges.0.mask}}"
+    domain_name_servers:
+      - 10.22.66.5
+      - 10.21.66.5
+      - 10.20.66.5
+      - 1.1.1.1
+      - 9.9.9.9
+    range_begin: "{{interfaces.bridges.container_bridges.0.begin}}"
+    range_end: "{{interfaces.bridges.container_bridges.0.end}}"
+    routers: "{{interfaces.bridges.container_bridges.0.ip}}"
+  - ip: "{{interfaces.bridges.container_bridges.1.subnet}}"
+    netmask: "{{interfaces.bridges.container_bridges.1.mask}}"
+    domain_name_servers:
+      - 10.22.66.5
+      - 10.21.66.5
+      - 10.20.66.5
+      - 1.1.1.1
+      - 9.9.9.9
+    range_begin: "{{interfaces.bridges.container_bridges.1.begin}}"
+    range_end: "{{interfaces.bridges.container_bridges.1.end}}"
+    routers: "{{interfaces.bridges.container_bridges.1.ip}}"
+  - ip: "{{interfaces.bridges.evpn.0.subnet}}"
+    netmask: "{{interfaces.bridges.evpn.0.mask}}"
+    domain_name_servers:
+      - 10.22.66.5
+      - 10.21.66.5
+      - 10.20.66.5
+      - 1.1.1.1
+      - 9.9.9.9
+    range_begin: "{{interfaces.bridges.evpn.0.begin}}"
+    range_end: "{{interfaces.bridges.evpn.0.end}}"
+    routers: "{{interfaces.bridges.evpn.0.ip}}"
+#    pools:
+#      - default_lease_time: 1800
+#        max_lease_time: 3600
+#        range_begin: 192.168.222.101
+#        range_end: 192.168.222.127
+#        allow: 'members of "vbox"'
+#  - ip: 10.101.0.0
+#    default_lease_time: 3600
+#    max_lease_time: 7200
+#    netmask: 255.255.255.0
+#    domain_name_servers:
+#      - 10.22.66.5
+#      - 10.21.66.5
+#      - 10.20.66.5
+#      - 1.1.1.1
+#      - 9.9.9.9
+#    routers: 10.101.0.1
+#  dhcp_hosts:
+#    - name: cl1
+#      mac: 'de:ad:c0:de:ca:fe'
+#      ip: 192.168.222.150
+#    - name: cl2
+#      mac: '00:de:ad:be:ef:00'
+#      ip: 192.168.222.151
+#  dhcp6_enable: true
+#  dhcp6_subnets:
+#    - ip: 'fdad:d155:f869:55b4::'
+#      cidr: 64
+#      range_begin: 'fdad:d155:f869:55b4::2:0000'
+#      range_end: 'fdad:d155:f869:55b4::2:ffff'
+#      default_lease_time: 1800
+#      max_lease_time: 7200
+#      hosts:
+#        - name: testws
+#          mac: '08:00:27:4c:e4:46'
+#          ip: 'fdad:d155:f869:55b4::3:1'

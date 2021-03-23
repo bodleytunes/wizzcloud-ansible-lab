@@ -14,6 +14,8 @@ interfaces:
         mtu: 1350
         anycast_mac: 26:13:8e:83:01:00
         bridge_ports: vxlan100
+        begin: 10.0.0.115
+        end: 10.0.0.175
       - name: evpn101
         ip: 10.1.1.1
         subnet: 10.1.1.0
@@ -22,6 +24,8 @@ interfaces:
         mtu: 1350
         anycast_mac: 26:13:8e:83:01:01
         bridge_ports: vxlan101
+        begin: 10.1.1.115
+        end: 10.1.1.175
     nebula:
       - name: nebula1
         subnet: 10.140.140.0
