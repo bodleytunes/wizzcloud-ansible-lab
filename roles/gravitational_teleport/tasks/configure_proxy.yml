@@ -1,0 +1,10 @@
+# create template
+- name: Set teleport proxy config
+  template:
+    src: templates/proxy/teleport.yaml.j2
+    dest: /etc/teleport.yaml
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - "restart teleport"

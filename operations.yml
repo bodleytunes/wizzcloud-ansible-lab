@@ -1,10 +1,10 @@
 # Day "N" Continuing Operations
 
-- import_playbook: playbooks/upgrade_k3s.yml
+- import_playbook: playbooks/operational/upgrade_k3s.yml
   tags: ['upgrade_k3s']
 
-- import_playbook: playbooks/enroll_hosts_to_idm.yml
+- import_playbook: playbooks/operational/enroll_hosts_to_idm.yml
   tags: ['enroll_idm']
 
-- import_playbook: playbooks/general_operations.yml
+- import_playbook: playbooks/operational/general_operations.yml
   tags: ['dist_upgrade']

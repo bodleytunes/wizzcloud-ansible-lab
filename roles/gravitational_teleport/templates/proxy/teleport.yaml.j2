@@ -1,0 +1,32 @@
+teleport:
+    nodename: "{{ inventory_hostname }}"
+    data_dir: /var/lib/teleport
+    storage:
+      path: /var/lib/teleport/backend
+      type: dir
+    advertise_ip: "{{ ansible_default_ipv4.address }}"
+    log:
+        output: stderr
+        severity: ERROR
+auth_service:
+    enabled: yes
+    cluster_name: "{{gravitational_teleport_cluster_name}}"
+    authentication:
+        type: local
+        second_factor: otp
+    listen_addr: "{{ ansible_default_ipv4.address }}:3025"
+    session_recording: "node"
+    proxy_checks_host_keys: no
+    client_idle_timeout: never
+    disconnect_expired_cert: no
+ssh_service:
+    enabled: yes
+    labels:
+        role: master
+        type: authenicator
+    commands:
+    - name: arch
+      command: ['/bin/uname', '-p']
+      period: 1h0m0s
+proxy_service:
+    enabled: yes

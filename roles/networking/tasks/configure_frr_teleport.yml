@@ -1,0 +1,18 @@
+
+# gen configuration file
+- name: Pre-req - Install Netifaces
+  pip: 
+    name: netifaces
+
+- name: Create FRR Configuration File - Baremetal Hosts
+  ansible.builtin.template:
+    src: frr/teleport/frr.conf.j2
+    dest: /etc/frr/frr.conf
+  notify: restart frr
+
+- name: Configure FRR Daemons
+  ansible.builtin.template:
+    src: frr/frr_daemons.j2
+    dest: /etc/frr/daemons
+  notify: restart frr
+  #when: "'baremetal_hosts' in group_names"
