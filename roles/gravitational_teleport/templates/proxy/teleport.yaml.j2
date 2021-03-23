@@ -9,7 +9,7 @@ teleport:
         output: stderr
         severity: ERROR
     auth_servers:
-      - teleport.wizznet.co.uk:3025
+      - "{{teleport_auth_server_address}}:3025"
     auth_token: ""
 auth_service:
     enabled: no

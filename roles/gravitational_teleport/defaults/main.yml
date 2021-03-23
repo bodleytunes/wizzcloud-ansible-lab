@@ -6,3 +6,4 @@ gravitational_arch: amd64
 gravitational_url: https://get.gravitational.com/
 gravitational_download_url: "{{gravitational_url}}teleport_{{gravitational_teleport_version}}_{{gravitational_arch}}.deb"
 gravitational_teleport_cluster_name: wizznet
+teleport_auth_server_address: teleport.wizznet.co.uk
