@@ -2,5 +2,15 @@
   setup:
 
 - include_tasks: install.yml
+
+
 - include_tasks: configure_server.yml
   when: " 'teleport_auth_servers' in groups"
+
+
+- include_tasks: configure_proxy.yml
+  when: " 'teleport_proxy_servers' in groups"
+
+
+- include_tasks: configure_client.yml
+  when: " 'teleport_clients' in groups"

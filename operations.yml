@@ -5,3 +5,6 @@
 
 - import_playbook: playbooks/enroll_hosts_to_idm.yml
   tags: ['enroll_idm']
+
+- import_playbook: playbooks/general_operations.yml
+  tags: ['dist_upgrade']
