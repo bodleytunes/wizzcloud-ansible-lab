@@ -4,21 +4,15 @@ teleport:
     storage:
       path: /var/lib/teleport/backend
       type: dir
-    advertise_ip: "{{ ansible_default_ipv4.address }}"
+    advertise_ip: "{{ zt_ip }}"
     log:
         output: stderr
         severity: ERROR
+    auth_servers:
+      - teleport.wizznet.co.uk:3025
+    auth_token: ""
 auth_service:
-    enabled: yes
-    cluster_name: "{{gravitational_teleport_cluster_name}}"
-    authentication:
-        type: local
-        second_factor: otp
-    listen_addr: "{{ ansible_default_ipv4.address }}:3025"
-    session_recording: "node"
-    proxy_checks_host_keys: no
-    client_idle_timeout: never
-    disconnect_expired_cert: no
+    enabled: no
 ssh_service:
     enabled: yes
     labels:

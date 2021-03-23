@@ -30,7 +30,7 @@ Starting a new version of the ovh cloud deployment lab but based entirely on Ans
 * Install FreeIPA server and replica on main nodes for DNS and IDM
 * Install FreeIPA client and enroll virtual machines
 * Install Gravitational Teleport auth, proxy and clients for an alternative to SSH and key based auth
-* Gravitational Auth server advertises and listens on anycast loopback.  This done via BGP as its 10.0.0.6 address is unreachable from non local baremetal host due to anycast MAC addresses on shared evpn stretched segment causing reply issues (basically if the remote gw sends a frame with its anycast mac, the reply goes to the local gw and thus is blackholed).
+* Gravitational Auth server advertises and listens on anycast loopback.  This done via BGP as its 10.0.0.6 address is unreachable from non local baremetal host due to anycast MAC addresses on shared evpn stretched segment causing reply issues (basically if the remote gw sends a frame with its anycast mac as the src, the reply will return to the local gw and thus is blackholed).
 
 
 Examples:

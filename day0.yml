@@ -174,16 +174,19 @@
         name: install_required_packages
       tags: ['install_required_packages']
       
-- hosts: teleport_auth_servers
+- hosts: 
+    - teleport_auth_servers
+    - teleport_proxy_servers
+    - teleport_clients
   gather_facts: true
   become: True
   any_errors_fatal: true
   strategy: linear
-  tags: ['teleport_auth']
+  tags: ['gravitational_teleport']
   tasks:
     - import_role:
         name: gravitational_teleport
-      tags: ['teleport_auth']
+      tags: ['gravitational_teleport']
 
 - hosts: kubernetes_servers
   gather_facts: false
