@@ -4,7 +4,7 @@ teleport:
     storage:
       path: /var/lib/teleport/backend
       type: dir
-    advertise_ip: "{{ ansible_default_ipv4.address }}"
+    advertise_ip: "{{ ansible_lo.ipv4_secondaries.0.address }}" # loopback
     log:
         output: stderr
         severity: ERROR
@@ -14,7 +14,7 @@ auth_service:
     authentication:
         type: local
         second_factor: otp
-    listen_addr: "{{ ansible_default_ipv4.address }}:3025"
+    listen_addr: "0.0.0.0:3025"
     session_recording: "node"
     proxy_checks_host_keys: no
     client_idle_timeout: never
@@ -23,7 +23,7 @@ ssh_service:
     enabled: yes
     labels:
         role: master
-        type: authenicator
+        type: authenticator
     commands:
     - name: arch
       command: ['/bin/uname', '-p']

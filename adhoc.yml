@@ -1,4 +1,4 @@
 # Day "N" Continuing Operations
 
 - import_playbook: playbooks/run_once/configure_teleport_servers.yml
-  tags: ['configure_teleport_auth_server', 'configure_teleport_proxy_server', 'configure_teleport_clients']
+  tags: ['configure_teleport']

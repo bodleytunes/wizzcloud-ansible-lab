@@ -1,0 +1,35 @@
+
+
+
+
+- name: remove old data folder   
+  file: 
+    path: /var/lib/teleport
+    state: absent
+  become: true
+  tags: ['never','force_reinstall']
+  when: "'force_reinstall'  in ansible_run_tags"
+  ignore_errors: true
+
+- name: start teleport
+  service:
+    name: teleport
+    state: started
+    enabled: yes
+
+# run tctl on auth server via delegation
+- name: client node create (generate essential vars such as tokens)
+  include_tasks: create_nodes.yml
+
+
+# create template
+- name: Set teleport proxy config
+  template:
+    src: templates/client/teleport.yaml.j2
+    dest: /etc/teleport.yaml
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - "restart teleport"
+

@@ -1,3 +1,28 @@
+
+
+- name: remove old data folder   
+  file: 
+    path: /var/lib/teleport
+    state: absent
+  become: true
+  tags: ['never','force_reinstall']
+  # only run if the the runtime tag is "force_reinstall".  This will be hit via running adho with teleport tag if you don't have this line
+  when: "'force_reinstall'  in ansible_run_tags"
+  ignore_errors: true
+  
+- name: start teleport
+  service:
+    name: teleport
+    state: started
+    enabled: yes
+
+# run tctl on auth server via delegation
+- name: proxy node create
+  include_tasks: create_nodes.yml
+
+
+
+
 # create template
 - name: Set teleport proxy config
   template:
@@ -8,3 +33,5 @@
     mode: '0644'
   notify:
     - "restart teleport"
+
+

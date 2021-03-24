@@ -1,3 +1,5 @@
+# Teleport Auth Servers
+
 - hosts: 
     - teleport_auth_servers
   gather_facts: true
@@ -7,6 +9,7 @@
     - import_role:
         name: install_required_packages
         tasks_from: install_baseline_packages_vm
+  # install FRR on auth server as it is advertising anycast loopback to the host with eBGP
     - include_role: # loop through to pull in multiple tasks (only works with include)
         name: networking
         tasks_from: '{{ item }}'
@@ -19,3 +22,32 @@
 
   tags: ['configure_teleport_auth_server']
 
+
+# Teleport Proxys
+- hosts: 
+    - teleport_proxy_servers
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role:
+        name: gravitational_teleport
+        tasks_from: configure_proxy
+
+  tags: ['configure_teleport_proxy_server']
+
+# Teleport Clients (but specifically exclude the auth server!)
+- hosts: 
+    - teleport_clients,!teleport_auth_servers
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - include_role:
+        name: gravitational_teleport
+        tasks_from: "{{ item }}"
+      loop:
+        - install
+        - configure_client
+
+  tags: ['configure_teleport_clients']

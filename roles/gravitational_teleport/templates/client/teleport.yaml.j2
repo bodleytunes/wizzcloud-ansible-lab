@@ -4,7 +4,7 @@ teleport:
     storage:
       path: /var/lib/teleport/backend
       type: dir
-    advertise_ip: "{{ zt_ip }}"
+    advertise_ip: "{{ ansible_default_ipv4.address }}"
     log:
         output: stderr
         severity: ERROR
@@ -16,12 +16,9 @@ auth_service:
     enabled: no
 ssh_service:
     enabled: yes
-    labels:
-        role: master
-        type: proxy
     commands:
     - name: arch
       command: ['/bin/uname', '-p']
       period: 1h0m0s
 proxy_service:
-    enabled: yes
+    enabled: no

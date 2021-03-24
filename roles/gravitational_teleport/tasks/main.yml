@@ -5,12 +5,14 @@
 
 
 - include_tasks: configure_server.yml
-  when: " 'teleport_auth_servers' in groups"
+  when: "'teleport_auth_servers' in group_names"
 
 
 - include_tasks: configure_proxy.yml
-  when: " 'teleport_proxy_servers' in groups"
+  when: " 'teleport_proxy_servers' in group_names"
 
 
 - include_tasks: configure_client.yml
-  when: " 'teleport_clients' in groups"
+  when: 
+    - " 'teleport_clients' in group_names"
+    - " 'teleport' not in ansible_hostname"
