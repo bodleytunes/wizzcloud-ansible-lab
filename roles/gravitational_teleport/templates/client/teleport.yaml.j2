@@ -1,0 +1,24 @@
+teleport:
+    nodename: "{{ inventory_hostname }}"
+    data_dir: /var/lib/teleport
+    storage:
+      path: /var/lib/teleport/backend
+      type: dir
+    advertise_ip: "{{ ansible_default_ipv4.address }}"
+    log:
+        output: stderr
+        severity: ERROR
+    auth_servers:
+      - "{{teleport_auth_server_address}}:3025"
+    auth_token: "{{ teleport_token }}"
+    ca_pin: "{{ teleport_ca_pin }}"
+auth_service:
+    enabled: no
+ssh_service:
+    enabled: yes
+    commands:
+    - name: arch
+      command: ['/bin/uname', '-p']
+      period: 1h0m0s
+proxy_service:
+    enabled: no

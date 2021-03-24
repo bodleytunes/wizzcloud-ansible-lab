@@ -26,10 +26,10 @@
   when: "'teleport_clients' in group_names"
 
 
-- name: print output 
-  debug:
-    msg: "{{tctl}}"
-
+#- name: print output 
+#  debug:
+#    msg: "{{tctl}}"
+#
 
 - name: set fact - get token
   set_fact:
