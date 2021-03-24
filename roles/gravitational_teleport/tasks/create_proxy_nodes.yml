@@ -1,0 +1,33 @@
+- name: run node command
+  command: tctl nodes add --roles node,proxy
+  register: tctl_output
+  delegate_to: teleport.wizznet.co.uk
+  #delegate_facts: true
+
+#- name: print output 
+#  debug:
+#    msg: "{{tctl_output}}"
+
+- name: set fact - get stdout
+  set_fact:
+    tctl: "{{tctl_output.stdout}}"
+
+- name: set fact - get token
+  set_fact:
+  # Get string after --token= but then ignore end white space - also double backslash to escape character 
+    teleport_token: "{{ tctl | regex_findall('--token=([^\\s]+)') | first }}"
+
+- name: set fact - get ca-pin
+  set_fact:
+  # Get string after ---ca-pin=  but then ignore end white space - also double backslash to escape character 
+    teleport_ca_pin: "{{ tctl | regex_findall('--ca-pin=([^\\s]+)') | first }}"
+  
+- name: print var
+  debug:
+    msg: "{{teleport_token}}"
+  
+    
+- name: print var
+  debug:
+    msg: "{{teleport_ca_pin}}"
+    

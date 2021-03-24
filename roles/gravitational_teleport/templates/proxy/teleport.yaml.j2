@@ -10,7 +10,8 @@ teleport:
         severity: ERROR
     auth_servers:
       - "{{teleport_auth_server_address}}:3025"
-    auth_token: ""
+    auth_token: "{{ teleport_token }}"
+    ca_pin: "{{ teleport_ca_pin }}"
 auth_service:
     enabled: no
 ssh_service:

@@ -1,9 +1,15 @@
-# remove /var/lib/teleport
-- name: Fetch the certificate from nebula cert authority   
+- name: remove old data folder   
   file: 
     path: /var/lib/teleport
     state: absent
   become: true
+
+# run tctl on auth server via delegation
+- name: proxy node create
+  include_tasks: create_proxy_nodes.yml
+
+
+
 
 # create template
 - name: Set teleport proxy config

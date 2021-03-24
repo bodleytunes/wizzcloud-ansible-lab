@@ -19,3 +19,14 @@
 
   tags: ['configure_teleport_auth_server']
 
+- hosts: 
+    - teleport_proxy_servers
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role:
+        name: gravitational_teleport
+        tasks_from: configure_proxy
+
+  tags: ['configure_teleport_proxy_server']
