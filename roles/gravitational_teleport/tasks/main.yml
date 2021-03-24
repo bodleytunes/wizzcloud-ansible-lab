@@ -13,4 +13,6 @@
 
 
 - include_tasks: configure_client.yml
-  when: " 'teleport_clients' in group_names"
+  when: 
+    - " 'teleport_clients' in group_names"
+    - " 'teleport' not in ansible_hostname"

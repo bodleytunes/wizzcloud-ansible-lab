@@ -3,6 +3,13 @@
     path: /var/lib/teleport
     state: absent
   become: true
+  ignore_errors: true
+  
+- name: start teleport
+  service:
+    name: teleport
+    state: started
+    enabled: yes
 
 # run tctl on auth server via delegation
 - name: proxy node create

@@ -9,4 +9,8 @@
   notify:
     - "restart teleport"
 
-
+- name: start teleport
+  service:
+    name: teleport
+    state: started
+    enabled: yes

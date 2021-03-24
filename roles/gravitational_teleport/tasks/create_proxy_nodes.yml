@@ -1,16 +1,35 @@
-- name: run node command
-  command: tctl nodes add --roles node,proxy
-  register: tctl_output
-  delegate_to: teleport.wizznet.co.uk
-  #delegate_facts: true
+# has to be run in blocks to keep the registered variable associated
+- block:
+  - name: run node command - for type proxy
+    command: tctl nodes add --roles node,proxy
+    register: tctl_output
+    delegate_to: teleport.wizznet.co.uk
+    
+  
+  - name: set fact - get stdout
+    set_fact:
+      tctl: "{{tctl_output}}"
 
-#- name: print output 
-#  debug:
-#    msg: "{{tctl_output}}"
+  when: "'teleport_proxy_servers' in group_names"
 
-- name: set fact - get stdout
-  set_fact:
-    tctl: "{{tctl_output.stdout}}"
+# has to be run in blocks
+- block: 
+  - name: run node command - for type client
+    command: tctl nodes add --roles node
+    register: tctl_output
+    delegate_to: teleport.wizznet.co.uk
+    
+  
+  - name: set fact - get stdout
+    set_fact:
+      tctl: "{{tctl_output}}"
+  when: "'teleport_clients' in group_names"
+
+
+- name: print output 
+  debug:
+    msg: "{{tctl}}"
+
 
 - name: set fact - get token
   set_fact:

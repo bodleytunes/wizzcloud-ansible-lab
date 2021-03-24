@@ -182,6 +182,7 @@
   become: True
   any_errors_fatal: true
   strategy: linear
+  serial: 1
   tags: ['gravitational_teleport']
   tasks:
     - import_role:
