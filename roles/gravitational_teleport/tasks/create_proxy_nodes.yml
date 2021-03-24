@@ -45,7 +45,6 @@
   debug:
     msg: "{{teleport_token}}"
   
-    
 - name: print var
   debug:
     msg: "{{teleport_ca_pin}}"
