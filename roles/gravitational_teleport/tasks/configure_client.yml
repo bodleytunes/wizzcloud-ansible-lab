@@ -1,8 +1,14 @@
+
+
+
+
 - name: remove old data folder   
   file: 
     path: /var/lib/teleport
     state: absent
   become: true
+  tags: ['never','force_reinstall']
+  when: "'force_reinstall'  in ansible_run_tags"
   ignore_errors: true
 
 - name: start teleport
@@ -13,7 +19,7 @@
 
 # run tctl on auth server via delegation
 - name: client node create (generate essential vars such as tokens)
-  include_tasks: create_proxy_nodes.yml
+  include_tasks: create_nodes.yml
 
 
 # create template

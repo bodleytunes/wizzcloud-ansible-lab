@@ -23,7 +23,7 @@ ssh_service:
     enabled: yes
     labels:
         role: master
-        type: authenicator
+        type: authenticator
     commands:
     - name: arch
       command: ['/bin/uname', '-p']
