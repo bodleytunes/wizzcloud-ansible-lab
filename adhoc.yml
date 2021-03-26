@@ -1,4 +1,1 @@
-# Day "N" Continuing Operations
-
-- import_playbook: playbooks/run_once/configure_teleport_servers.yml
-  tags: ['configure_teleport']
+# adhoc tasks / one offs.

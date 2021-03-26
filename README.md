@@ -67,7 +67,7 @@ etc..
 ###### Destroy
 `ansible-playbook -i inventory.ini day0.yml --tags terraform_destroy`
 
-##### Day N operations
+##### Day N operational tasks
 
 ###### Regenerate Nebula Certs
 If you modify the groups the node belongs to you will have to regen and load new certs on the nodes - this is an adhoc run via a tag
@@ -77,8 +77,24 @@ If you modify the groups the node belongs to you will have to regen and load new
 If you make modificaations to the templates or to the vars they consume then run this to reconfigure the routing
 `ansible-playbook -i inventory.ini day0.yml --tags reconfigure_frr_routing`
 
+###### Dist upgrade baremetal hosts + vm's
+`ansible-playbook -i inventory.ini operations.yml --tags dist_upgrade`
 
-###### Notes for kubernetes quorum node on Raspberry Pi4
+###### Setup s3fs backup storage device in proxmox
+`ansible-playbook -i inventory.ini operations.yml --tags setup_s3fs`
+
+###### Configure Teleport
+
+`ansible-playbook -i inventory.ini adhoc.yml  --tags configure_teleport_auth_server`
+
+`ansible-playbook -i inventory.ini adhoc.yml  --tags configure_teleport_proxy_server`
+
+`ansible-playbook -i inventory.ini adhoc.yml  --tags configure_teleport_clients`
+
+
+
+
+###### Extra Notes for kubernetes quorum node on Raspberry Pi4
 
 ###### on pi4 list
 cat /boot/cmdline.txt
