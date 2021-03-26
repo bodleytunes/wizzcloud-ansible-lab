@@ -106,3 +106,28 @@ cat /boot/cmdline.txt
 ###### k3s install on pi4
 
 `curl -fL https://get.k3s.io |  INSTALL_K3S_CHANNEL=stable   K3S_TOKEN=token_goes_here sh -s - --server https://10.100.0.100:6443  --node-ip 10.55.0.11 --node-taint k3s-controlplane=true:NoExecute --disable traefik --disable servicelb`
+
+###### Add a new VM after deployment (Day N Operations)
+
+add to inventory.ini
+add to correct
+
+`pritunl.wizznet.co.uk ansible_host=10.0.0.7 ansible_user=jon`
+
+run dist-upgrade
+
+`ansible-playbook -i inventory.ini operations.yml  --tags dist_upgrade`
+
+
+run vm_networking
+
+`ansible-playbook -i inventory.ini day0.yml  --tags vm_networking`
+
+join IPA / IDM
+
+`ansible-playbook -i inventory.ini day0.yml  --tags freeipa_client`
+
+join Teleport SSH
+
+`ansible-playbook -i inventory.ini operations.yml  --tags configure_teleport_clients`
+

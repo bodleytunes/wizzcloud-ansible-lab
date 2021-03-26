@@ -1,13 +1,13 @@
 locals {
-  teleport_host = { 190 = { "name" = "pritunl.wizznet.co.uk" } }
+  pritunl_host = { 190 = { "name" = "pritunl.wizznet.co.uk" } }
 }
 
 resource "proxmox_vm_qemu" "pritunl" {
 
   vmid        = 0
-  name        = local.teleport_host["190"]["name"]
+  name        = local.pritunl_host["190"]["name"]
   target_node = "p21"
-  clone       = "9003-ubuntu-20-04-template"
+  clone       = "9004-ubuntu-20-04-template"
   os_type     = "cloud-init"
   agent       = 1
   # custom cloud init file located on proxmox host in snippets dir
