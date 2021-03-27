@@ -1,0 +1,63 @@
+# Day "N" Continuing Operations
+
+
+
+# A group of plays to configure a VM after adding one on day N
+
+- import_playbook: playbooks/operational/general_operations.yml
+  tags: ['dist_upgrade']
+
+- import_playbook: playbooks/operational/network_operations.yml
+  tags: ['vm_networking']
+
+- import_playbook: playbooks/operational/enroll_hosts_to_idm.yml
+
+- import_playbook: playbooks/run_once/configure_teleport_servers.yml
+  tags: ['configure_teleport_clients']
+
+# Upgrade the servers via dist-upgrade!
+- hosts: 
+    - baremetal_hosts
+    - virtual_machines
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: dist_upgrade
+
+- hosts: 
+    - virtual_machines
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role:
+        name: vm_networking
+
+
+# enroll to freeipa 
+- hosts: 
+    - virtual_machines
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role:
+        name: freeipa_client
+
+# Teleport Clients (but specifically exclude the auth server!)
+- hosts: 
+    - teleport_clients,!teleport_auth_servers
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - include_role:
+        name: gravitational_teleport
+        tasks_from: "{{ item }}"
+      loop:
+        - install
+        - configure_client
+
