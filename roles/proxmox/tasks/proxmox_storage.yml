@@ -1,15 +1,27 @@
 
-- name: Custom module for PVE set storage
+- block:
+  - name: Custom module for PVE set storage
+    pve_operations:
+      func: set_zfs_storage
+      group_storage_dict: "{{ group_storage }}"
+      host_storage_dict: "{{ storage }}"
+    register: pve_result
+    
+  
+  - name: print var for debugging purposes
+    ansible.builtin.debug:
+      msg: " {{ pve_result.data }} "
+
+  when: " 'setup_s3fs' not in ansible_run_tags"
+
+
+- name: Custom module for PVE set s3fs (backblaze) backups storage
   pve_operations:
-    func: set_zfs_storage
-    group_storage_dict: "{{ group_storage }}"
-    host_storage_dict: "{{ storage }}"
+    func: set_s3fs_storage
+    s3fs: "{{ group_storage.s3fs.backblaze }}"
+  #  host_storage_dict: "{{ storage }}"
   register: pve_result
-
-- name: print var for debugging purposes
-  ansible.builtin.debug:
-    msg: " {{ pve_result.data }} "
-
+  tags: ['setup_s3fs']
 
 
 #- name: Create Proxmox ZFS storage via CLI

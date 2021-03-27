@@ -67,7 +67,7 @@ etc..
 ###### Destroy
 `ansible-playbook -i inventory.ini day0.yml --tags terraform_destroy`
 
-##### Day N operations
+##### Day N operational tasks
 
 ###### Regenerate Nebula Certs
 If you modify the groups the node belongs to you will have to regen and load new certs on the nodes - this is an adhoc run via a tag
@@ -77,8 +77,24 @@ If you modify the groups the node belongs to you will have to regen and load new
 If you make modificaations to the templates or to the vars they consume then run this to reconfigure the routing
 `ansible-playbook -i inventory.ini day0.yml --tags reconfigure_frr_routing`
 
+###### Dist upgrade baremetal hosts + vm's
+`ansible-playbook -i inventory.ini operations.yml --tags dist_upgrade`
 
-###### Notes for kubernetes quorum node on Raspberry Pi4
+###### Setup s3fs backup storage device in proxmox
+`ansible-playbook -i inventory.ini operations.yml --tags setup_s3fs`
+
+###### Configure Teleport
+
+`ansible-playbook -i inventory.ini adhoc.yml  --tags configure_teleport_auth_server`
+
+`ansible-playbook -i inventory.ini adhoc.yml  --tags configure_teleport_proxy_server`
+
+`ansible-playbook -i inventory.ini adhoc.yml  --tags configure_teleport_clients`
+
+
+
+
+###### Extra Notes for kubernetes quorum node on Raspberry Pi4
 
 ###### on pi4 list
 cat /boot/cmdline.txt
@@ -90,3 +106,28 @@ cat /boot/cmdline.txt
 ###### k3s install on pi4
 
 `curl -fL https://get.k3s.io |  INSTALL_K3S_CHANNEL=stable   K3S_TOKEN=token_goes_here sh -s - --server https://10.100.0.100:6443  --node-ip 10.55.0.11 --node-taint k3s-controlplane=true:NoExecute --disable traefik --disable servicelb`
+
+###### Add a new VM after deployment (Day N Operations)
+
+add to inventory.ini
+add to correct
+
+`pritunl.wizznet.co.uk ansible_host=10.0.0.7 ansible_user=jon`
+
+run dist-upgrade
+
+`ansible-playbook -i inventory.ini operations.yml  --tags dist_upgrade`
+
+
+run vm_networking
+
+`ansible-playbook -i inventory.ini day0.yml  --tags vm_networking`
+
+join IPA / IDM
+
+`ansible-playbook -i inventory.ini day0.yml  --tags freeipa_client`
+
+join Teleport SSH
+
+`ansible-playbook -i inventory.ini operations.yml  --tags configure_teleport_clients`
+

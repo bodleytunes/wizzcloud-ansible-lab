@@ -7,8 +7,8 @@
     path: /var/lib/teleport
     state: absent
   become: true
-  tags: ['never','force_reinstall']
-  when: "'force_reinstall'  in ansible_run_tags"
+ # tags: ['never','force_reinstall']
+ # when: "'force_reinstall'  in ansible_run_tags"
   ignore_errors: true
 
 - name: start teleport

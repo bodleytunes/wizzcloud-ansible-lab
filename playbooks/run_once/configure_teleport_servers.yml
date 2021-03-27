@@ -51,3 +51,19 @@
         - configure_client
 
   tags: ['configure_teleport_clients']
+
+
+  # Teleport Users 
+- hosts: 
+    - teleport_auth_servers
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - include_role:
+        name: gravitational_teleport
+        tasks_from: "{{ item }}"
+      loop:
+        - create_users
+
+  tags: ['configure_teleport_users']

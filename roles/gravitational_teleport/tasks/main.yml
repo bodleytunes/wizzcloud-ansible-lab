@@ -16,3 +16,6 @@
   when: 
     - " 'teleport_clients' in group_names"
     - " 'teleport' not in ansible_hostname"
+
+- include_tasks: configure_users.yml
+  when: "'teleport_auth_servers' in group_names"

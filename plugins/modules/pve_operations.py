@@ -20,6 +20,7 @@ def run_module():
         template_ids=dict(type="list", required=False),
         zpool_name=dict(type=str, required=False),
         image_name=dict(type=str, required=False),
+        s3fs=dict(type=dict, required=False),
     )
 
     # seed the result dict in the object
@@ -57,6 +58,8 @@ def pve_operations(module) -> dict:
 
     if func == "set_zfs_storage":
         set_zfs_storage(module)
+    if func == "set_s3fs_storage":
+        set_s3fs_storage(module)
     elif func == "create_template":
         result = create_template(module)
         return result
@@ -93,6 +96,39 @@ def set_zfs_storage(module):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
+    stdout, stderr = process.communicate()
+    return {"stdout:": stdout, "stderr": stderr}
+
+
+def set_s3fs_storage(module):
+    s3fs = module.params["s3fs"]
+    # host_storage_dict = module.params["host_storage_dict"]
+
+    import subprocess
+
+    # pvesm add zfspool "{{ item[0].name }}" -pool "{{item[0].datasets.proxmox}}" --nodes p20,p21 --content rootdir,images
+    # for zpool in group_storage_dict["zfs"]["zpools"]:
+
+    process = subprocess.Popen(
+        [
+            "pvesm",
+            "add",
+            s3fs["type"],
+            s3fs["name"],
+            f"--path={s3fs['backup_folder']}",
+            "--content=backup",
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    # get nodes as in p20,p21 auto build string separated by commas
+    node_strings = s3fs["nodes"]
+    joined_string = ",".join(node_strings)
+    process = subprocess.Popen(
+        ["pvesm", "set", s3fs["name"], "--nodes", joined_string],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
     stdout, stderr = process.communicate()
     return {"stdout:": stdout, "stderr": stderr}
 
