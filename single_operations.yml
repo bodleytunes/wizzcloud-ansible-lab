@@ -7,10 +7,11 @@
   tags: ['enroll_idm']
 
 - import_playbook: playbooks/operational/general_operations.yml
-  tags: ['dist_upgrade']
 
 - import_playbook: playbooks/operational/storage_operations.yml
-  tags: ['setup_s3fs']
 
 - import_playbook: playbooks/run_once/configure_teleport_servers.yml
   tags: ['configure_teleport']
+
+- import_playbook: playbooks/run_once/configure_pritunl_server_networking.yml
+  tags: ['configure_frr_pritunl']
