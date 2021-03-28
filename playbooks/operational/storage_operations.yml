@@ -9,3 +9,20 @@
         name: proxmox
         tasks_from: proxmox_storage
       tags: ['setup_s3fs']
+
+
+#TODO
+# remove all cloud-init drives from virtual machines so that they can live migrate
+# qm set 105 --ide2 none
+# deletate to p20
+
+#- hosts: 
+#    - virtual_machines
+#  gather_facts: true
+#  become: True
+#  any_errors_fatal: true
+#  tasks:
+#    - import_role:
+#        name: vm_storage
+#        tasks_from: remove_cloudinit_drives
+#      tags: ['vm_remove_cloudinit_drives']
