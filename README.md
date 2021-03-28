@@ -132,3 +132,9 @@ join Teleport SSH
 
 `ansible-playbook -i inventory.ini operations.yml  --tags configure_teleport_clients`
 
+
+###### VM Post Ops
+`ansible-playbook -i inventory.ini post_operations_vm.yml`
+
+###### VM Add k3s host
+`ansible-playbook -i inventory.ini day0.yml --tags vm_configuration_kubernetes`
