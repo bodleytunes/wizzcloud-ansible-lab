@@ -209,6 +209,18 @@
     - import_role:
         name: freeipa_client
       tags: ['freeipa_client']
+
+
+- hosts: docker_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['docker']
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: install_docker
+
       #vars:
       #  - ansible_python_interpreter: "/usr/bin/python2.7"
 

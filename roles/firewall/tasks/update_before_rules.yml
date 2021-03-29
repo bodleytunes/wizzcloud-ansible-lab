@@ -1,0 +1,13 @@
+- name: Re-gather facts
+  setup: ~
+
+- name: Create UFW Defaults - Baremetal Hosts
+  ansible.builtin.template:
+    src: baremetal_hosts/ufw_before_rules.j2
+    dest: /etc/ufw/before.rules
+
+
+- name: UFW refresh
+  shell: |
+    ufw --force enable
+    iptables -t nat -F && ufw reload

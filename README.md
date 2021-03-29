@@ -110,7 +110,8 @@ cat /boot/cmdline.txt
 ###### Add a new VM after deployment (Day N Operations)
 
 add to inventory.ini
-add to correct
+add to correct groups in inventory e.g. ipa_clients requires a group that the vm belongs to.
+
 
 `pritunl.wizznet.co.uk ansible_host=10.0.0.7 ansible_user=jon`
 
@@ -131,3 +132,9 @@ join Teleport SSH
 
 `ansible-playbook -i inventory.ini operations.yml  --tags configure_teleport_clients`
 
+
+###### VM Post Ops
+`ansible-playbook -i inventory.ini post_operations_vm.yml`
+
+###### VM Add k3s host
+`ansible-playbook -i inventory.ini day0.yml --tags vm_configuration_kubernetes`

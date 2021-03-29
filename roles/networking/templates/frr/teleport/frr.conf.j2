@@ -4,10 +4,10 @@ no ipv6 forwarding
 service integrated-vtysh-config
 !
 interface lo
- ip address 10.169.169.6/32
+ ip address {{ bgp.loopback }}/32
 !
-router bgp 6
- bgp router-id 10.169.169.6
+router bgp {{ bgp.bgp_as | default('6') }}
+ bgp router-id {{ bgp.loopback | default(ansible_default_ipv4.address) }}
 no bgp ebgp-requires-policy
  neighbor 10.0.0.1 remote-as external
  neighbor 10.0.0.1 bfd
@@ -15,7 +15,7 @@ no bgp ebgp-requires-policy
  neighbor 10.0.0.1 capability extended-nexthop
  !
  address-family ipv4 unicast
-  network 10.169.169.6/32
+  network {{ bgp.loopback }}/32
   neighbor 10.0.0.1 soft-reconfiguration inbound
  exit-address-family
 !

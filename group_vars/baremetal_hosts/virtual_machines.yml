@@ -8,9 +8,23 @@ virtual_machines:
       fw_rules:
         - name: plex_media_server
           chain: PREROUTING
-          ingress_interface: vmbr0
+          ingress_interface: "{{ ansible_default_ipv4.interface }}"
           src: any
           dst: 10.169.169.100
           dst_port: 32400
+          proto: tcp
+          type: DNAT
+    - name: pritunl
+      ip: 10.0.0.7
+      mask: /24
+      network: evpn100
+      mtu: 1350
+      fw_rules:
+        - name: "pritunl vpn server"
+          chain: PREROUTING
+          ingress_interface: "{{ ansible_default_ipv4.interface }}"
+          src: any
+          dst: 10.169.169.7
+          dst_port: 17336
           proto: tcp
           type: DNAT

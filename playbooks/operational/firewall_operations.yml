@@ -1,0 +1,13 @@
+# Upgrade the servers via dist-upgrade!
+- hosts: 
+    - baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role:
+        name: firewall
+        tasks_from: update_before_rules
+   #   when: "'dist_upgrade' in ansible_run_tags"
+      tags: ['update_firewall']
+
