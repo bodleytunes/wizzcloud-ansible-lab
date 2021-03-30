@@ -1,0 +1,49 @@
+- name: Docker container for pritunl
+  docker_container:
+    name: '{{ freeipa.name }}'
+    image: '{{ ipa_container_image }}'
+    restart_policy: always
+    hostname: '{{ freeipa.name }}'
+    domainname: '{{ ipa_domain_name }}'
+    dns_servers:
+      - 8.8.4.4
+      - 1.1.1.1
+      - 9.9.9.9
+    etc_hosts:
+      ipa.wizznet.co.uk: '{{ freeipa.ipa_address }}'
+    networks_cli_compatible: true
+    env:
+      IPA_SERVER_HOSTNAME: '{{ freeipa.ipa_hostname }}'
+      IPA_SERVER_IP: '{{ freeipa.ipa_address }}'
+      PASSWORD: "{{ ipa_admin_password }}"
+    command:
+      - -U
+      - "--realm={{ ipa_domain_name }}"
+      - "--domain={{ ipa_domain_name }}"
+      - "--ds-password={{ ipa_admin_password }}"
+      - "--admin-password={{ ipa_admin_password }}"
+      - --no-dnssec-validation
+      - --setup-dns
+      - --forwarder=9.9.9.9
+      - --forwarder=1.1.1.1
+      - --forwarder=8.8.4.4
+      - --allow-zone-overlap
+      - --setup-kra
+      - --auto-reverse
+      - --unattended
+    volumes:
+      - /docker/ipa_ansible/data:/data
+      - /docker/ipa_ansible/logs:/var/logs
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /run
+      - /var/cache
+      - /tmp
+    capabilities:
+      - SYS_TIME
+    networks:
+      - name: '{{ ipa_bridge }}'
+        ipv4_address: '{{ freeipa.ipa_address }}'
+    sysctls:
+      net.ipv6.conf.all.disable_ipv6: 0
+  register: ipa_master

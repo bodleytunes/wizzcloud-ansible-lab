@@ -1,0 +1,5 @@
+- import_role:
+    name: common
+    tasks_from: install_docker
+
+- include_tasks: install_pritunl.yml
