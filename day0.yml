@@ -232,8 +232,15 @@
         name: openvpn_pritunl
       tags: ['pritunl_server']
 
-- import_playbook: roles/docker-pdns/ansible-playbook.yml
-  tags: ['powerdns']
+
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tasks:
+    - import_role: 
+        name: powerdns
+      tags: ['powerdns']
 
 
       #vars:
