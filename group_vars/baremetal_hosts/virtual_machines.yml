@@ -25,6 +25,34 @@ virtual_machines:
           ingress_interface: "{{ ansible_default_ipv4.interface }}"
           src: any
           dst: 10.169.169.7
-          dst_port: 17336
+          dst_port: 11098
           proto: tcp
+          type: DNAT
+    - name: pritunl
+      ip: 10.0.0.7
+      mask: /24
+      network: evpn100
+      mtu: 1350
+      fw_rules:
+        - name: "pritunl vpn server udp"
+          chain: PREROUTING
+          ingress_interface: "{{ ansible_default_ipv4.interface }}"
+          src: any
+          dst: 10.169.169.7
+          dst_port: 11098
+          proto: udp
+          type: DNAT
+    - name: pritunl_wireguard
+      ip: 10.0.0.7
+      mask: /24
+      network: evpn100
+      mtu: 1350
+      fw_rules:
+        - name: "pritunl wireguard vpn server"
+          chain: PREROUTING
+          ingress_interface: "{{ ansible_default_ipv4.interface }}"
+          src: any
+          dst: 10.169.169.7
+          dst_port: 28599
+          proto: udp
           type: DNAT

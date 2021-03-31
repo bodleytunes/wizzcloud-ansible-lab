@@ -1,49 +1,63 @@
+- name: create bridge for mongo
+  docker_network:
+    name: br-mongo
+    state: present
+    driver: bridge
+    driver_options:
+      com.docker.network.driver.mtu: 1300
+
+
+
+- name: MongoDB container for pritunl
+  docker_container:
+    name: mongo
+    image: mongo:latest
+    hostname: mongo
+    networks:
+      - name: br-mongo
+    volumes:
+      - /docker/pritunl/db:/data/db
+  register: mongo
+
 - name: Docker container for pritunl
   docker_container:
-    name: '{{ freeipa.name }}'
-    image: '{{ ipa_container_image }}'
+    name: '{{ pritunl.name }}'
+    image: '{{ pritunl.image }}'
     restart_policy: always
-    hostname: '{{ freeipa.name }}'
-    domainname: '{{ ipa_domain_name }}'
+    hostname: '{{ pritunl.name }}'
+    domainname: '{{ pritunl.domainname }}'
+    privileged: yes
     dns_servers:
+      - 127.0.0.11
+      - 10.22.66.5
+      - 10.21.66.5
+      - 10.20.66.5
       - 8.8.4.4
       - 1.1.1.1
       - 9.9.9.9
+    published_ports:
+      - 0.0.0.0:1194:1194/tcp
+      - 0.0.0.0:1194:1194/udp
+      - 0.0.0.0:1195:1195/udp
+      - 0.0.0.0:80:80
+      - 0.0.0.0:443:443
+      - 0.0.0.0:11098:11098/tcp # ovpn tcp
+      - 0.0.0.0:11098:11098/udp # ovpn udp
+      - 0.0.0.0:28599:28599/udp # wireguard
     etc_hosts:
-      ipa.wizznet.co.uk: '{{ freeipa.ipa_address }}'
+      ipa.wizznet.co.uk: '{{ hostvars["ipa3.wizznet.co.uk"].freeipa.ipa_address }}'
     networks_cli_compatible: true
     env:
-      IPA_SERVER_HOSTNAME: '{{ freeipa.ipa_hostname }}'
-      IPA_SERVER_IP: '{{ freeipa.ipa_address }}'
-      PASSWORD: "{{ ipa_admin_password }}"
-    command:
-      - -U
-      - "--realm={{ ipa_domain_name }}"
-      - "--domain={{ ipa_domain_name }}"
-      - "--ds-password={{ ipa_admin_password }}"
-      - "--admin-password={{ ipa_admin_password }}"
-      - --no-dnssec-validation
-      - --setup-dns
-      - --forwarder=9.9.9.9
-      - --forwarder=1.1.1.1
-      - --forwarder=8.8.4.4
-      - --allow-zone-overlap
-      - --setup-kra
-      - --auto-reverse
-      - --unattended
+      TZ: UTC
+      MONGODB_URI: "mongodb://mongo:27017/pritunl"
+      REVERSE_PROXY: "false"
+      WIREGUARD: "true"
     volumes:
-      - /docker/ipa_ansible/data:/data
-      - /docker/ipa_ansible/logs:/var/logs
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    tmpfs:
-      - /run
-      - /var/cache
-      - /tmp
-    capabilities:
-      - SYS_TIME
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/pritunl/pritunldata:/var/lib/pritunl
+    network_mode: bridge
     networks:
-      - name: '{{ ipa_bridge }}'
-        ipv4_address: '{{ freeipa.ipa_address }}'
+      - name: br-mongo
     sysctls:
       net.ipv6.conf.all.disable_ipv6: 0
-  register: ipa_master
+  register: pritunl
