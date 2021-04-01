@@ -13,3 +13,6 @@
 - import_tasks: setup_users.yml
   when: " 'ipa_master' in group_names "
   tags: ['ipa_users']
+
+- include_tasks: enable_dns_recursion.yml
+  

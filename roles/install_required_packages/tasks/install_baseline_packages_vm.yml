@@ -1,7 +1,20 @@
-- name: Install baseline packages for virtual_machines
+
+
+- name: Make sure universe repository is enabled
+  apt_repository:
+   repo: deb http://archive.ubuntu.com/ubuntu focal universe
+   state: present
+   update_cache: True
+
+- name: Install baseline python-is-python3 first!
   apt:
     pkg:
     - python-is-python3
+    update_cache: yes
+
+- name: Install baseline python3-pip packages for virtual_machines
+  apt:
+    pkg:
     - python3
     - python3-pip
  

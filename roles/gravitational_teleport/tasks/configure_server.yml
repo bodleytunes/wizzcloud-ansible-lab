@@ -14,3 +14,4 @@
     name: teleport
     state: started
     enabled: yes
+  when: "'teleport' in ansible_hostname"

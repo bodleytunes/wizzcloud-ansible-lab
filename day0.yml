@@ -53,6 +53,9 @@
     - import_role:
         name: proxmox
       tags: ['proxmox']
+    - import_role:
+        name: common
+        tasks_from: install_docker
 
 - hosts: baremetal_hosts
   gather_facts: true
@@ -65,16 +68,7 @@
         name: freeipa
       tags: ['freeipa']
 
-- hosts: baremetal_hosts
-  gather_facts: true
-  become: True
-  any_errors_fatal: true
-  serial: 1
-  tags: ['dhcp_servers']
-  tasks:
-    - import_role:
-        name: bertvv.dhcp
-      tags: ['dhcp_servers']
+
 
 # break out to clustering role which needs to be linear
 - hosts: baremetal_hosts
@@ -113,8 +107,24 @@
     - import_role:
         name: githubixx.ansible_role_wireguard
       tags: ['wireguard']
+    - import_role:
+        name: githubixx.ansible_role_wireguard
+      tags: ['wireguard']
+    - import_role:
+        name: githubixx.ansible_role_wireguard
+      tags: ['wireguard']
 
-    
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  serial: 1
+  tags: ['dhcp_servers']
+  tasks:
+    - import_role:
+        name: bertvv.dhcp
+      tags: ['dhcp_servers']
+
 - hosts: baremetal_hosts
   gather_facts: true
   become: True
@@ -174,20 +184,23 @@
         name: install_required_packages
       tags: ['install_required_packages']
       
-- hosts: 
-    - teleport_auth_servers
-    - teleport_proxy_servers
-    - teleport_clients
-  gather_facts: true
-  become: True
-  any_errors_fatal: true
-  strategy: linear
-  serial: 1
+#- hosts: 
+#    - teleport_auth_servers
+#    - teleport_proxy_servers
+#    - teleport_clients
+#  gather_facts: true
+#  become: True
+#  any_errors_fatal: true
+#  strategy: linear
+#  serial: 1
+#  tags: ['gravitational_teleport']
+#  tasks:
+#    - import_role:
+#        name: gravitational_teleport
+#      tags: ['gravitational_teleport']
+
+- import_playbook: playbooks/run_once/configure_teleport_servers.yml
   tags: ['gravitational_teleport']
-  tasks:
-    - import_role:
-        name: gravitational_teleport
-      tags: ['gravitational_teleport']
 
 - hosts: kubernetes_servers
   gather_facts: false
@@ -233,14 +246,14 @@
       tags: ['pritunl_server']
 
 
-- hosts: baremetal_hosts
-  gather_facts: false
-  become: True
-  any_errors_fatal: true
-  tasks:
-    - import_role: 
-        name: powerdns
-      tags: ['powerdns']
+#- hosts: baremetal_hosts
+#  gather_facts: false
+#  become: True
+#  any_errors_fatal: true
+#  tasks:
+#    - import_role: 
+#        name: powerdns
+#      tags: ['powerdns']
 
 
       #vars:
