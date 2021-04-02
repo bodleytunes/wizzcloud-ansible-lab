@@ -107,12 +107,7 @@
     - import_role:
         name: githubixx.ansible_role_wireguard
       tags: ['wireguard']
-    - import_role:
-        name: githubixx.ansible_role_wireguard
-      tags: ['wireguard']
-    - import_role:
-        name: githubixx.ansible_role_wireguard
-      tags: ['wireguard']
+
 
 - hosts: baremetal_hosts
   gather_facts: true
