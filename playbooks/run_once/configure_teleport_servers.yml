@@ -16,9 +16,12 @@
       loop:
         - install_frr
         - configure_frr_teleport
-    - import_role:
+    - include_role:
         name: gravitational_teleport
-        tasks_from: configure_server
+        tasks_from: "{{ item }}"
+      loop:
+        - install
+        - configure_server
 
   tags: ['configure_teleport_auth_server']
 
@@ -30,6 +33,9 @@
   become: True
   any_errors_fatal: true
   tasks:
+    - import_role:
+        name: gravitational_teleport
+        tasks_from: install
     - import_role:
         name: gravitational_teleport
         tasks_from: configure_proxy

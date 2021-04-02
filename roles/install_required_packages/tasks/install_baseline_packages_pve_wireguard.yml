@@ -1,0 +1,4 @@
+- name: Install baseline packages for Wireguard install on proxmox
+  apt:
+    pkg:
+    - pve-headers

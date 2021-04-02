@@ -16,3 +16,9 @@
     dest: /etc/frr/daemons
   notify: restart frr
   #when: "'baremetal_hosts' in group_names"
+
+
+- name: Reload service FRR, in all cases
+  ansible.builtin.systemd:
+    name: frr
+    state: reloaded

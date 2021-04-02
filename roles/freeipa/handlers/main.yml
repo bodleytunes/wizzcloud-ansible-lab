@@ -1,0 +1,6 @@
+- name: Wait until the dns opts file is available before continuing
+  wait_for:
+    path: /docker/ipa_ansible/data/etc/named/ipa-options-ext.conf
+    delay: 10
+    timeout: 1000
+  listen: wait_for_dns

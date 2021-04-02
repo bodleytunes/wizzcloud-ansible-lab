@@ -1,8 +1,8 @@
 global:
   dns_nameservers:
-    - '{{hostvars["ipa3.wizznet.co.uk"].freeipa.ipa_address}}'
-    - '{{hostvars["p21"].freeipa.ipa_address}}'
     - '{{hostvars["p20"].freeipa.ipa_address}}'
+    - '{{hostvars["p21"].freeipa.ipa_address}}'
+    - '{{hostvars["ipa3.wizznet.co.uk"].freeipa.ipa_address}}'
     - 1.1.1.1
     - 9.9.9.9
     - 8.8.4.4

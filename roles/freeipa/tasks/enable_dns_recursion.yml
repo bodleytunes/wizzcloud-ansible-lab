@@ -1,0 +1,53 @@
+- name: Wait until the dns opts file is available before continuing
+  wait_for:
+    path: /docker/ipa_ansible/data/etc/named/ipa-options-ext.conf
+    delay: 10
+    timeout: 1000
+
+- name: Enable dns recursion for external hosts in NameD
+  blockinfile:
+    path: /docker/ipa_ansible/data/etc/named/ipa-options-ext.conf
+    block: "{{  lookup('template', 'ipa-options-ext.conf.j2') }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK for ipa-options dns recursion"
+
+
+#- name: Restart freeipa containers
+#  docker_container:
+#    name: '{{ freeipa.name }}'
+#    restart: yes
+#  register: ipa_restart
+
+- name: Wait for IPA Master Web server Https to accept connections - don't continue until its up and ready
+  wait_for:
+    host: "{{ ipa_master['ansible_facts'] \
+          ['docker_container'] \
+          ['NetworkSettings'] \
+          ['Networks'] \
+          ['br-freeipa'] \
+          ['IPAddress'] }}"
+    port: 443
+    state: started
+    connect_timeout: 1
+    timeout: 30
+  register: ipa_running
+  until: ipa_running is success
+  retries: 25
+  when: "'ipa_master' in group_names"
+
+
+- name: Wait for IPA Master Web server Https to accept connections - don't continue until its up and ready
+  wait_for:
+    host: "{{ ipa_replica['ansible_facts'] \
+          ['docker_container'] \
+          ['NetworkSettings'] \
+          ['Networks'] \
+          ['br-freeipa'] \
+          ['IPAddress'] }}"
+    port: 443
+    state: started
+    connect_timeout: 1
+    timeout: 30
+  register: ipa_replica_running
+  until: ipa_replica_running is success
+  retries: 25
+  when: "'ipa_replica' in group_names"

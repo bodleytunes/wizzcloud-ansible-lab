@@ -1,0 +1,14 @@
+- name: Gathering facts
+  setup:
+
+# pre-req install docker
+- import_role:
+    name: common
+    tasks_from: install_docker
+
+# pre-req install wiregaurd
+- import_role:
+    name: githubixx.ansible_role_wireguard
+    tasks_from: setup-ubuntu.yml
+
+- include_tasks: install_pritunl.yml

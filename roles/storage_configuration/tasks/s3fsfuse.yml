@@ -2,7 +2,7 @@
   apt:
     pkg:
       - libfuse-dev
-      - fuse
+    #  - fuse
       - build-essential
       - libcurl4-openssl-dev
       - libxml2-dev

@@ -5,6 +5,11 @@
 - name: set fact
   set_fact:
     user_ipa_passwords: "{{ users | items2dict(key_name='name',value_name='password') }}"
+  
+
+# don't attempt this until dns has resumed otherwise can get 500 or 401 errors
+- meta: flush_handlers
+
 
 - name: Add IPA User Jon
   community.general.ipa_user:
@@ -18,6 +23,7 @@
     ipa_pass: "{{ ipa_admin_password }}"
     update_password: on_create
     validate_certs: no
+  ignore_errors: true
 
 - name: Add IPA User Wizznetadmin
   community.general.ipa_user:
@@ -32,6 +38,8 @@
     homedirectory: "/home/{{ user_ipa_users.wizznetadmin  }}"
     update_password: on_create
     validate_certs: no
+  ignore_errors: true
+
 
 - name: Add IPA Users
   community.general.ipa_user:
@@ -47,3 +55,4 @@
     update_password: on_create
     validate_certs: no
   loop: "{{ users }}"
+  ignore_errors: true
