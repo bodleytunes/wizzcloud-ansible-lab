@@ -101,9 +101,27 @@
     - import_role:
         name: lxd
       tags: ['lxd']
+
+# serial run 
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tags: ['overlay_networking']
+  serial: 1
+  tasks:
     - import_role:
         name: networking_nebula
       tags: ['networking_nebula']
+
+
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  strategy: free
+  tasks:
     - import_role:
         name: githubixx.ansible_role_wireguard
       tags: ['wireguard']

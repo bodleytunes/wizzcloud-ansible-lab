@@ -65,6 +65,9 @@
   when: "'baremetal_hosts' in group_names"
   register: ufw_output
 
+- name: enable UFW
+  community.general.ufw:
+    state: enabled
 
 #- name: UFW input rules - Baremetal Hosts
 #  shell: |

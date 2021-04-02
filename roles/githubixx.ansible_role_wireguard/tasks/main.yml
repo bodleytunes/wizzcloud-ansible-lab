@@ -34,7 +34,7 @@
   when: not ansible_os_family == 'Darwin'
 
 - block:
-  # Key handling [[[1
+  # Key handling 
   - name: Register if config/private key already exists on target host
     stat:
       path: "{{ wireguard_remote_directory }}/{{ wireguard_interface }}.conf"
@@ -74,6 +74,7 @@
     - not wireguard__register_config_file.stat.exists
     - wireguard_private_key is not defined
 
+
 - block:
   - name: Read WireGuard config file
     slurp:
@@ -91,6 +92,10 @@
     - wireguard__register_config_file.stat.exists
     - wireguard_private_key is not defined
 
+- name: debug
+  debug:
+    msg: "{{ wireguard_private_key  }}"
+
 - name: Derive WireGuard public key
   command: "wg pubkey"
   args:
@@ -101,13 +106,19 @@
   tags:
     - wg-config
 
+- name: debug
+  debug:
+    msg: "{{ wireguard__register_public_key.stdout  }}"
+
+
 - name: Set public key fact
   set_fact:
     wireguard__fact_public_key: "{{ wireguard__register_public_key.stdout }}"
   tags:
     - wg-config
 
-# Configuration [[[1
+
+# Configuration
 - name: Create WireGuard configuration directory
   file:
     dest: "{{ wireguard_remote_directory }}"
