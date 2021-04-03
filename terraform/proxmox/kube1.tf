@@ -1,11 +1,8 @@
-locals {
-  kube = { 113 = { "name" = "kube1.wizznet.co.uk" }, 213 = { "name" = "kube2.wizznet.co.uk" } }
-}
 
-resource "proxmox_vm_qemu" "kube_p20" {
+resource "proxmox_vm_qemu" "kube1" {
 
-  vmid        = 0
-  name        = local.kube["113"]["name"]
+  vmid        = 113
+  name        = "kube1.wizznet.co.uk"
   target_node = "p20"
   clone       = "9003-ubuntu-20-04-template"
   os_type     = "cloud-init"

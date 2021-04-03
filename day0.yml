@@ -121,6 +121,7 @@
   become: True
   any_errors_fatal: true
   strategy: free
+  tags: ['overlay_networking']
   tasks:
     - import_role:
         name: githubixx.ansible_role_wireguard

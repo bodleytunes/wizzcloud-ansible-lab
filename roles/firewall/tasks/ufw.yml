@@ -58,6 +58,14 @@
   register: ufw_output
 
 
+- name: allow proxmox api for terraform
+  community.general.ufw:
+    rule: allow
+    from_ip: 86.29.22.70/32
+    to_port: 8006
+    proto: tcp
+    direction: in
+
 
 - name: UFW Flush iptables NAT rules and reload UFW
   shell: |
