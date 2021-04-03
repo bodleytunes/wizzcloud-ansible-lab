@@ -28,7 +28,3 @@
 
   when: "'upgrade_k3s' not in ansible_run_tags"
   
-# Day N Operational tasks
-- block:
-  - import_tasks: upgrade_k3s.yml
-    tags: ['never', 'upgrade_k3s']

@@ -7,5 +7,6 @@
   tasks:
     - import_role:
         name: vm_configuration_kubernetes
+        tasks_from: upgrade_k3s
       tags: ['upgrade_k3s']
 

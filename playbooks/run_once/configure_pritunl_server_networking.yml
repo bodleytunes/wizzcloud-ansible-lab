@@ -13,6 +13,6 @@
         tasks_from: '{{ item }}'
       loop:
         - install_frr
-        - configure_frr_teleport
+        - configure_frr_anycast_vm
 
   tags: ['configure_frr_pritunl']

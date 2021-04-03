@@ -29,3 +29,6 @@
   when: " 'kube1' not in inventory_hostname "
   ignore_errors: true
   become: yes
+
+
+
