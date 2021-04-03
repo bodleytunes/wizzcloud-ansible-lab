@@ -15,7 +15,7 @@
         tasks_from: '{{ item }}'
       loop:
         - install_frr
-        - configure_frr_teleport
+        - configure_frr_anycast_vm
     - include_role:
         name: gravitational_teleport
         tasks_from: "{{ item }}"
@@ -47,7 +47,7 @@
     - teleport_clients,!teleport_auth_servers
   gather_facts: true
   become: True
-  any_errors_fatal: true
+  #any_errors_fatal: true
   tasks:
     - include_role:
         name: gravitational_teleport

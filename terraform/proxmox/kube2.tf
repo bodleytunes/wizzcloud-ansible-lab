@@ -1,10 +1,10 @@
 
 
 
-resource "proxmox_vm_qemu" "kube_p21" {
+resource "proxmox_vm_qemu" "kube2" {
 
-  vmid        = 0
-  name        = local.kube["213"]["name"]
+  vmid        = 213
+  name        = "kube2.wizznet.co.uk"
   target_node = "p21"
   clone       = "9004-ubuntu-20-04-template"
   os_type     = "cloud-init"

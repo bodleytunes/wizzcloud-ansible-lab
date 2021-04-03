@@ -32,7 +32,7 @@ EOF
     size      = "15G"
     type      = "scsi"
     storage   = "zpool1"
-    replicate = true
+    replicate = 1
   }
 
   network {

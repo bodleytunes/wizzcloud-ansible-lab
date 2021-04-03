@@ -1,3 +1,6 @@
+- name: gather facts for secondary ipa
+  setup:
+
 # create template
 - name: Set teleport server config
   template:

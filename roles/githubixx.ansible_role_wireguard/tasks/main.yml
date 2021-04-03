@@ -5,12 +5,6 @@
 - name: Gather instance facts
   setup:
 
-
-- import_role:
-    name: install_required_packages
-    tasks_from: install_baseline_packages_pve_wireguard
-  when: "'pve' in ansible_kernel|lower"
-
 # Installing WireGuard [[[1
 - include_tasks: "{{ item }}"
   with_first_found:

@@ -101,9 +101,28 @@
     - import_role:
         name: lxd
       tags: ['lxd']
+
+# serial run 
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tags: ['overlay_networking']
+  serial: 1
+  tasks:
     - import_role:
         name: networking_nebula
       tags: ['networking_nebula']
+
+
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  strategy: free
+  tags: ['overlay_networking']
+  tasks:
     - import_role:
         name: githubixx.ansible_role_wireguard
       tags: ['wireguard']
@@ -236,6 +255,16 @@
   any_errors_fatal: true
   tags: ['pritunl_server']
   tasks:
+    - import_role:
+        name: install_required_packages
+        tasks_from: install_baseline_packages_vm
+  # install FRR on auth server as it is advertising anycast loopback to the host with eBGP
+    - include_role: # loop through to pull in multiple tasks (only works with include)
+        name: networking
+        tasks_from: '{{ item }}'
+      loop:
+        - install_frr
+        - configure_frr_anycast_vm
     - import_role:
         name: openvpn_pritunl
       tags: ['pritunl_server']
