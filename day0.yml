@@ -235,9 +235,6 @@
 #        tasks_from: install_packages
 #      tags: ['vm_configuration_kubernetes']
 
-- import_playbook: playbooks/run_once/vm_configuration_kubernetes.yml
-  tags: ['vm_configuration_kubernetes']
-
 # enroll to freeipa 
 - hosts: ipa_clients
   gather_facts: true
@@ -248,6 +245,12 @@
     - import_role:
         name: freeipa_client
       tags: ['freeipa_client']
+
+
+- import_playbook: playbooks/run_once/vm_configuration_kubernetes.yml
+  tags: ['vm_configuration_kubernetes']
+
+
 
 
 - hosts: docker_hosts
@@ -281,6 +284,16 @@
         name: openvpn_pritunl
       tags: ['pritunl_server']
 
+
+- hosts: kubernetes_master
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tags: ['rancher']
+  tasks:
+    - import_role:
+        name: rancher
+      tags: ['rancher']
 
 #- hosts: baremetal_hosts
 #  gather_facts: false

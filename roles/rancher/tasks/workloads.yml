@@ -1,0 +1,14 @@
+
+
+- name: Create Plex Deployment
+  community.kubernetes.k8s:
+    host: "https://127.0.0.1:6444"
+    validate_certs: no
+    username: jon
+    api_key: eyJhbGciOiJSUzI1NiIsImtpZCI6InJJUGViN005VFR6QWtnWEhYM3hEaW5fekxQVEpnRVZJMlUtWXpWb2dQdUUifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJqb24tdG9rZW4tbTlocTciLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiam9uIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiNzc0NTJlN2MtNDUyMi00YzdmLWFmZDMtMmRiZjc3Y2YzMzdjIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmpvbiJ9.Nlft8smViIyC5yFI66sAAkidJkjoki7FKagJwRqYHzRjx77s55OnYaDPoLvFyA5sl6ki0XelqNuFaPlJ5QiT4n2dHeHqSNtcoyWWyexJAu7cBHKWO8yf89KjxO0MS1P7pnjK3FyZozZtW-RoGqoHJagaF7Yb57B93ryB-R5zxHDrfkvJYRDsF7oQcJeyhHgda3FPGoIM7Y4Cf-wOJrIgPLxGkLpOzP6loDctMVhm0m8CmXyT3oqhN8r11cKDC69CQIh-jz27jczIDcYTgrV0fyPBaZtHG4G5z6-VgG-Go36V6fvs5LvCJjIflxeuj8U9Sms2utr6YTvu_UhmYaPzDw
+    #kubeconfig: "/bigdata/rancher/k3s/server/cred/admin.kubeconfig"
+    #ca_cert: "/var/lib/rancher/k3s/server/tls/server-ca.crt"
+    #client_cert: "/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt"
+    #client_key: "/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key"
+    state: present
+    definition: "{{ lookup('template', 'plex.yml') | from_yaml }}"
