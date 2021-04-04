@@ -1,0 +1,70 @@
+- hosts: kubernetes_servers
+  gather_facts: yes
+  become: yes
+  tags: ['vm_configuration_kubernetes']
+  tasks:
+    - import_role:
+        name: vm_networking
+
+- hosts: kubernetes_servers
+  gather_facts: yes
+  become: yes
+  tags: ['vm_configuration_kubernetes']    
+  tasks:
+    - import_role:
+        name: vm_configuration_kubernetes
+#        tasks_from: filesystem_changes
+#      tags: ['vm_configuration_kubernetes']
+#    - import_role:
+#        name: vm_configuration_kubernetes
+#        tasks_from: pre_checks
+#      tags: ['vm_configuration_kubernetes']
+#    - import_role:
+#        name: vm_configuration_kubernetes
+#        tasks_from: install_packages
+#      tags: ['vm_configuration_kubernetes']
+#    - import_role:
+#        name: vm_configuration_kubernetes
+#        tasks_from: k3s
+#      tags: ['vm_configuration_kubernetes']
+#
+#
+# - hosts: kubernetes_servers
+#   gather_facts: yes
+#   become: yes
+#   tags: ['vm_configuration_kubernetes']
+#   roles:
+#     - role: vm_configuration_kubernetes/prereq
+#     - role: vm_configuration_kubernetes/download
+#     - role: vm_configuration_kubernetes/raspberrypi
+
+# - hosts: kubernetes_master
+#   become: yes
+#   tags: ['vm_configuration_kubernetes']
+#   roles:
+#     - role: vm_configuration_kubernetes/k3s/master
+
+# - hosts: kubernetes_nodes
+#   become: yes
+#   tags: ['vm_configuration_kubernetes']
+#   roles:
+#     - role: vm_configuration_kubernetes/k3s/node
+
+
+- hosts: kubernetes_servers
+  gather_facts: yes
+  become: yes
+  tags: ['vm_configuration_kubernetes']
+  tasks:    
+    - import_role:
+        name: vm_configuration_kubernetes
+        tasks_from: install_rancher
+      when: " 'kube1' in inventory_hostname "
+    - import_role:
+        name: vm_configuration_kubernetes
+        tasks_from: metallb
+      when: " 'kube1' in inventory_hostname "
+    - import_role:
+        name: vm_configuration_kubernetes
+        tasks_from: glusterfs
+  

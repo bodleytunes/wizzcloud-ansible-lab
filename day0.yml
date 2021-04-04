@@ -216,15 +216,27 @@
 - import_playbook: playbooks/run_once/configure_teleport_servers.yml
   tags: ['gravitational_teleport']
 
-- hosts: kubernetes_servers
-  gather_facts: false
-  become: True
-  any_errors_fatal: true
-  tags: ['phase8']
-  tasks:
-    - import_role:
-        name: vm_configuration_kubernetes
-      tags: ['vm_configuration_kubernetes']
+#- hosts: kubernetes_servers
+#  gather_facts: false
+#  become: True
+#  any_errors_fatal: true
+#  tags: ['phase8']
+#  tasks:
+#    - import_role:
+#        name: vm_configuration_kubernetes
+#        tasks_from: filesystem_changes
+#      tags: ['vm_configuration_kubernetes']
+#    - import_role:
+#        name: vm_configuration_kubernetes
+#        tasks_from: pre_checks
+#      tags: ['vm_configuration_kubernetes']
+#    - import_role:
+#        name: vm_configuration_kubernetes
+#        tasks_from: install_packages
+#      tags: ['vm_configuration_kubernetes']
+
+- import_playbook: playbooks/run_once/vm_configuration_kubernetes.yml
+  tags: ['vm_configuration_kubernetes']
 
 # enroll to freeipa 
 - hosts: ipa_clients
