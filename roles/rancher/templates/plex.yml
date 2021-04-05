@@ -1,15 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
+metadata:
+  namespace: default
+  name: plex3
+  labels:
+    app: plex3
 spec:
-  progressDeadlineSeconds: 600
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      workload.user.cattle.io/workloadselector: deployment-default-plex
-  strategy:
-    type: Recreate
+      app: plex3
   template:
+    metadata:
+      labels:
+        app: plex3
     spec:
       containers:
       - env:
@@ -39,7 +44,7 @@ spec:
         tty: true
         volumeMounts:
         - mountPath: /config
-          name: plexconfig
+          name: plex3-config-pvc
         - mountPath: /gv1
           name: plexgv1
       dnsPolicy: ClusterFirst
@@ -48,9 +53,9 @@ spec:
       securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
-      - name: plexconfig
+      - name: plex3-config-pvc
         persistentVolumeClaim:
-          claimName: plexconfig
+          claimName: plex3-config-pvc
       - hostPath:
           path: /gv1
           type: ""
