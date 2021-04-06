@@ -16,3 +16,22 @@
     definition: "{{ lookup('template', 'plex.yml') | from_yaml }}"
   environment:
     KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+
+
+- name: Create sabnzbd Storage
+  community.kubernetes.k8s:
+    host: "https://10.100.0.100:6443"
+    validate_certs: no
+    state: present
+    definition: "{{ lookup('template', 'sabnzbd_storage.yml') | from_yaml }}"
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+
+- name: Create sabnzbd Deployment
+  community.kubernetes.k8s:
+    host: "https://10.100.0.100:6443"
+    validate_certs: no
+    state: present
+    definition: "{{ lookup('template', 'sabnzbd.yml') | from_yaml }}"
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
