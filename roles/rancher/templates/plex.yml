@@ -21,7 +21,7 @@ spec:
         - name: PGID
           value: "0"
         - name: PLEX_CLAIM
-          value: claim-z3mYkxGqRs_Loqnxbxj1
+          value: claim-XcGprY6UASJXozsq9yxb
         - name: PUID
           value: "0"
         image: linuxserver/plex

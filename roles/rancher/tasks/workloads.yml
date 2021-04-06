@@ -17,6 +17,15 @@
   environment:
     KUBECONFIG: /etc/rancher/k3s/k3s.yaml
 
+- name: Create Plex L4 Loadbalancer (MetalLB)
+  community.kubernetes.k8s:
+    host: "https://10.100.0.100:6443"
+    validate_certs: no
+    state: present
+    definition: "{{ lookup('template', 'plex_loadbalancer.yml') | from_yaml }}"
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+
 
 - name: Create sabnzbd Storage
   community.kubernetes.k8s:
