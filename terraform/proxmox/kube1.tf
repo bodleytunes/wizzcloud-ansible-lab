@@ -5,6 +5,8 @@ resource "proxmox_vm_qemu" "kube1" {
   name        = "kube1.wizznet.co.uk"
   target_node = "p20"
   clone       = "9003-ubuntu-20-04-template"
+  full_clone  = true
+  bootdisk    = "scsi0"
   os_type     = "cloud-init"
   agent       = 1
   # custom cloud init file located on proxmox host in snippets dir
@@ -33,11 +35,13 @@ EOF
     size    = "12G"
     type    = "scsi"
     storage = "zpool1"
+    replicate = 1
   }
   disk {
     size    = "100G"
     type    = "scsi"
     storage = "zpool1"
+    replicate = 1
   }
 
   # basic remote execution script 
