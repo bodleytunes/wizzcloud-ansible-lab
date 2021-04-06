@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: plex-config-pvc
+  name: sabnzbd-config-pvc
   namespace: default
 spec:
   accessModes:
@@ -9,4 +9,4 @@ spec:
   storageClassName: longhorn
   resources:
     requests:
-      storage: 7Gi
+      storage: 25Gi

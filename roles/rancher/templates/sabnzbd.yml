@@ -2,34 +2,32 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: default
-  name: plex
+  name: sabnzbd
   labels:
-    app: plex
+    app: sabnzbd
 spec:
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: plex
+      app: sabnzbd
   template:
     metadata:
       labels:
-        app: plex
+        app: sabnzbd
     spec:
       containers:
       - env:
         - name: PGID
           value: "0"
-        - name: PLEX_CLAIM
-          value: claim-z3mYkxGqRs_Loqnxbxj1
         - name: PUID
           value: "0"
-        image: linuxserver/plex
+        image: linuxserver/sabnzbd
         imagePullPolicy: Always
-        name: plex
+        name: sabnzbd
         ports:
-        - containerPort: 32400
-          name: plex2400
+        - containerPort: 8080
+          name: sabnzbd8080
           protocol: TCP
         resources: {}
         securityContext:
@@ -44,20 +42,20 @@ spec:
         tty: true
         volumeMounts:
         - mountPath: /config
-          name: plex-config-pvc
+          name: sabnzbd-config-pvc
         - mountPath: /gv1
-          name: plexgv1
+          name: sabnzbdgv1
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
-      - name: plex-config-pvc
+      - name: sabnzbd-config-pvc
         persistentVolumeClaim:
-          claimName: plex-config-pvc
+          claimName: sabnzbd-config-pvc
       - hostPath:
           path: /gv1
           type: ""
-        name: plexgv1
+        name: sabnzbdgv1
 
