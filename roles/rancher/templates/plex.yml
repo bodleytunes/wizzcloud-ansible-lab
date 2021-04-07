@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: plex
+  labels:
+    app: plex
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: plex
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      containers:
+      - env:
+        - name: PGID
+          value: "0"
+        - name: PLEX_CLAIM
+          value: claim-XcGprY6UASJXozsq9yxb
+        - name: PUID
+          value: "0"
+        image: linuxserver/plex
+        imagePullPolicy: Always
+        name: plex
+        ports:
+        - containerPort: 32400
+          name: plex2400
+          protocol: TCP
+        resources: {}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities: {}
+          privileged: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: false
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /config
+          name: plex-config-pvc
+        - mountPath: /gv1
+          name: plexgv1
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: plex-config-pvc
+        persistentVolumeClaim:
+          claimName: plex-config-pvc
+      - hostPath:
+          path: /gv1
+          type: ""
+        name: plexgv1
+

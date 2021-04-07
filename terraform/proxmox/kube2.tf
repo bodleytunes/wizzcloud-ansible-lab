@@ -7,6 +7,8 @@ resource "proxmox_vm_qemu" "kube2" {
   name        = "kube2.wizznet.co.uk"
   target_node = "p21"
   clone       = "9004-ubuntu-20-04-template"
+  full_clone  = true
+  bootdisk    = "scsi0"
   os_type     = "cloud-init"
   agent       = 1
   # custom cloud init file located on proxmox host in snippets dir
@@ -18,8 +20,11 @@ resource "proxmox_vm_qemu" "kube2" {
 
   ipconfig0  = "ip=10.101.0.100/24,gw=10.101.0.1"
   nameserver = "10.21.66.5"
-  ciuser     = "jon"
-
+ network {
+    model  = "virtio"
+    bridge = "lxdbr0"
+  }
+  ciuser = "jon"
 
   sshkeys = <<EOF
   ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJjM78UyIQWNbMsca2qafeshPflijH8HbbsKuTTZqB1F jon@DESKTOP-SNM4E2E
@@ -32,11 +37,14 @@ EOF
     size    = "12G"
     type    = "scsi"
     storage = "zpool1"
+    replicate = 1
+
   }
   disk {
     size    = "100G"
     type    = "scsi"
     storage = "zpool1"
+    replicate = 1
   }
   lifecycle {
     ignore_changes = [

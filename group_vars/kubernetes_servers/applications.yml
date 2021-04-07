@@ -3,3 +3,5 @@ applications:
     - nfs-common
     - cifs-utils
     - open-iscsi
+    - python-is-python3
+    - python3-pip

@@ -1,0 +1,4 @@
+bgp:
+  bgp_as: 111
+  loopback: 10.169.169.111
+  upstream_gateway: 10.100.0.1

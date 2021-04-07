@@ -1,0 +1,40 @@
+- hosts: kubernetes_servers
+  gather_facts: yes
+  become: yes
+  tags: ['vm_configuration_kubernetes']
+  tasks:
+    - import_role:
+        name: vm_networking
+  #  - include_role: # loop through to pull in multiple tasks (only works with include)
+  #      name: networking
+  #      tasks_from: '{{ item }}'
+  #    loop:
+  #      - install_frr
+  #      - configure_frr_anycast_vm
+
+- hosts: kubernetes_servers
+  gather_facts: yes
+  become: yes
+  tags: ['vm_configuration_kubernetes']    
+  tasks:
+    - import_role:
+        name: vm_configuration_kubernetes
+
+
+- hosts: kubernetes_servers
+  gather_facts: yes
+  become: yes
+  tags: ['vm_configuration_kubernetes']
+  tasks:    
+    - import_role:
+        name: vm_configuration_kubernetes
+        tasks_from: install_rancher
+      when: " 'kube1' in inventory_hostname "
+    - import_role:
+        name: vm_configuration_kubernetes
+        tasks_from: metallb
+      when: " 'kube1' in inventory_hostname "
+    - import_role:
+        name: vm_configuration_kubernetes
+        tasks_from: glusterfs
+  

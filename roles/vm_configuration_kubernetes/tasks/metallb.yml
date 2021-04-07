@@ -14,3 +14,8 @@
 
 - name: metal_lb apply config
   command: kubectl apply -f /root/metallb.yml
+  retries: 5
+  delay: 5
+  register: result
+  until: result is succeeded
+  ignore_errors: true

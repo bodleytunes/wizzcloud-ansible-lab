@@ -50,6 +50,8 @@
         ipv4_address: '{{ freeipa.ipa_address }}'
     sysctls:
       net.ipv6.conf.all.disable_ipv6: 0
+    memory: 2G
+    cpus: 1
   register: ipa_replica
 
 

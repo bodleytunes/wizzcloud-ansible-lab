@@ -1,0 +1,4 @@
+
+- import_role:
+    name: proxmox_clustering
+    tasks_from: proxmox_clustering

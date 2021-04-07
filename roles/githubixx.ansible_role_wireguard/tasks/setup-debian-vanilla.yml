@@ -17,6 +17,12 @@
 #      - "linux-headers-{{ ansible_kernel }}"
 #    state: present
 
+- name: (Debian) Install kernel headers for the currently running PVE kernel to compile Wireguard with DKMS
+  apt:
+    name:
+      - pve-headers
+    state: present
+
 - name: (Debian) Get architecture
   command: "dpkg --print-architecture"
   register: wireguard__fact_dpkg_arch

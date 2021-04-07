@@ -1,4 +1,5 @@
 # set miscellaneous variables
+- include_tasks: assert_cluster.yml
 - include_tasks: set_vars.yml
 # get cloud image from ubuntu mirror
 - include_tasks: get_images.yml

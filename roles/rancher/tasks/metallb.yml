@@ -1,0 +1,82 @@
+
+
+
+
+#- name: Download Files
+#  get_url:
+#    url: "{{ item.url }}"
+#    dest: "/tmp/{{ item.name }}.yml"
+#  loop:
+#    - { url: "https://raw.githubusercontent.com/metallb/metallb/v{{ kubernetes.k3s.metal_lb_version }}/manifests/namespace.yaml", name: namespace }
+#    - { url: "https://raw.githubusercontent.com/metallb/metallb/v{{ kubernetes.k3s.metal_lb_version }}/manifests/metallb.yaml", name: metallb }
+
+- name: MetalLB generate secret
+  command: kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+  register: metallb_secret
+  ignore_errors: true
+
+- name: Assert that secret creation succeeded
+  assert:
+    that:
+      - metallb_secret is successful
+  ignore_errors: true
+
+#- name: generate random secret key with openssl for metallb
+#  command: openssl rand -base64 128
+#  register: secret_key
+#
+#- name: Set key fact
+#  set_fact:
+#    metallb_secret: "{{ secret_key.stdout }}"
+#
+#
+#- name:  MetalLB create secret
+#  community.kubernetes.k8s:
+#    host: "https://10.100.0.100:6443"
+#    validate_certs: no
+#    state: present
+#    template: "{{ lookup('template', 'metallb_secret.yml') | from_yaml }}"
+#  environment:
+#    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+
+
+
+
+- name: MetalLB deploy
+  community.kubernetes.k8s:
+    host: "https://10.100.0.100:6443"
+    validate_certs: no
+    state: present
+    #definition: "{{ lookup('template', '{{ item }}.yml') | from_yaml }}"
+    #definition: "/tmp/{{ item | from_yaml }}.yml"
+    definition: "{{ lookup('url', item, split_lines=False) }}" # lookup remote URL yaml file
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  loop: 
+    - "https://raw.githubusercontent.com/metallb/metallb/v{{ kubernetes.k3s.metal_lb_version }}/manifests/namespace.yaml"
+    - "https://raw.githubusercontent.com/metallb/metallb/v{{ kubernetes.k3s.metal_lb_version }}/manifests/metallb.yaml"
+
+
+- name: MetalLB  BGP configuration
+  community.kubernetes.k8s:
+    host: "https://10.100.0.100:6443"
+    validate_certs: no
+    state: present
+    definition: "{{ lookup('template', '{{ item }}.yml') | from_yaml }}"
+    #definition: "/tmp/{{ item | from_yaml }}.yml"
+    #definition: "{{ lookup('url', item, split_lines=False) }}" # lookup remote URL yaml file
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  loop:
+    - metallb
+
+
+
+- name: Rancher L4 LoadBalancer
+  community.kubernetes.k8s:
+    host: "https://10.100.0.100:6443"
+    validate_certs: no
+    state: present
+    definition: "{{ lookup('template', 'rancher_loadbalancer.yml') | from_yaml }}"
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml

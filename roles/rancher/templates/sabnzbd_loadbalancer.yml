@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex-loadbalancer
+  namespace: default
+spec:
+  selector:
+    app: plex
+  loadBalancerIP: 10.0.198.2
+  ports:
+    - port: 32400
+      targetPort: 32400
+  type: LoadBalancer
