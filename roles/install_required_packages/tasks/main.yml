@@ -7,6 +7,9 @@
 - include_tasks: install_baseline_packages_vm.yml
   when: "'virtual_machines' in group_names"
 
+- include_tasks: install_baseline_packages_pve_wireguard.yml
+  when: "'baremetal_hosts' in group_names"
+
 - include_role:
     name: common
     tasks_from: reboot

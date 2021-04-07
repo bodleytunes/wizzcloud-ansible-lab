@@ -24,8 +24,8 @@
   - include_tasks: install_rancher.yml
     when: " 'kube1' in inventory_hostname "
   
-  - include_tasks: metallb.yml
-    when: " 'kube1' in inventory_hostname "
+  #- include_tasks: metallb.yml
+  #  when: " 'kube1' in inventory_hostname "
   
   - include_tasks: glusterfs.yml
 

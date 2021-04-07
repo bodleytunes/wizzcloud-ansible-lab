@@ -1,1 +1,2 @@
+- include_tasks: metallb.yml
 - include_tasks: workloads.yml

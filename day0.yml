@@ -90,7 +90,7 @@
   become: True
   any_errors_fatal: true
   strategy: free
-  tags: ['phase3']
+  tags: ['networking']
   tasks:
     - import_role:
         name: networking
@@ -98,6 +98,15 @@
     - import_role:
         name: firewall
       tags: ['firewall']
+
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  strategy: free
+  tags: ['lxd']
+  tasks:
     - import_role:
         name: lxd
       tags: ['lxd']
@@ -144,14 +153,14 @@
   become: True
   any_errors_fatal: true
   strategy: linear
-  tags: ['phase4']
+  tags: ['storage']
   tasks:
     - import_role:
         name: storage_configuration
-      tags: ['storage_configuration']
-    - import_role:
-        name: storage_linstor
-      tags: ['storage_linstor']
+      tags: ['storage']
+#    - import_role:
+#        name: storage_linstor
+#      tags: ['storage_linstor']
 
 
 - hosts: baremetal_hosts
@@ -159,7 +168,7 @@
   become: True
   any_errors_fatal: true
   strategy: linear
-  tags: ['phase5']
+  tags: ['vm_pre']
   tasks:
     - import_role:
         name: proxmox_vm
@@ -169,7 +178,7 @@
   gather_facts: false
   become: True
   any_errors_fatal: true
-  tags: ['phase6']
+  tags: ['vm_deploy']
   tasks:
     - import_role:
         name: terraform
@@ -188,7 +197,7 @@
 - hosts: virtual_machines
   gather_facts: false
   become: True
-  tags: ['phase7']
+  tags: ['vm_post']
   #any_errors_fatal: true
   tasks:
     - import_role:
@@ -248,7 +257,7 @@
 
 
 - import_playbook: playbooks/run_once/vm_configuration_kubernetes.yml
-  tags: ['vm_configuration_kubernetes']
+  tags: ['k3s_deploy']
 
 
 
@@ -289,7 +298,7 @@
   gather_facts: true
   become: True
   any_errors_fatal: true
-  tags: ['rancher']
+  tags: ['k3s_apps']
   tasks:
     - import_role:
         name: rancher

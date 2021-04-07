@@ -46,3 +46,6 @@
   when: "'proxmox_master' not in group_names"
   register: result
 
+- name: print vars
+  debug:
+    msg: result

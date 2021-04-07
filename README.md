@@ -144,18 +144,21 @@ join Teleport SSH
 ###### example deployment using day0 playbook but running groups of roles
 
 ```
-ansible-playbook -i inventory.ini day0.yml --tags phase1
+ansible-playbook -i inventory.ini day0.yml --tags host_pre
 ansible-playbook -i inventory.ini day0.yml --tags freeipa
-ansible-playbook -i inventory.ini day0.yml --tags phase2
-ansible-playbook -i inventory.ini day0.yml --tags phase3
+ansible-playbook -i inventory.ini day0.yml --tags proxmox_clustering
+ansible-playbook -i inventory.ini day0.yml --tags networking
+ansible-playbook -i inventory.ini day0.yml --tags lxd
+ansible-playbook -i inventory.ini day0.yml --tags overlay_networking
 ansible-playbook -i inventory.ini day0.yml --tags dhcp_servers
-ansible-playbook -i inventory.ini day0.yml --tags phase4
-ansible-playbook -i inventory.ini day0.yml --tags phase5
-ansible-playbook -i inventory.ini day0.yml --tags phase6  
-ansible-playbook -i inventory.ini day0.yml --tags phase7
-ansible-playbook -i inventory.ini day0.yml --tags pritunl_server
+ansible-playbook -i inventory.ini day0.yml --tags storage
+ansible-playbook -i inventory.ini day0.yml --tags vm_pre
+ansible-playbook -i inventory.ini day0.yml --tags vm_deploy
+ansible-playbook -i inventory.ini day0.yml --tags vm_post
 ansible-playbook -i inventory.ini day0.yml --tags gravitational_teleport
-ansible-playbook -i inventory.ini day0.yml --tags phase8
 ansible-playbook -i inventory.ini day0.yml --tags freeipa_client
 ansible-playbook -i inventory.ini day0.yml --tags docker
+ansible-playbook -i inventory.ini day0.yml --tags pritunl_server
+ansible-playbook -i inventory.ini day0.yml --tags k3s_deploy
+ansible-playbook -i inventory.ini day0.yml --tags k3s_apps
 ```
