@@ -4,9 +4,9 @@
   pip: 
     name: netifaces
 
-- name: Create FRR Configuration File - Baremetal Hosts
+- name: Create FRR Configuration File 
   ansible.builtin.template:
-    src: frr/teleport/frr.conf.j2
+    src: frr/anycast_vm/frr.conf.j2
     dest: /etc/frr/frr.conf
   notify: restart frr
 

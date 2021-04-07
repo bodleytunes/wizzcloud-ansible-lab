@@ -5,6 +5,12 @@
   tasks:
     - import_role:
         name: vm_networking
+  #  - include_role: # loop through to pull in multiple tasks (only works with include)
+  #      name: networking
+  #      tasks_from: '{{ item }}'
+  #    loop:
+  #      - install_frr
+  #      - configure_frr_anycast_vm
 
 - hosts: kubernetes_servers
   gather_facts: yes
