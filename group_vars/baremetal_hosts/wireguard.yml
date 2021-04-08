@@ -1,1 +1,1 @@
-wireguard_allowed_ips: 172.16.0.0/24
+wireguard_allowed_ips: 0.0.0.0/0, 172.16.0.0/24
