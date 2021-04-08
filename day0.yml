@@ -33,7 +33,7 @@
   become: True
   any_errors_fatal: true
   strategy: free
-  tags: ['phase1']
+  tags: ['host_pre']
   tasks:
     - import_role:
         name: day0_pre
@@ -68,6 +68,16 @@
         name: freeipa
       tags: ['freeipa']
 
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  strategy: free
+  tags: ['wireguard']
+  tasks:
+    - import_role:
+        name: githubixx.ansible_role_wireguard
+      tags: ['wireguard']
 
 
 # break out to clustering role which needs to be linear
@@ -125,16 +135,6 @@
 
 
 
-- hosts: baremetal_hosts
-  gather_facts: true
-  become: True
-  any_errors_fatal: true
-  strategy: free
-  tags: ['overlay_networking']
-  tasks:
-    - import_role:
-        name: githubixx.ansible_role_wireguard
-      tags: ['wireguard']
 
 
 - hosts: baremetal_hosts
