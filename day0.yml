@@ -67,6 +67,9 @@
     - import_role:
         name: freeipa
       tags: ['freeipa']
+    - import_role:
+        name: freeipa_users
+      tags: ['freeipa_users']
 
 - hosts: baremetal_hosts
   gather_facts: true

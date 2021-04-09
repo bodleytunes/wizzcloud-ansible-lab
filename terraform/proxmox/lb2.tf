@@ -10,7 +10,8 @@ resource "proxmox_vm_qemu" "lb2" {
   desc        = "HAproxy Load Balancer 2"
   target_node = "p21"
   clone       = "9006-ubuntu-20-04-template"
-  agent       = 1
+  clone_wait  = 12
+  agent       = 0
   # custom cloud init file located on proxmox host in snippets dir
   #os_type  = "cloud-init"
   #cicustom = "user=local:snippets/user-data-cicustom.yaml"
