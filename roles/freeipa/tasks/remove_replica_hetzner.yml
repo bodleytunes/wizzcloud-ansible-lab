@@ -1,10 +1,5 @@
 
-# remmove replica firstly
-
-  
-
-
-- name: Docker container for freeipa replica - Hetzner cloud
+- name: Remove freeipa replica - Hetzner cloud
   docker_container:
     name: '{{ freeipa.name }}'
     image: '{{ ipa_container_image }}'
@@ -27,22 +22,7 @@
       DNS: "{{ hostvars['p20'].freeipa.ipa_address }}"
 #      PASSWORD: password
     command:
-      - ipa-replica-install
-      - "--domain={{ ipa_domain_name }}"
-      - "--ip-address={{ freeipa.ipa_address }}"
-      - --server=ipa.wizznet.co.uk
-      - "--admin-password={{ipa_admin_password}}"
-      - --no-dnssec-validation
-      - --no-host-dns
-      - --setup-dns
-      - --setup-ca
-      - --forwarder=9.9.9.9
-      - --forwarder=1.1.1.1
-      - --forwarder=8.8.4.4
-      - --allow-zone-overlap
-      - --unattended
-    #  - --force-join 
- #     - --skip-conncheck  # note that this is only used because the hetz cloud server is slow and it fails otherwise.
+      - "ipa-server-install --uninstall -U"
     volumes:
       - /docker/ipa_ansible/data:/data
       - /docker/ipa_ansible/logs:/var/logs
@@ -60,3 +40,8 @@
       net.ipv6.conf.all.disable_ipv6: 0
     memory: 2G
     cpus: 1
+
+- name: remove files and folders for docker container
+  ansible.builtin.file:
+    path: /docker/ansible_ipa3
+    state: absent

@@ -7,7 +7,7 @@ resource "proxmox_vm_qemu" "kube2" {
   name        = "kube2.wizznet.co.uk"
   target_node = "p21"
   clone       = "9004-ubuntu-20-04-template"
-  full_clone  = true
+  full_clone  = false
   clone_wait  = 12
   bootdisk    = "scsi0"
   os_type     = "cloud-init"

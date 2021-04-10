@@ -57,7 +57,12 @@
         name: common
         tasks_from: install_docker
 
-- hosts: baremetal_hosts
+
+
+
+- hosts: 
+    - baremetal_hosts
+ #   - ipa_hetzner
   gather_facts: true
   become: True
   any_errors_fatal: true

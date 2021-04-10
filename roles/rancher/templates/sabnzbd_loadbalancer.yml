@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: plex-loadbalancer
+  name: sabnzbd-loadbalancer
   namespace: default
 spec:
   selector:
-    app: plex
-  loadBalancerIP: 10.0.198.2
+    app: sabnzbd
+  loadBalancerIP: 10.0.198.3
   ports:
-    - port: 32400
-      targetPort: 32400
+    - port: 8080
+      targetPort: 8080
   type: LoadBalancer

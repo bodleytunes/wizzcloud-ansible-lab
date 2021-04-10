@@ -6,6 +6,9 @@
 - include_tasks: install_replica.yml
   when: " 'ipa_replica' in group_names "
 
+#- include_tasks: remove_replica_hetzner.yml
+#  when: " 'ipa_hetzner' in group_names "
+
 - include_tasks: install_replica_hetzner.yml
   when: " 'ipa_hetzner' in group_names "
 
