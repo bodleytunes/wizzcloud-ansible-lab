@@ -16,8 +16,16 @@
 COMMIT
 
 *mangle
--A PREROUTING -p tcp -m multiport --dport 32400 -j DSCP --set-dscp-class EF
--A PREROUTING -p tcp -m multiport --sport 32400 -j DSCP --set-dscp-class EF
+-A PREROUTING -p tcp -m multiport --dport 32400 -j DSCP --set-dscp-class AF41
+-A PREROUTING -p tcp -m multiport --sport 32400 -j DSCP --set-dscp-class AF41
+-A PREROUTING -p tcp -m multiport --dport 49152 -j DSCP --set-dscp-class CS1
+-A PREROUTING -p tcp -m multiport --sport 49152 -j DSCP --set-dscp-class CS1
+-A PREROUTING -p tcp -m multiport --dport 49153 -j DSCP --set-dscp-class CS1
+-A PREROUTING -p tcp -m multiport --sport 49153 -j DSCP --set-dscp-class CS1
+-A PREROUTING -p tcp -m multiport --dport 24007 -j DSCP --set-dscp-class CS1
+-A PREROUTING -p tcp -m multiport --sport 24007 -j DSCP --set-dscp-class CS1
+-A PREROUTING -p tcp -m multiport --sport 24008 -j DSCP --set-dscp-class CS1
+-A PREROUTING -p tcp -m multiport --sport 24008 -j DSCP --set-dscp-class CS1
 COMMIT
 
 

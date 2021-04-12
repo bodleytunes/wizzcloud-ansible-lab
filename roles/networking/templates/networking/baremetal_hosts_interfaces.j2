@@ -1,6 +1,8 @@
 auto {{ ansible_default_ipv4.interface }}
 iface {{ ansible_default_ipv4.interface }} inet dhcp
   up tc qdisc add dev {{ ansible_default_ipv4.interface }} root cake diffserv4 bandwidth {{ iface_qos_max_limits | default("500mbit") }}
+  up tc qdisc add dev wg0 root cake diffserv4 bandwidth {{ iface_qos_max_limits | default("500mbit") }}
+  up tc qdisc add dev lxdbr0 root cake diffserv4 bandwidth {{ iface_qos_max_limits | default("500mbit") }}
   up ip link add name ifb_{{ ansible_default_ipv4.interface }} type ifb
   up tc qdisc del dev {{ ansible_default_ipv4.interface }} ingress
   up tc qdisc add dev {{ ansible_default_ipv4.interface }} handle ffff: ingress
@@ -17,6 +19,7 @@ iface {{ e.name }} inet static
           bridge-ports {{ e.bridge_ports }}
           mtu {{ e.mtu }}
           hwaddress ether {{ e.anycast_mac }}
+          up tc qdisc add dev {{ e.name }} root cake diffserv4 bandwidth {{ iface_qos_max_limits | default("500mbit") }}
 {% endfor %}
 
 {% for c in interfaces.bridges.container_bridges %}
