@@ -1,5 +1,13 @@
 auto {{ ansible_default_ipv4.interface }}
 iface {{ ansible_default_ipv4.interface }} inet dhcp
+  up tc qdisc add dev {{ ansible_default_ipv4.interface }} root cake diffserv4 bandwidth {{ iface_qos_max_limits | default("500mbit") }}
+  up ip link add name ifb_{{ ansible_default_ipv4.interface }} type ifb
+  up tc qdisc del dev {{ ansible_default_ipv4.interface }} ingress
+  up tc qdisc add dev {{ ansible_default_ipv4.interface }} handle ffff: ingress
+  up tc qdisc del dev ifb_{{ ansible_default_ipv4.interface }} root
+  up tc qdisc add dev ifb_{{ ansible_default_ipv4.interface }} root cake bandwidth {{ iface_qos_max_limits | default("500mbit") }} besteffort
+  up ip link set ifb_{{ ansible_default_ipv4.interface }} up && tc filter add dev {{ ansible_default_ipv4.interface }} parent ffff: matchall action mirred egress redirect dev ifb_{{ ansible_default_ipv4.interface }}
+
 
 
 {% for e in interfaces.bridges.evpn %}
