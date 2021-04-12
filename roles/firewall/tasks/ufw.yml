@@ -22,6 +22,11 @@
     name: OpenSSH
   when: "'baremetal_hosts' in group_names"
   register: ufw_output
+  retries: 5
+  delay: 5
+  until: ufw_output is succeeded
+
+
 
 
 
@@ -39,6 +44,9 @@
       proto: udp
   when: "'baremetal_hosts' in group_names"
   register: ufw_output
+  retries: 5
+  delay: 5
+  until: ufw_output is succeeded
 
 
 
@@ -56,6 +64,9 @@
     - interface: wg+
   when: "'baremetal_hosts' in group_names"
   register: ufw_output
+  retries: 5
+  delay: 5
+  until: ufw_output is succeeded
 
 
 - name: allow proxmox api for terraform
@@ -65,13 +76,19 @@
     to_port: 8006
     proto: tcp
     direction: in
-
+  register: ufw_output
+  retries: 5
+  delay: 5
+  until: ufw_output is succeeded
 
 - name: UFW Flush iptables NAT rules and reload UFW
   shell: |
     iptables -t nat -F && ufw reload
   when: "'baremetal_hosts' in group_names"
   register: ufw_output
+  retries: 5
+  delay: 5
+  until: ufw_output is succeeded
 
 - name: enable UFW
   community.general.ufw:

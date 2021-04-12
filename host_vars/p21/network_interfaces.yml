@@ -1,3 +1,4 @@
+iface_qos_max_limits: 500mbit
 interfaces:
   bridges:
     container_bridges:

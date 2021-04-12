@@ -5,10 +5,11 @@ resource "proxmox_vm_qemu" "kube1" {
   name        = "kube1.wizznet.co.uk"
   target_node = "p20"
   clone       = "9003-ubuntu-20-04-template"
-  full_clone  = true
+  full_clone  = false
+  clone_wait  = 12
   bootdisk    = "scsi0"
   os_type     = "cloud-init"
-  agent       = 1
+  agent       = 0
   # custom cloud init file located on proxmox host in snippets dir
   #cicustom = "user=local:snippets/user-data-cicustom.yaml"
 

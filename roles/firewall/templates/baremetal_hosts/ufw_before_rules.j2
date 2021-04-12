@@ -15,6 +15,12 @@
 -A POSTROUTING -o {{ ansible_default_ipv4.interface }} -j MASQUERADE
 COMMIT
 
+*mangle
+-A PREROUTING -p tcp -m multiport --dport 32400 -j DSCP --set-dscp-class EF
+-A PREROUTING -p tcp -m multiport --sport 32400 -j DSCP --set-dscp-class EF
+COMMIT
+
+
 
 #
 # rules.before

@@ -26,7 +26,7 @@
   when: ifupdown2.stat.exists == False
 
 - include_tasks: networking_config_file.yml
-  when: ifupdown2.stat.exists == False
+  #when: ifupdown2.stat.exists == False
 
 
 - include_tasks: install_frr.yml

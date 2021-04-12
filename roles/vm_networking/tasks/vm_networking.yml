@@ -15,3 +15,12 @@
   become: true
   when: netplan_configuration != []
   notify: netplan generate config
+
+
+- name: Force running handlers now
+  meta: flush_handlers
+
+#- name: Applying Netplan Configuration
+#  command: netplan apply
+#  become: true
+#  when: netplan_apply

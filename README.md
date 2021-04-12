@@ -6,11 +6,13 @@ Starting a new version of the ovh cloud deployment lab but based entirely on Ans
 * Install packages, proxmox etc
 * Setup Linux networking and bridges using ifupdown2
 * Setup encrypted overlay networking via Zerotier-One
-* Setup encryption p2p overlay between nodes using Slack Nebula (similar to ZT)
+* Setup encryption P2P overlay between nodes using Slack Nebula (similar to ZT)
 * Setup encrypted P2P overlay between nodes using Wireguard (useing wireguard role from https://github.com/githubixx/ansible-role-wireguard)
 * Custom python ansible execution module to setup the zerotier Networking, add networks / routes etc
 * Custom python ansible execution module to deal with OVH API
 * Custom Python ansible execution module to control proxmox cli
+* Experiments with Linux TC (traffic control) and cake tins for video traffic
+* IPtables mangle rules to mark traffic with dscp codes.
 * Using exec module to interact with proxmox-ve api for networking etc ( using https://github.com/robinelfrink/ansible-proxmox-api )
 * Setup inter-host bridge evpn/vxlan overlay via FRR / Free range routing (encapped through Zerotier-one)
 * Setup Proxmox cluster
@@ -27,6 +29,7 @@ Starting a new version of the ovh cloud deployment lab but based entirely on Ans
 * Terraform and cloud init templates/images to deploy initial VM's in proxmox
 * Deploy K3s (lightweight kubernetes)
 * Install Rancher to control K3s
+* Deploy k3s/rancher workloads via ansible k8s module. (plex and sabnzbd)
 * Install FreeIPA server and replica on main nodes for DNS and IDM
 * Install FreeIPA client and enroll virtual machines
 * Install Gravitational Teleport auth, proxy and clients for an alternative to SSH and key based auth
@@ -162,3 +165,6 @@ ansible-playbook -i inventory.ini day0.yml --tags pritunl_server
 ansible-playbook -i inventory.ini day0.yml --tags k3s_deploy
 ansible-playbook -i inventory.ini day0.yml --tags k3s_apps
 ```
+###### Run the entire playbook
+
+`ansible-playbook -i inventory.ini day0.yml`
