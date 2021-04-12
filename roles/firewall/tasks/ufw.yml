@@ -8,12 +8,22 @@
  # notify: restart ufw
   when: "'baremetal_hosts' in group_names"
 
+
+- name: Flush rules before adding "before rules"
+  command: iptables -F -vt "{{ item }}"
+  loop:
+    - mangle
+    - nat
+
+
 - name: Create UFW Defaults - Baremetal Hosts
   ansible.builtin.template:
     src: baremetal_hosts/ufw_before_rules.j2
     dest: /etc/ufw/before.rules
  # notify: restart ufw
   when: "'baremetal_hosts' in group_names"
+
+
 
 
 - name: UFW input rules - ssh
@@ -94,24 +104,5 @@
   community.general.ufw:
     state: enabled
 
-#- name: UFW input rules - Baremetal Hosts
-#  shell: |
-#    ufw allow ssh
-#    ufw allow 9993/udp
-#    ufw allow 51820/udp
-#    ufw allow 4242/udp
-#    ufw allow in on zt+
-#    ufw allow in on lxdbr+
-#    ufw allow in on evpn+
-#    ufw allow in on nebula+
-#    ufw allow in on br+
-#    ufw allow in on wg+
-#    ufw allow from 86.29.22.70/32 to any port 8006
-#    ufw allow from 10.12.0.0/16 to any port 8006
-#    ufw logging off
-#    ufw --force enable
-#    iptables -t nat -F && ufw reload
-#  when: "'baremetal_hosts' in group_names"
-#  register: ufw_output
 
 
