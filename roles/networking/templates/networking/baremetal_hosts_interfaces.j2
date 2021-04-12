@@ -30,6 +30,7 @@ iface {{ c.name }} inet static
           bridge_stp off
           bridge-fd 0
           mtu {{ c.mtu }}
+          up tc qdisc add dev {{ c.name }} root cake diffserv4 bandwidth {{ iface_qos_max_limits | default("500mbit") }}
 
 {% endfor %}
 
