@@ -37,6 +37,8 @@
   # some logic to run either when there is no FRR file or run if tag has been explicitly passed in
   when: (frr.stat.exists == false) or ("'reconfigure_frr_routing' in ansible_run_tags")
 
+- include_tasks: cake_qos_systemd_services.yml
+
 # final reboot
 - include_role:
     name: common
