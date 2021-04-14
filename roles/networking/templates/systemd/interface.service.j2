@@ -1,0 +1,12 @@
+[Unit]
+Description=Cake {{ item.name }}
+After=sys-devices-virtual-net-{{ item.name }}.device    
+Wants=sys-devices-virtual-net-{{ item.name }}.device
+
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/tc qdisc add dev {{ item.name }} root cake diffserv4 bandwidth {{ iface_qos_max_limits | default("500mbit") }}
+
+[Install]
+WantedBy=multi-user.target
