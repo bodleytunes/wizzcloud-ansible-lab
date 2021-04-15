@@ -221,7 +221,7 @@ def set_image_properties(template, zpool_name):
             template,
             "--startup",
             "c",
-            "up=15",
+            "up=45",
             "-agent",
             "1",
             "-hotplug",
@@ -282,7 +282,7 @@ def set_image_properties(template, zpool_name):
     )
     stdout, stderr = process.communicate()
 
-    process = subprocess.Popen(["qm", "set", template, "--startup", "up=22"])
+    process = subprocess.Popen(["qm", "set", template, "--startup", "up=45"])
     stdout, stderr = process.communicate()
 
     process = subprocess.Popen(["qm", "set", template, "-agent", "1"])
