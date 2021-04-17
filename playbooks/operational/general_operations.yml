@@ -1,5 +1,5 @@
 # Upgrade the servers via dist-upgrade!
-- hosts: 
+- hosts:
     - baremetal_hosts
     - virtual_machines
   gather_facts: true
@@ -9,11 +9,10 @@
     - import_role:
         name: common
         tasks_from: dist_upgrade
-   #   when: "'dist_upgrade' in ansible_run_tags"
-      tags: ['dist_upgrade']
+      #   when: "'dist_upgrade' in ansible_run_tags"
+      tags: ["dist_upgrade"]
 
-
-- hosts: 
+- hosts:
     - docker_hosts
   gather_facts: true
   become: True
@@ -22,5 +21,5 @@
     - import_role:
         name: common
         tasks_from: install_docker
-   #   when: "'install_docker' in ansible_run_tags"
-      tags: ['install_docker']
+      #   when: "'install_docker' in ansible_run_tags"
+      tags: ["install_docker"]
