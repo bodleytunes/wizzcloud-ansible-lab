@@ -1,7 +1,6 @@
-
 - name: Create Plex Storage
   community.kubernetes.k8s:
-    host: "https://10.100.0.100:6443"
+    host: "https://{{kubernetes.k3s.node_ip}}:6443"
     validate_certs: no
     state: present
     definition: "{{ lookup('template', 'plex_storage.yml') | from_yaml }}"
@@ -10,7 +9,7 @@
 
 - name: Create Plex Deployment
   community.kubernetes.k8s:
-    host: "https://10.100.0.100:6443"
+    host: "https://{{kubernetes.k3s.node_ip}}:6443"
     validate_certs: no
     state: present
     definition: "{{ lookup('template', 'plex.yml') | from_yaml }}"
@@ -19,17 +18,16 @@
 
 - name: Create Plex L4 Loadbalancer (MetalLB)
   community.kubernetes.k8s:
-    host: "https://10.100.0.100:6443"
+    host: "https://{{kubernetes.k3s.node_ip}}:6443"
     validate_certs: no
     state: present
     definition: "{{ lookup('template', 'plex_loadbalancer.yml') | from_yaml }}"
   environment:
     KUBECONFIG: /etc/rancher/k3s/k3s.yaml
 
-
 - name: Create sabnzbd Storage
   community.kubernetes.k8s:
-    host: "https://10.100.0.100:6443"
+    host: "https://{{kubernetes.k3s.node_ip}}:6443"
     validate_certs: no
     state: present
     definition: "{{ lookup('template', 'sabnzbd_storage.yml') | from_yaml }}"
@@ -38,7 +36,7 @@
 
 - name: Create sabnzbd Deployment
   community.kubernetes.k8s:
-    host: "https://10.100.0.100:6443"
+    host: "https://{{kubernetes.k3s.node_ip}}:6443"
     validate_certs: no
     state: present
     definition: "{{ lookup('template', 'sabnzbd.yml') | from_yaml }}"
@@ -47,7 +45,7 @@
 
 - name: Create Sabnzbd L4 Loadbalancer (MetalLB)
   community.kubernetes.k8s:
-    host: "https://10.100.0.100:6443"
+    host: "https://{{kubernetes.k3s.node_ip}}:6443"
     validate_certs: no
     state: present
     definition: "{{ lookup('template', 'sabnzbd_loadbalancer.yml') | from_yaml }}"

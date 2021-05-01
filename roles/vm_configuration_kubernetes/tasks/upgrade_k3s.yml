@@ -9,11 +9,9 @@
     chdir: /root
   retries: 8
   delay: 3
-  when: " 'kube1' in inventory_hostname "
+  when: " 'kubernetes_master' in group_names "
   ignore_errors: true
   become: yes
-
-
 
 - name: install K3s Slaves
   shell: |
@@ -26,9 +24,6 @@
     chdir: /root
   retries: 8
   delay: 3
-  when: " 'kube1' not in inventory_hostname "
+  when: " 'kubernetes_master' not in group_names "
   ignore_errors: true
   become: yes
-
-
-

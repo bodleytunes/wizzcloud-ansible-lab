@@ -7,9 +7,6 @@ data:
   config: |
     peers:
       - my-asn: 68
-        peer-asn: 20
-        peer-address: 10.100.0.1
-      - my-asn: 68
         peer-asn: 21
         peer-address: 10.101.0.1
     address-pools:
