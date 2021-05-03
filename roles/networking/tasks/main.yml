@@ -7,17 +7,16 @@
   stat:
     path: /etc/frr/frr.conf
   register: frr
-  tags: ['always']
+  #tags: ["always"]
   ignore_errors: true
-  
+
 - name: check existence of files - ifupdown2
   stat:
     path: /etc/network/interfaces.d/60-ansible-interfaces
+  timeout: 10
   register: ifupdown2
-  tags: ['always']
+  #tags: ["always"]
   ignore_errors: true
-
-
 
 - include_tasks: ifupdown2.yml
   when: ifupdown2.stat.exists == False
@@ -27,13 +26,11 @@
 
 - include_tasks: networking_config_file.yml
   #when: ifupdown2.stat.exists == False
-
-
 - include_tasks: install_frr.yml
 #  when: frr.stat.exists == False
 
 - include_tasks: configure_frr.yml
-  tags: ['reconfigure_frr_routing']
+  tags: ["reconfigure_frr_routing"]
   # some logic to run either when there is no FRR file or run if tag has been explicitly passed in
   when: (frr.stat.exists == false) or ("'reconfigure_frr_routing' in ansible_run_tags")
 
@@ -44,7 +41,3 @@
     name: common
     tasks_from: reboot
   when: ifupdown2.stat.exists == False
-
-
-
-  
