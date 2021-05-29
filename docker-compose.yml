@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  wiz-cloud-ansible:
+    hostname: wiz-cloud-ansible
+    container_name: wiz-cloud-ansible
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    volumes:
+    #- ./jimi-db/data/db:/data/db
+      #- jimi_db_volume:/data/db
+    entrypoint: ["/docker/entrypoint.sh"]
+
+
+    
