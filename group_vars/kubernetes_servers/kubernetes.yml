@@ -2,7 +2,7 @@ systemd_dir: /etc/systemd/system
 master_ip: "{{ hostvars[groups['kubernetes_master'][0]]['ansible_host'] | default(groups['kubernetes_master'][0]) }}"
 extra_server_args: "--kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10 --disable traefik --disable servicelb"
 extra_agent_args: "--kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10 --disable traefik --disable servicelb"
-k3s_version: "v1.21.0+k3s1"
+k3s_version: "v1.21.1+k3s1"
 kubernetes:
   k3s:
     k3s_channel: latest

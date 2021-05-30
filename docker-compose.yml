@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+  wiz-cloud-ansible:
+    hostname: wiz-cloud-ansible
+    container_name: wiz-cloud-ansible
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    volumes:
+      - .vault_password:/root/.vault_password
+    entrypoint: ["./entrypoint.sh"]
+
+
+    
