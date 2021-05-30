@@ -6,9 +6,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
-    #volumes:
-    #- ./jimi-db/data/db:/data/db
-      #- jimi_db_volume:/data/db
+    volumes:
+      - .vault_password:/root/.vault_password
     entrypoint: ["/docker/entrypoint.sh"]
 
 

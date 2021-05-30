@@ -9,3 +9,4 @@ group_vars/all/backblaze.yml
 terraform/proxmox/terraform.tfstate
 plugins/modules/__pycache__
 roles/freeipa_client/library/__pycache__/
+./vault_password
