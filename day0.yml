@@ -1,4 +1,15 @@
 ---
+# prep ssh keys
+- hosts: localhost
+  gather_facts: false
+  become: true
+  any_errors_fatal: True
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: pre_steps.yml
+
+
 # only run this first one with specific tags
 - hosts: ovh
   gather_facts: false
