@@ -1,0 +1,6 @@
+- name: Copy SSH private key
+  copy:
+    content: "{{ private }}"
+    dest: "~/.ssh/ansible"
+    mode: 0600
+    no_log: True
