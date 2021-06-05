@@ -11,6 +11,10 @@
 -A PREROUTING -i {{ ansible_default_ipv4.interface }} -p {{rule.proto}} -m {{rule.proto}} --dport {{ rule.dst_port }} -m comment --comment "{{rule.name}}" -j {{rule.type}} --to-destination {{ rule.dst }}:{{ rule.dst_port_natted }} 
 {% endfor -%}
 {%- endfor -%}
+{# Destination to Any Adhoc internal host #}
+{%- for rule in ufw.inbound_dst_nat.fw_rules -%}
+-A PREROUTING -i {{ ansible_default_ipv4.interface }} -p {{rule.proto}} -m {{rule.proto}} --dport {{ rule.dst_port }} -m comment --comment "{{rule.name}}" -j {{rule.type}} --to-destination {{ rule.dst }} 
+{%- endfor -%}
 {# Masquerade / Overload Rules #}
 -A POSTROUTING -o {{ ansible_default_ipv4.interface }} -j MASQUERADE
 COMMIT

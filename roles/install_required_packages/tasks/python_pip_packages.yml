@@ -2,3 +2,7 @@
 - name: Python Docker API
   pip: 
     name: docker
+
+- name: bpytop
+  pip:
+    name: bpytop
