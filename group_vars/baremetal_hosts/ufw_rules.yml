@@ -12,3 +12,29 @@ ufw:
       - name: zt+
       - name: lxdbr+
       - name: evpn+
+  inbound_dst_nat:
+    fw_rules:
+      - name: "To Jitsi LXD container"
+        chain: PREROUTING
+        ingress_interface: "{{ ansible_default_ipv4.interface }}"
+        src: any
+        dst: 10.101.0.115
+        dst_port: 8443
+        proto: tcp
+        type: DNAT
+      - name: "To Jitsi LXD container"
+        chain: PREROUTING
+        ingress_interface: "{{ ansible_default_ipv4.interface }}"
+        src: any
+        dst: 10.101.0.115
+        dst_port: 10000
+        proto: tcp
+        type: DNAT
+      - name: "To Jitsi LXD container"
+        chain: PREROUTING
+        ingress_interface: "{{ ansible_default_ipv4.interface }}"
+        src: any
+        dst: 10.101.0.115
+        dst_port: 10000
+        proto: udp
+        type: DNAT
