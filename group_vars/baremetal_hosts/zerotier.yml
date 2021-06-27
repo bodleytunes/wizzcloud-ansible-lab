@@ -21,3 +21,4 @@ zt:
       bgp_peer_as: 43
 zt_interface: "{{ ansible_interfaces | select('match','zt.*') | list | first }}"
 zt_mss_clamping_size: 1300
+
