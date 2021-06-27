@@ -20,6 +20,7 @@
 COMMIT
 
 *mangle
+# cake QoS rules for plex video
 -A PREROUTING -p tcp -m multiport --dport 32400 -j DSCP --set-dscp-class AF41
 -A PREROUTING -p tcp -m multiport --sport 32400 -j DSCP --set-dscp-class AF41
 -A PREROUTING -p tcp -m multiport --dport 49152 -j DSCP --set-dscp-class CS1
@@ -47,6 +48,11 @@ COMMIT
 # Don't delete these required lines, otherwise there will be errors
 
 *filter
+# mss clamping rules to clamp to 1300 for ZT VPN traffic
+-A FORWARD -o {{ zt_interface }} -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i {{ zt_interface }} -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o {{ zt_interface }} -p tcp -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1301:65535 -j TCPMSS --set-mss 1300
+-A FORWARD -i {{ zt_interface }} -p tcp -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1301:65535 -j TCPMSS --set-mss 1300
 :ufw-before-input - [0:0]
 :ufw-before-output - [0:0]
 :ufw-before-forward - [0:0]

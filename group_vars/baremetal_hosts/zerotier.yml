@@ -1,6 +1,6 @@
 zt_subnet:
-    target: '10.55.0.0/24'
-zt_mtu: 1400
+  target: "10.55.0.0/24"
+zt_mtu: 2800
 zt:
   peer_group_name: zt
   peers:
@@ -19,3 +19,4 @@ zt:
     - name: p43
       ip: 10.55.0.43
       bgp_peer_as: 43
+zt_interface: "{{ ansible_interfaces | select('match','zt.*') | list | first }}"
