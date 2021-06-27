@@ -1,6 +1,6 @@
 zt_subnet:
   target: "10.55.0.0/24"
-zt_mtu: 2800
+zt_mtu: 1300
 zt:
   peer_group_name: zt
   peers:
