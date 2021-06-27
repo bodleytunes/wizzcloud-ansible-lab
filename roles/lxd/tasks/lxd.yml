@@ -11,6 +11,14 @@
   args:
     creates: /zpool1
 
+- name: enable https listening server on 8443 of ZT interface
+  shell: |
+        /snap/bin/lxc config set core.https_address {{ zt_ip }}:8443
+
+- name: set https interface password
+  shell: |
+        /snap/bin/lxc config set core.trust_password {{ lxd_server_password }}
+
 
 #- name: LXD create dummy bridge
 #  shell: |
