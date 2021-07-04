@@ -1,0 +1,26 @@
+- name: Docker container for Webtop
+  docker_container:
+    name: webtop
+    image: ghcr.io/linuxserver/webtop:ubuntu-mate
+    restart_policy: always
+    hostname: webtop
+    domainname: '{{ global_domain_name }}'
+    dns_servers:
+      - 8.8.4.4
+      - 1.1.1.1
+      - 9.9.9.9
+    networks_cli_compatible: true
+    env:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Europe/London
+      SUBFOLDER: "/"
+    volumes:
+      - /gv1/webtop/data:/config
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "{{zt_ip}}:3000:3000"
+    shm_size: 1G
+    memory: 2G
+    cpus: 1
+  register: webtop

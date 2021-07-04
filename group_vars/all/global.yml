@@ -8,3 +8,4 @@ global:
     - 9.9.9.9
     - 8.8.4.4
 frr_version: frr-stable
+global_domain_name: wizznet.co.uk

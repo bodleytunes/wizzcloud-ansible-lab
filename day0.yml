@@ -270,3 +270,13 @@
     - import_role:
         name: rancher
       tags: ['rancher']
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tags: ['miscellaneous_docker']
+  tasks:
+    - import_role:
+        name: webtop
+      tags: ['webtop']
