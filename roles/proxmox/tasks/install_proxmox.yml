@@ -1,6 +1,6 @@
 - name: Add Proxmox GPG Key
   ansible.builtin.apt_key:
-    url: http://download.proxmox.com/debian/proxmox-ve-release-6.x.gpg
+    url: http://download.proxmox.com/debian/proxmox-ve-release-7.x.gpg
     state: present
 
 
