@@ -6,13 +6,13 @@
 
 - name: Add specified Proxmox repository into sources list
   ansible.builtin.apt_repository:
-    repo: deb http://download.proxmox.com/debian/pve buster pve-no-subscription
+    repo: deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription
     filename: pve-install-repo.list
     state: present
 
 - name: Remove specified repository from sources list
   ansible.builtin.apt_repository:
-    repo: "deb https://enterprise.proxmox.com/debian/pve buster pve-enterprise"
+    repo: "deb https://enterprise.proxmox.com/debian/pve bullseye pve-enterprise"
     state: absent
 
 - name: Update the cache first
@@ -32,7 +32,7 @@
 
 - name: Remove specified repository from sources list
   ansible.builtin.apt_repository:
-    repo: "deb https://enterprise.proxmox.com/debian/pve buster pve-enterprise"
+    repo: "deb https://enterprise.proxmox.com/debian/pve bullseye pve-enterprise"
     state: absent
   #notify: "restart server"
 
