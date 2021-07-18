@@ -152,6 +152,28 @@
 - hosts: baremetal_hosts
   gather_facts: true
   become: True
+  any_errors_fatal: false
+  strategy: linear
+  tags: ['storage_zfs']
+  tasks:
+    - import_role:
+        name: storage_zfs
+      tags: ['storage_zfs']
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: false
+  strategy: linear
+  tags: ['storage_proxmox']
+  tasks:
+    - import_role:
+        name: storage_proxmox
+      tags: ['storage_proxmox']
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
   any_errors_fatal: true
   strategy: linear
   tags: ['storage']

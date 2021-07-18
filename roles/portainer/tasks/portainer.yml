@@ -1,0 +1,27 @@
+- name: Docker container for Portainer
+  docker_container:
+    name: portainer
+    image: portainer/portainer-ce:latest
+    restart_policy: always
+    hostname: portainer
+    domainname: '{{ global_domain_name }}'
+    dns_servers:
+      - 8.8.4.4
+      - 1.1.1.1
+      - 9.9.9.9
+    networks_cli_compatible: true
+    env:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Europe/London
+      SUBFOLDER: "/"
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "{{zt_ip}}:8000:8000"
+      - "{{zt_ip}}:9000:9000"
+    shm_size: 1G
+    memory: 2G
+    cpus: 1
+  register: portainer

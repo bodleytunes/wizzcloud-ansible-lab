@@ -1,0 +1,10 @@
+- name: Custom module for PVE set storage
+  pve_operations:
+    func: set_zfs_storage
+    group_storage_dict: "{{ group_storage }}"
+    host_storage_dict: "{{ storage }}"
+  register: pve_result
+  
+- name: print var for debugging purposes
+  ansible.builtin.debug:
+    msg: " {{ pve_result.data }} "
