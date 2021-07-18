@@ -5,7 +5,7 @@ dhcp_apparmor_fix: true
 dhcp_global_includes_missing: false
 dhcp_packages_state: "present"
 # custom stuff
-dhcp_interfaces: "{{interfaces.bridges.container_bridges.0.name}} {{interfaces.bridges.container_bridges.1.name}} {{ interfaces.bridges.evpn.0.name }}"
+dhcp_interfaces: "{{interfaces.bridges.container_bridges.0.name}} {{interfaces.bridges.container_bridges.1.name}} {{ interfaces.bridges.evpn.0.name }} lxdbr2"
 dhcp_global_default_lease_time: 28800   # 8hrs
 dhcp_global_max_lease_time: 43200       # 12 hrs
 #dhcp_global_subnet_mask: 255.255.255.0
