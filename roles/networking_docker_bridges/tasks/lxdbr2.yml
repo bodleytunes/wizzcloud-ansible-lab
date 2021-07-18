@@ -1,0 +1,11 @@
+- name: create bridge lxdbr2
+  docker_network:
+    name: lxdbr2
+    state: present
+    driver: bridge
+    driver_options:
+      com.docker.network.driver.mtu: 1300
+      com.docker.network.bridge.name: lxdbr2
+    ipam_config:
+      - subnet: 10.21.12.0/24
+        gateway: 10.21.12.1

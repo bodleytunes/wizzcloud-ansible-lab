@@ -1,3 +1,14 @@
+- name: create bridge for portainer
+  docker_network:
+    name: br-portainer
+    state: present
+    driver: bridge
+    driver_options:
+      com.docker.network.driver.mtu: 1300
+    ipam_config:
+      - subnet: 10.21.67.0/24
+
+
 - name: Docker container for Portainer
   docker_container:
     name: portainer
@@ -18,9 +29,12 @@
     volumes:
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - name: br-portainer
+        ipv4_address: 10.21.67.20
     ports:
-      - "{{zt_ip}}:8000:8000"
-      - "{{zt_ip}}:9000:9000"
+      - "8000:8000"
+      - "9000:9000"
     shm_size: 1G
     memory: 2G
     cpus: 1

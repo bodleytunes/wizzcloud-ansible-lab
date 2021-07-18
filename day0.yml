@@ -296,9 +296,23 @@
 - hosts: baremetal_hosts
   gather_facts: true
   become: True
-  any_errors_fatal: true
+  any_errors_fatal: false
   tags: ['miscellaneous_docker']
   tasks:
     - import_role:
         name: webtop
       tags: ['webtop']
+    - import_role:
+        name: portainer
+      tags: ['portainer']
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: false
+  tags: ['networking_docker_bridges']
+  tasks:
+    - import_role:
+        name: networking_docker_bridges
+      tags: ['networking_docker_bridges']
+   

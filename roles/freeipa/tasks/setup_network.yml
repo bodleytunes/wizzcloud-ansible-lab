@@ -28,5 +28,5 @@
     driver: bridge
     driver_options:
       com.docker.network.driver.mtu: 1300
-    ipam_options:
-      subnet: "{{ freeipa.ipa_bridge_network }}"
+    ipam_config:
+      - subnet: "{{ freeipa.ipa_bridge_network }}"
