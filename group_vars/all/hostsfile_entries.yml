@@ -1,6 +1,6 @@
 hostsfile_entries:
-  - "{{ hostvars['p20'].wireguard_ip }} p20 mfsmaster metalogger cgiserver"
-  - "{{ hostvars['p21'].wireguard_ip }} p21 shadowmaster metalogger cgiserver"
+  - "{{ hostvars['p20'].zt_ip }} p20 mfsmaster metalogger cgiserver"
+  - "{{ hostvars['p21'].zt_ip }} p21 shadowmaster metalogger cgiserver"
   - 10.55.0.10 p10
   - 10.55.0.11 p12
   - 10.12.10.7 lm1
@@ -9,4 +9,4 @@ hostsfile_entries:
   - 10.20.66.5 ipa.wizznet.co.uk
   - 10.21.66.5 ipa2.wizznet.co.uk
   - 10.22.66.5 ipa3.wizznet.co.uk
-  - "{{ hostvars['p20'].wireguard_ip }} p20.wireguard.wizznet.co.uk"
+  - "{{ hostvars['p20'].zt_ip }} p20.wireguard.wizznet.co.uk"

@@ -2,8 +2,3 @@ endpoint: soyoustart-eu
 application_key: "{{ vault_application_key }}"
 application_secret: "{{ vault_application_secret }}"
 consumer_key: "{{ vault_consumer_key }}"
-servers:
-  - friendly_name: p20
-    hostname: ns31050143.ip-51-77-116.eu
-  - friendly_name: p21
-    hostname: ns3098738.ip-188-165-235.eu

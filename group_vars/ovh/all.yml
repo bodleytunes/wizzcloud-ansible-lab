@@ -1,0 +1,5 @@
+ovh_servers:
+#  - friendly_name: p20
+#    hostname: ns31050143.ip-51-77-116.eu
+  - friendly_name: p21
+    hostname: ns3098738.ip-188-165-235.eu

@@ -50,9 +50,19 @@
         name: common
         tasks_from: install_docker
 
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  strategy: free
+  tags: ['install_docker']
+  tasks:
+    - import_role:
+        name: docker
 
 
 
+# todo fix this freeipa - container not starting
 - hosts: 
     - baremetal_hosts
  #   - ipa_hetzner
