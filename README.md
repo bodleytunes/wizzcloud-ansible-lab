@@ -148,7 +148,6 @@ join Teleport SSH
 
 ```
 ansible-playbook -i inventory.ini day0.yml --tags host_pre
-ansible-playbook -i inventory.ini day0.yml --tags docker
 ansible-playbook -i inventory.ini day0.yml --tags freeipa
 ansible-playbook -i inventory.ini day0.yml --tags wireguard
 ansible-playbook -i inventory.ini day0.yml --tags proxmox_clustering

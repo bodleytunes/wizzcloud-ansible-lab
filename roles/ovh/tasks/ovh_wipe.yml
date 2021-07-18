@@ -5,7 +5,7 @@
     application_key: "{{ application_key }}"
     application_secret: "{{ application_secret }}"
     consumer_key: "{{ consumer_key }}"
-    server_inventory: "{{ ovh_servers }}"
+    server_inventory: "{{ servers }}"
   register: result
  # failed_when:
  #   - '"An intervention is being carried out on this server" not in result.stdout'
