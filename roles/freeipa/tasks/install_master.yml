@@ -52,6 +52,9 @@
     cpus: 1
   register: ipa_master
 
+- name: Re-gather facts
+  setup: ~
+
 - name: Wait for IPA Master Web server Https to accept connections - don't continue until its up and ready
   wait_for:
     host: "{{ ipa_master['ansible_facts'] \
