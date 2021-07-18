@@ -58,6 +58,21 @@ dhcp_subnets:
     range_begin: "{{interfaces.bridges.evpn.0.begin}}"
     range_end: "{{interfaces.bridges.evpn.0.end}}"
     routers: "{{interfaces.bridges.evpn.0.ip}}"
+  - ip: 10.21.12.0
+    default_lease_time: 3600
+    max_lease_time: 7200
+    netmask: 255.255.255.0
+    domain_name_servers:
+      - 10.21.12.1
+      - 1.1.1.1
+      - 10.22.66.5
+      - 10.21.66.5
+      - 10.20.66.5
+      - 1.1.1.1
+      - 9.9.9.9
+    routers: 10.21.12.1
+    range_begin: 10.21.12.10
+    range_end: 10.21.12.200
 #    pools:
 #      - default_lease_time: 1800
 #        max_lease_time: 3600

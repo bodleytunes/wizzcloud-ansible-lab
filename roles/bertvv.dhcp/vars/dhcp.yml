@@ -45,6 +45,7 @@ dhcp_global_default_lease_time: 28800   # 8hrs
         - 1.1.1.1
         - 9.9.9.9
       routers: 10.101.0.1
+
 #  dhcp_hosts:
 #    - name: cl1
 #      mac: 'de:ad:c0:de:ca:fe'
