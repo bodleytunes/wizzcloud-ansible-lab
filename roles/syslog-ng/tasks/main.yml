@@ -1,0 +1,6 @@
+- name: append configuration to syslog ng config file
+  blockinfile:
+    path: /etc/syslog-ng/syslog-ng.conf
+    block: "{{  lookup('template', 'syslog-ng.conf') }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK for syslog-ng configuration"
+  when: "'baremetal_hosts' in group_names"
