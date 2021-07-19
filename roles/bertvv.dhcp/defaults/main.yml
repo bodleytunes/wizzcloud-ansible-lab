@@ -70,9 +70,10 @@ dhcp_subnets:
       - 10.20.66.5
       - 1.1.1.1
       - 9.9.9.9
-    routers: 10.21.12.1
     range_begin: 10.21.12.10
     range_end: 10.21.12.200
+    routers: 10.21.12.1
+
 #    pools:
 #      - default_lease_time: 1800
 #        max_lease_time: 3600

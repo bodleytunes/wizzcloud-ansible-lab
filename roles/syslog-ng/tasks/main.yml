@@ -1,3 +1,8 @@
+- name: Install required packages
+  apt:
+    pkg:
+    - syslog-ng
+
 - name: append configuration to syslog ng config file
   blockinfile:
     path: /etc/syslog-ng/syslog-ng.conf

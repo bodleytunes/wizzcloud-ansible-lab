@@ -45,8 +45,23 @@ dhcp_global_default_lease_time: 28800   # 8hrs
         - 1.1.1.1
         - 9.9.9.9
       routers: 10.101.0.1
-
-#  dhcp_hosts:
+    - ip: 10.21.12.0
+      default_lease_time: 3600
+      max_lease_time: 7200
+      netmask: 255.255.255.0
+      domain_name_servers:
+        - 10.21.12.1
+        - 1.1.1.1
+        - 10.22.66.5
+        - 10.21.66.5
+        - 10.20.66.5
+        - 1.1.1.1
+        - 9.9.9.9
+      range_begin: 10.21.12.10
+      range_end: 10.21.12.200
+      routers: 10.21.12.1
+  
+#    dhcp_hosts:
 #    - name: cl1
 #      mac: 'de:ad:c0:de:ca:fe'
 #      ip: 192.168.222.150
