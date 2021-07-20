@@ -3,7 +3,7 @@
     - baremetal_hosts
   gather_facts: true
   become: True
-  any_errors_fatal: true
+  any_errors_fatal: false
   tags: ['update_firewall']
   tasks:
     - import_role:
