@@ -42,3 +42,4 @@
     - openvswitch-switch
     - byobu
     - zsh
+    - syslog-ng

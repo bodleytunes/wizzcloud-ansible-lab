@@ -56,3 +56,17 @@ virtual_machines:
           dst_port: 28599
           proto: udp
           type: DNAT
+    - name: cortex_xsoar
+      ip: 10.21.12.10
+      mask: /24
+      network: lxdbr2
+      mtu: 1350
+      fw_rules:
+        - name: "cortex xsoar inbound nat"
+          chain: PREROUTING
+          ingress_interface: "{{ ansible_default_ipv4.interface }}"
+          src: any
+          dst: 10.21.12.10
+          dst_port: 443
+          proto: tcp
+          type: DNAT
