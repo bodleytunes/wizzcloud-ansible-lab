@@ -1,0 +1,10 @@
+storage:
+  zfs:
+    zpools:
+      - name: zpool1
+        disks:
+          - /dev/sdc
+          - /dev/sdd
+  glusterfs:
+    peers:
+      - name: wizz-node-2

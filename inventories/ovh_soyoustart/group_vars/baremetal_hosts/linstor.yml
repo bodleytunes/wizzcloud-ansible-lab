@@ -1,0 +1,28 @@
+linstor:
+  devices:
+    backing_storage: zpool1/linstor1
+    storage_pool: 
+      - name: sp1
+        resource_group:
+          name: rg1
+          volume_group: rg1
+        resource_definition:
+          - name: rd1
+            volume_definition:
+              name: rd1
+              size: 80G
+              storage_pool: sp1
+              volume_number: 1000
+          - name: rd2
+            volume_definition:
+              name: rd2
+              size: 19G
+              storage_pool: sp1
+              volume_number: 1001
+          - name: rd3
+            volume_definition:
+              name: rd3
+              size: 23G
+              storage_pool: sp1
+              volume_number: 1002
+ 

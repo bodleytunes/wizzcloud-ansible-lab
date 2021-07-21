@@ -1,0 +1,4 @@
+pritunl:
+  name: pritunl.wizznet.co.uk
+  image: goofball222/pritunl:latest
+  domainname: wizznet.co.uk

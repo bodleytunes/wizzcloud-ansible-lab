@@ -1,0 +1,25 @@
+group_storage:
+  zfs:
+    zpools:
+      - name: zpool1
+        datasets:
+          proxmox: zpool1/proxmox_vm
+          k3s: zpool1/k3s
+          gluster: zpool1/gluster
+          gluster2: zpool1/gluster2
+          lizardfs: zpool1/lizardfs
+  #        linstor: zpool1/linstor
+        nodes: "{{ groups['baremetal_hosts'] }}"
+  gluster:
+    volumes:
+      - name: gv1
+        folder: /gv1
+  s3fs:
+    backblaze:
+      backup_folder: /backups/backblaze
+      name: s3fs
+      type: dir
+      nodes: "{{ groups['baremetal_hosts'] }}"
+
+
+

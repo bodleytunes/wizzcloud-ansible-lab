@@ -1,0 +1,5 @@
+frr:
+  settings:
+    bgpd_enabled: yes
+    bfdd_enabled: yes
+    ospfd_enabled: yes

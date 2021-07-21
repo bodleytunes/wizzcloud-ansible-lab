@@ -1,0 +1,3 @@
+storage:
+  glusterfs:
+    peers: "{{ groups['baremetal_hosts'] }}"

@@ -1,0 +1,30 @@
+zt_subnet:
+  target: "10.55.0.0/24"
+zt_mtu: 1300
+zt:
+  peer_group_name: zt
+  peers:
+    - name: lisk
+      ip: 10.55.0.11
+      bgp_peer_as: 12
+    - name: plym
+      ip: 10.55.0.10
+      bgp_peer_as: 10
+    - name: hheath
+      ip: 10.55.0.75
+      bgp_peer_as: 75
+    - name: p42
+      ip: 10.55.0.42
+      bgp_peer_as: 42
+    - name: p43
+      ip: 10.55.0.43
+      bgp_peer_as: 43
+    - name: p20
+      ip: 10.55.0.20
+      bgp_peer_as: 20
+    - name: p21
+      ip: 10.55.0.21
+      bgp_peer_as: 21
+zt_interface: "{{ ansible_interfaces | select('match','zt.*') | list | first }}"
+zt_mss_clamping_size: 1300
+

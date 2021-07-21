@@ -1,0 +1,4 @@
+bgp:
+  bgp_as: 101
+  aggregate_network: 10.101.0.0
+  aggregate_mask: 255.255.0.0
