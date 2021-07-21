@@ -1,5 +1,5 @@
 nebula_port: 4242
-nebula_external_addr: 51.77.116.79
+nebula_external_addr: "{{ ansible_default_ipv4.address }}"
 
 nebula_ip: "10.140.140.20"
 
