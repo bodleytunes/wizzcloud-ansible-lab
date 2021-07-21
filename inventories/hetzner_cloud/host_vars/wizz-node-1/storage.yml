@@ -8,3 +8,4 @@ storage:
   glusterfs:
     peers:
       - name: wizz-node-2
+      - name: wizz-node-3
