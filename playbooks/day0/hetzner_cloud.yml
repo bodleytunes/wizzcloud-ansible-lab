@@ -84,3 +84,32 @@
     - import_role:
         name: docker
       tags: 'docker_baremetal'
+
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  # serial is used to run in sequence - i.e. one host at a time
+  serial: 1  
+  tags: ['proxmox_clustering']
+  tasks:
+    - import_role:
+        name: proxmox_clustering
+      tags: ['proxmox_clustering']
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: false
+  strategy: free
+  tags: ['networking']
+  tasks:
+    - import_role:
+        name: networking_frr
+      tags: ['networking_frr']
+    - import_role:
+        name: networking
+      tags: ['networking']
+    - import_role:
+        name: firewall
+      tags: ['firewall']
