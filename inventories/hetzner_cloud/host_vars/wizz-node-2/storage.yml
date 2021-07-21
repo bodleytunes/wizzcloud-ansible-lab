@@ -4,7 +4,6 @@ storage:
       - name: zpool1
         disks:
           - /dev/sdb
-          - /dev/sdc
   glusterfs:
     peers:
       - name: wizz-node-1

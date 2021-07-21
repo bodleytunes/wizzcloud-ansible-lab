@@ -44,3 +44,4 @@
     - byobu
     - zsh
     - syslog-ng
+    - python3-setuptools
