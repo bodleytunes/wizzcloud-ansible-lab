@@ -250,6 +250,15 @@
 - import_playbook: playbooks/run_once/vm_configuration_kubernetes.yml
   tags: ['k3s_deploy']
 
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['docker_baremetal']
+  tasks:
+    - import_role:
+        name: docker
+      tags: 'docker_baremetal'
 
 - hosts: docker_hosts
   gather_facts: false

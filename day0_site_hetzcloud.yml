@@ -1,0 +1,4 @@
+# ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml
+
+- import_playbook: playbooks/day0/hetzner_cloud.yml
+  #tags: ["all"]
