@@ -319,6 +319,16 @@
   gather_facts: true
   become: True
   any_errors_fatal: false
+  #tags: ['miscellaneous_docker']
+  tasks:
+    - import_role:
+        name: elasticsearch
+      tags: ['elasticsearch']
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: false
   tags: ['networking_docker_bridges']
   tasks:
     - import_role:

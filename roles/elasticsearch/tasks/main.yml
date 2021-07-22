@@ -1,0 +1,1 @@
+- include_tasks: elasticsearch_docker.yml

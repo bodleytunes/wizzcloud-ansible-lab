@@ -39,7 +39,13 @@ Examples:
 
 ###### update july 2021 - more scalable subfoldered inventories (per environment / site)
 
-`ansible-playbook -i inventories/hetzner_cloud/inventory.ini day0.yml --tags zerotier_networking`
+####### Hetz Cloud
+
+`ansible-playbook -i inventories/hetzner_cloud/inventory.ini day0_site_hetzcloud.yml --tags zerotier_networking`
+
+####### Soyoustart
+
+`ansible-playbook -i inventories/ovh_soyoustart/inventory.ini day0.yml --tags elasticsearch`
 
 ###### Run the whole playbook
 

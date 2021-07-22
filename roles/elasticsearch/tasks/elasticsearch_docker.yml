@@ -1,0 +1,46 @@
+- name: create bridge for ES
+  docker_network:
+    name: br-elasticsearch
+    state: present
+    driver: bridge
+    driver_options:
+      com.docker.network.driver.mtu: 1300
+      com.docker.network.bridge.name: br-elastic
+    ipam_config:
+      - subnet: 10.21.69.0/24
+
+
+- name: Docker container for Elasticsearch
+  docker_container:
+    name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+    restart_policy: always
+    hostname: elasticsearch
+    domainname: '{{ global_domain_name }}'
+    dns_servers:
+      - 8.8.4.4
+      - 1.1.1.1
+      - 9.9.9.9
+    ulimits:
+      - "memlock:-1:-1"
+    networks_cli_compatible: true
+    env:
+      node.name: "es01"
+      discovery.type: "single-node"
+      action.auto_create_index: "true"
+      cluster.name: "xsoar"
+      es_java_opts: "-Xms4g -Xmx2g"
+      PUID: "1000"
+      PGID: "1000"
+    volumes:
+      - /gv1/docker/elasticsearch/data:/usr/share/elasticsearch/data
+    networks:
+      - name: br-elasticsearch
+        ipv4_address: 10.21.69.10
+# routed so remove the ports (nat)
+#    ports:  
+#      - "9200:9200"
+    shm_size: 4G
+    memory: 4G
+    cpus: 4
+  register: elasticsearch

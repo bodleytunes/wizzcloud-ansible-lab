@@ -12,6 +12,7 @@ ufw:
       - name: zt+
       - name: lxdbr+
       - name: evpn+
+      - name: ens+
   inbound_dst_nat:
     fw_rules:
       - name: "To Jitsi LXD container"
