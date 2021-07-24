@@ -1,0 +1,27 @@
+- name: Re-gather facts
+  setup: ~
+#- install GlusterFS server
+
+- name: Add Gluster Key
+  ansible.builtin.apt_key:
+    url: https://download.gluster.org/pub/gluster/glusterfs/8/rsa.pub
+    state: present
+
+
+- name: Add specified Proxmox repository into sources list
+  ansible.builtin.apt_repository:
+    repo: deb https://download.gluster.org/pub/gluster/glusterfs/LATEST/Debian/{{ ansible_distribution_release }}/amd64/apt {{ ansible_distribution_release }} main
+    filename: /etc/apt/sources.list.d/gluster.list
+    state: present
+
+- name: Install GlusterFS Server
+  apt:
+    pkg:
+    - glusterfs-server
+
+- name: enable gluster
+  ansible.builtin.service:
+    name: glusterd
+    enabled: yes
+    state: started
+  ignore_errors: true

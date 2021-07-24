@@ -1,0 +1,3 @@
+gluster:
+  volumes:
+    - name: gv1

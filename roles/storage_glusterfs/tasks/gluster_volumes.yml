@@ -1,0 +1,43 @@
+
+- name: Run gluster volume create via python module
+  gluster_func:
+    baremetal_hosts: "{{ groups['baremetal_hosts'] }}"
+    gluster_volumes: "{{ gluster }}"
+    gluster_zfs_dataset: "{{ group_storage.zfs.zpools.0.datasets.gluster }}"
+  register: command_result    
+  become: true
+
+- debug: var=command_result
+
+
+
+#- name: Gluster create volume
+#  command: gluster volume create gv1 replica 2 p20:/"{{ group_storage.zfs.zpools.0.datasets.gluster }}" p21:/"{{ group_storage.zfs.zpools.0.datasets.gluster }}" force
+#  ignore_errors: true
+
+#- name: Gluster create volume
+#  command: gluster volume create gv2 replica 2 p20:/"{{ group_storage.zfs.zpools.0.datasets.gluster2 }}" p21:/"{{ group_storage.zfs.zpools.0.datasets.gluster2 }}" force
+#  ignore_errors: true
+
+#- name: Gluster volume status
+#  command: gluster volume status
+#  retries: 10
+#  delay: 3
+#  register: status
+#  until: status.stdout.find("Status of volume:") != -1
+#  when: "'proxmox_master' in group_names"
+#  ignore_errors: true
+
+- name: Gluster start volume
+  command: gluster volume start gv1
+  retries: 10
+  delay: 5
+  register: status 
+  ignore_errors: true
+
+- name: Gluster start volume
+  command: gluster volume start gv2
+  retries: 10
+  delay: 5
+  register: status 
+  ignore_errors: true

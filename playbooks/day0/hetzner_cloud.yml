@@ -113,3 +113,14 @@
     - import_role:
         name: firewall
       tags: ['firewall']
+
+
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['storage_glusterfs']
+  tasks:
+    - import_role:
+        name: storage_glusterfs
+      tags: 'storage_glusterfs'

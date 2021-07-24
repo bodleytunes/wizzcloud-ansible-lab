@@ -8,12 +8,7 @@ group_storage:
           gluster: zpool1/gluster
           gluster2: zpool1/gluster2
           lizardfs: zpool1/lizardfs
-  #        linstor: zpool1/linstor
         nodes: "{{ groups['baremetal_hosts'] }}"
-  gluster:
-    volumes:
-      - name: gv1
-        folder: /gv1
   s3fs:
     backblaze:
       backup_folder: /backups/backblaze
