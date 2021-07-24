@@ -55,12 +55,13 @@ def create_command(module):
     gluster_zfs_dataset = module.params["gluster_zfs_dataset"]
 
     try:
-        cmd = run_template(
-            hosts,
-            volumes,
-            gluster_zfs_dataset,
-        )
-        result = run_cmd(cmd)
+        for volume in volumes["volumes"]:
+            cmd = run_template(
+                hosts,
+                volume,
+                gluster_zfs_dataset,
+            )
+            result = run_cmd(cmd)
 
     except BaseException as e:
         raise f"exception {e}"
@@ -82,11 +83,11 @@ def run_cmd(cmd):
     return {"stdout:": stdout, "stderr": stderr}
 
 
-def run_template(hosts, volumes, gluster_zfs_dataset):
+def run_template(hosts, volume, gluster_zfs_dataset):
     num_of_replicas = len(hosts)
     cmd_location = "/usr/sbin/"
     prefix_cmd = f"{cmd_location}gluster volume create"
-    volname = f"{volumes['volumes'][0]['name']}"
+    volname = f"{volume['name']}"
     replicas = f"replica {num_of_replicas}"
 
     cmd_1 = str(f"{prefix_cmd} {volname} {replicas}")

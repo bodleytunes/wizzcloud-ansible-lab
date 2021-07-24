@@ -9,6 +9,15 @@
 
 - debug: var=command_result
 
+- name: Run gluster volume create via python module
+  gluster_func:
+    baremetal_hosts: "{{ groups['baremetal_hosts'] }}"
+    gluster_volumes: "{{ gluster }}"
+    gluster_zfs_dataset: "{{ group_storage.zfs.zpools.1.datasets.gluster }}"
+  register: command_result    
+  become: true
+
+- debug: var=command_result
 
 
 #- name: Gluster create volume
@@ -37,6 +46,13 @@
 
 - name: Gluster start volume
   command: gluster volume start gv2
+  retries: 10
+  delay: 5
+  register: status 
+  ignore_errors: true
+
+- name: Gluster start volume
+  command: gluster volume start gv3
   retries: 10
   delay: 5
   register: status 

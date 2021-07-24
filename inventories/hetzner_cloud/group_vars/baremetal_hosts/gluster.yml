@@ -1,3 +1,4 @@
 gluster:
   volumes:
     - name: gv1
+    - name: gv3
