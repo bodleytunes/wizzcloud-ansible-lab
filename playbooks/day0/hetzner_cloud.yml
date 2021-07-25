@@ -134,3 +134,14 @@
     - import_role:
         name: storage_glusterfs_client
       tags: 'storage_glusterfs_client'
+
+
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['storage_samba']
+  tasks:
+    - import_role:
+        name: storage_samba
+      tags: 'storage_samba'

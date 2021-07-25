@@ -1,4 +1,6 @@
 gluster:
   volumes:
     - name: gv1
+      folder: /gv1
     - name: gv3
+      folder: /gv3
