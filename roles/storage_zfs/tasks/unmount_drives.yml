@@ -1,0 +1,24 @@
+# unmount - get drive list
+- name: unmount
+  parted:
+    device: "{{ item }}"
+    unit: MiB
+  register: info
+  loop: "{{ storage.zfs.zpools[0].disks }}"
+  ignore_errors: true
+
+# unmount - unmount drives
+#- name: debug stuff
+#  debug:
+#    msg: "{{ item.0.disk.dev }} {{ item.1.num }}"
+#  loop: "{{ info.results | subelements('partitions') }}"
+
+# unmount - get drive list
+- name: unmount
+  parted:
+    device: "{{ item }}"
+    unit: MiB
+  register: info
+  loop: "{{ storage.zfs.zpools[1].disks }}"
+  ignore_errors: true
+

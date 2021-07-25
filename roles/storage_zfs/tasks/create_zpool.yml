@@ -1,0 +1,10 @@
+
+# warning this will wipe your current pools!
+
+- name: Create zpools - OVH
+  command: zpool create {{ item.name }}  {{ item.disks[0] }}  -f
+  loop: '{{ storage.zfs.zpools }}'
+  loop_control:
+    index_var: i
+  when: "'baremetal_hosts' in group_names"
+  ignore_errors: true

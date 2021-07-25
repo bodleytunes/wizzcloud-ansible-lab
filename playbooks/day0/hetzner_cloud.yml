@@ -124,3 +124,13 @@
     - import_role:
         name: storage_glusterfs
       tags: 'storage_glusterfs'
+
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['storage_glusterfs_client']
+  tasks:
+    - import_role:
+        name: storage_glusterfs_client
+      tags: 'storage_glusterfs_client'

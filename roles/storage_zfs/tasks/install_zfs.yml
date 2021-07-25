@@ -1,0 +1,12 @@
+# install zfsutils-linux
+- name: Install useful zfs packages
+  apt:
+    update_cache: true
+    pkg:
+    - zfsutils-linux 
+
+# modprobe zfs kernel module
+- name: zfs
+  community.general.modprobe:
+    name: zfs
+    state: present

@@ -3,24 +3,38 @@
   gluster_func:
     baremetal_hosts: "{{ groups['baremetal_hosts'] }}"
     gluster_volumes: "{{ gluster }}"
-    gluster_zfs_dataset: "{{ group_storage.zfs.zpools.0.datasets.gluster }}"
+    gluster_zfs_dataset: "{{ item.datasets.gluster }}"
   register: command_result    
   become: true
-
-- debug: var=command_result
-
-- name: Run gluster volume create via python module
-  gluster_func:
-    baremetal_hosts: "{{ groups['baremetal_hosts'] }}"
-    gluster_volumes: "{{ gluster }}"
-    gluster_zfs_dataset: "{{ group_storage.zfs.zpools.1.datasets.gluster }}"
-  register: command_result    
-  become: true
+  loop: "{{ group_storage.zfs.zpools }}"
+  
 
 - debug: var=command_result
 
 
-#- name: Gluster create volume
+#- name: Run gluster volume create via python module
+#  gluster_func:
+#    baremetal_hosts: "{{ groups['baremetal_hosts'] }}"
+#    gluster_volumes: "{{ gluster }}"
+#    gluster_zfs_dataset: "{{ group_storage.zfs.zpools.0.datasets.gluster }}"
+#  register: command_result    
+#  become: true
+#
+#
+#- debug: var=command_result
+#
+#- name: Run gluster volume create via python module
+#  gluster_func:
+#    baremetal_hosts: "{{ groups['baremetal_hosts'] }}"
+#    gluster_volumes: "{{ gluster }}"
+#    gluster_zfs_dataset: "{{ group_storage.zfs.zpools.1.datasets.gluster }}"
+#  register: command_result    
+#  become: true
+#
+#- debug: var=command_result
+#
+#
+##- name: Gluster create volume
 #  command: gluster volume create gv1 replica 2 p20:/"{{ group_storage.zfs.zpools.0.datasets.gluster }}" p21:/"{{ group_storage.zfs.zpools.0.datasets.gluster }}" force
 #  ignore_errors: true
 
