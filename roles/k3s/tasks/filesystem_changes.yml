@@ -1,0 +1,38 @@
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: /bigdata
+    state: directory
+
+- name: Create bigdata filesystem
+  filesystem: 
+    fstype: ext4
+    dev: /dev/sdb
+
+- name: Mount bigdata
+  ansible.posix.mount:
+    path: /bigdata
+    src: /dev/sdb
+    fstype: ext4
+    state: mounted
+
+- name: Create a kube subfolders
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  with_items: "{{ kubernetes.kubernetes_subfolders }}"
+
+- name: symlink rancher folders
+  ansible.builtin.file:
+    src: /bigdata/rancher
+    dest: /var/lib/rancher
+    state: link
+    force: no
+  ignore_errors: true
+
+- name: symlink rancher folders
+  ansible.builtin.file:
+    src: /bigdata/run_k3s
+    dest: /run/k3s
+    state: link
+    force: no
+  ignore_errors: true

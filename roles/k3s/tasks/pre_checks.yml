@@ -1,0 +1,4 @@
+- name: pre checks
+  command: kubectl get nodes
+  register: kube_installed
+  ignore_errors: true

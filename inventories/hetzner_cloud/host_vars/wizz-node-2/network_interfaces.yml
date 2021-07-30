@@ -1,5 +1,13 @@
 iface_qos_max_limits: 500mbit
 interfaces:
+  storage:
+    storage_bridges:
+      - name: ens10
+        ip: 10.180.0.2
+        subnet: 10.180.0.0
+        mask: 255.255.255.0
+        cidr: 24
+        mtu: 1450
   bridges:
     container_bridges:
       - name: lxdbr0

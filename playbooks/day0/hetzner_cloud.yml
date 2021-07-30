@@ -116,6 +116,18 @@
 
 
 - hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: false
+  strategy: free
+  tags: ['networking_interfaces']
+  tasks:
+    - import_role:
+        name: networking_interfaces
+      tags: ['networking_interfaces']
+
+
+- hosts: baremetal_hosts
   gather_facts: false
   become: True
   any_errors_fatal: true
