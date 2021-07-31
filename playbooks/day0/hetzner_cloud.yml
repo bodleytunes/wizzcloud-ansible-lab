@@ -157,3 +157,29 @@
     - import_role:
         name: storage_samba
       tags: 'storage_samba'
+
+# after k3s we can install helm , rancher, jetstack cert
+- hosts: kubernetes_servers
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['post_k3s']
+  tasks:
+    - import_role:
+        name: k3s
+        tasks_from: install_rancher
+      tags: 'post_k3s'
+
+
+- hosts: kubernetes_servers
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['rancher']
+  tasks:
+    - import_role:
+        name: k3s
+        tasks_from: metallb
+    - import_role:
+        name: rancher
+      tags: 'rancher'

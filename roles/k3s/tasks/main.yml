@@ -18,8 +18,8 @@
       # when: kube_installed.rc == 2
       ignore_errors: true
 
-    - include_tasks: install_rancher.yml
-      when: " 'kubernetes_master' in group_names "
+  #  - include_tasks: install_rancher.yml
+  #    when: " 'kubernetes_master' in group_names "
 
     #- include_tasks: metallb.yml
     #  when: " 'kube1' in inventory_hostname "

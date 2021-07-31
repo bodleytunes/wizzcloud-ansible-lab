@@ -3,7 +3,7 @@ interfaces:
   storage:
     storage_bridges:
       - name: ens10
-        ip: 10.180.0.2
+        ip: 10.180.0.11
         subnet: 10.180.0.0
         mask: 255.255.255.0
         cidr: 24
