@@ -1,13 +1,16 @@
 storage:
   zfs:
     zpools:
-      - name: zpool1
+      - name: zpool3
         disks:
           - /dev/sdb
       - name: zpool2
         disks:
           - /dev/sdd
+      - name: zpool3
+        disks:
+          - /dev/sdb
   glusterfs:
     peers:
-      - name: wizz-node-1
-      - name: wizz-node-3
+      - name: rancher1
+      - name: rancher3

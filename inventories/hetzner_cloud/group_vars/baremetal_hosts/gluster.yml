@@ -4,3 +4,5 @@ gluster:
       folder: /gv1
     - name: gv3
       folder: /gv3
+    - name: glusterfinal
+      folder: /glusterfinal

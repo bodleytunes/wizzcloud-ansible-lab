@@ -7,7 +7,10 @@ storage:
       - name: zpool2
         disks:
           - /dev/sdd
+      - name: zpool3
+        disks:
+          - /dev/sdc
   glusterfs:
     peers:
-      - name: wizz-node-2
-      - name: wizz-node-3
+      - name: rancher2
+      - name: rancher3

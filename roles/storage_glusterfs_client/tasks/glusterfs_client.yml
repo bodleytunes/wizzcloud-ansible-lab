@@ -19,6 +19,10 @@
     path: /gv3
     state: directory
 
+- name: Create glusterfinal dir
+  ansible.builtin.file:
+    path: /glusterfinal
+    state: directory
 # clever bit to add a line/block to fstab file but use a template as a basis and add a marker.
 - name: Manage fstab file
   blockinfile:

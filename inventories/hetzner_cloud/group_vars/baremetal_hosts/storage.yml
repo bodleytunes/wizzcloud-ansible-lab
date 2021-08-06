@@ -12,6 +12,9 @@ group_storage:
       - name: zpool2
         datasets:
           gluster: zpool2/gluster3
+      - name: zpool3
+        datasets:
+          gluster: zpool3/glusterfinal
   s3fs:
     backblaze:
       backup_folder: /backups/backblaze
