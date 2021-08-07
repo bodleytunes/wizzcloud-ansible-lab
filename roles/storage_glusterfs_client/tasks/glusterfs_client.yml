@@ -32,4 +32,6 @@
   when: "'baremetal_hosts' in group_names"
   
 
-  
+# mount -a
+- name: Mount All
+  command: mount -a
