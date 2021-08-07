@@ -1,0 +1,99 @@
+{%- for i in interfaces.bridges.evpn -%}
+interface {{ i.name }}
+ ip ospf area 0
+
+{% endfor -%}
+{%- for i in interfaces.bridges.container_bridges -%}
+interface {{ i.name }}
+ ip ospf area 0
+
+{% endfor -%}
+
+
+router bgp {{ bgp.bgp_as }}
+ bgp router-id {{ zt_ip }}
+ no bgp ebgp-requires-policy
+ neighbor bgpdump peer-group
+ neighbor bgpdump remote-as internal
+ neighbor bgpdump capability extended-nexthop
+ neighbor client peer-group
+ neighbor client remote-as internal
+ neighbor client bfd
+ neighbor client disable-connected-check
+ neighbor client timers 1 3
+ neighbor client capability extended-nexthop
+ neighbor evpn-peer peer-group
+ neighbor evpn-peer bfd
+ neighbor evpn-peer disable-connected-check
+ neighbor evpn-peer capability extended-nexthop
+ neighbor evpn-peer ebgp-multihop
+ neighbor loopback-learn peer-group
+ neighbor loopback-learn remote-as external
+ neighbor loopback-learn bfd
+ neighbor loopback-learn timers 1 3
+ neighbor rancher-kubernetes peer-group
+ neighbor rancher-kubernetes remote-as external
+ neighbor rancher-kubernetes disable-connected-check
+ neighbor rancher-kubernetes timers 1 3
+ neighbor rancher-kubernetes capability extended-nexthop
+ neighbor zt peer-group
+ neighbor zt remote-as external
+ neighbor zt bfd
+ neighbor zt disable-connected-check
+ neighbor zt timers 1 3
+ {% for peer in evpn.peers %}
+ neighbor {{ peer.ip }} remote-as {{ peer.bgp_peer_as }}
+ {% endfor %}
+{% for peer in evpn.peers %}
+ neighbor {{ peer.ip }} peer-group evpn-peer
+{% endfor %}
+ {% for peer in zt.peers %}
+ neighbor {{ peer.ip }} peer-group {{ zt.peer_group_name }}
+ {% endfor %}
+ {% for b in interfaces.bridges.container_bridges %}
+ {% if "lxdbr" in b.name %}
+ bgp listen range {{ b.subnet }}/{{ b.cidr }} peer-group rancher-kubernetes
+ {% endif %}
+ {% endfor %}
+ bgp listen range 10.0.0.0/24 peer-group loopback-learn
+ !
+ address-family ipv4 unicast
+ {% for b in interfaces.bridges.container_bridges %}
+  network {{ b.subnet }} mask {{ b.mask }} 
+ {% endfor %}
+ {% for e in interfaces.bridges.evpn %}
+  network {{ e.subnet }} mask {{ e.mask }} 
+ {% endfor %}
+ {% for n in interfaces.bridges.nebula %}
+  network {{ n.subnet }} mask {{ n.mask }} 
+ {% endfor %}
+  network {{ bgp.aggregate_network }} {{ bgp.aggregate_mask }}
+  neighbor client soft-reconfiguration inbound
+  neighbor evpn-peer soft-reconfiguration inbound
+  neighbor rancher-kubernetes soft-reconfiguration inbound
+{#  neighbor evpn-peer weight 2 #}
+  neighbor loopback-learn soft-reconfiguration inbound
+  neighbor zt soft-reconfiguration inbound
+ exit-address-family
+ !
+ address-family l2vpn evpn
+  neighbor evpn-peer activate
+  neighbor evpn-peer soft-reconfiguration inbound
+  advertise-all-vni
+  advertise-svi-ip
+ exit-address-family
+!
+router ospf
+ ospf router-id {{ zt_ip }}
+ passive-interface default
+{% for b in interfaces.bridges.container_bridges %}
+ {% if "lxdbr" in b.name %}
+ no passive-interface {{ b.name }}
+ {% endif %}
+{% endfor %}
+ no passive-interface {{ zt_iface.data.zt_interface_name }}
+!
+!
+!
+line vty
+

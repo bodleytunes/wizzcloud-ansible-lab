@@ -1,0 +1,49 @@
+ufw:
+  input_rules:
+    - name: ssh
+      cmd: ufw allow ssh
+      port: 22/tcp
+    - name: zerotier
+      cmd: ufw allow 
+      port: 9993/udp
+  interface_based:
+    command: ufw allow in on
+    rules:
+      - name: zt+
+      - name: lxdbr+
+      - name: evpn+
+      - name: ens+
+  inbound_dst_nat:
+    fw_rules:
+      - name: "To Jitsi LXD container"
+        chain: PREROUTING
+        ingress_interface: "{{ ansible_default_ipv4.interface }}"
+        src: any
+        dst: 10.101.0.115
+        dst_port: 8443
+        proto: tcp
+        type: DNAT
+      - name: "To Jitsi LXD container"
+        chain: PREROUTING
+        ingress_interface: "{{ ansible_default_ipv4.interface }}"
+        src: any
+        dst: 10.101.0.115
+        dst_port: 10000
+        proto: tcp
+        type: DNAT
+      - name: "To Jitsi LXD container"
+        chain: PREROUTING
+        ingress_interface: "{{ ansible_default_ipv4.interface }}"
+        src: any
+        dst: 10.101.0.115
+        dst_port: 10000
+        proto: udp
+        type: DNAT
+      - name: "To Plex LXC Container"
+        chain: PREROUTING
+        ingress_interface: "{{ ansible_default_ipv4.interface }}"
+        src: any
+        dst: 10.105.100.10
+        dst_port: 32400
+        proto: tcp
+        type: DNAT

@@ -1,0 +1,28 @@
+- name: Re-gather facts
+  setup: ~
+
+- name: Add FRR GPG Key
+  ansible.builtin.apt_key:
+    url: https://deb.frrouting.org/frr/keys.asc
+    state: present
+
+- name: Add specified FRR repository into sources list
+  ansible.builtin.apt_repository:
+    repo: "deb https://deb.frrouting.org/frr {{ ansible_lsb.codename }} {{ frr_version }}"
+    state: present
+
+- name: Update the cache first
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Run autoremove to clean up before upgrades
+  ansible.builtin.apt:
+    autoremove: yes
+    
+- name: apt install
+  ansible.builtin.apt:
+    pkg:
+      - frr
+      - frr-pythontools
+      - frr-snmp
+      - frr-rpki-rtrlib

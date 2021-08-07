@@ -1,0 +1,40 @@
+- name: Add Gluster Key
+  ansible.builtin.apt_key:
+    url: https://download.gluster.org/pub/gluster/glusterfs/8/rsa.pub
+    state: present
+
+
+#- name: Add specified Proxmox repository into sources list
+#  ansible.builtin.apt_repository:
+#    repo: deb https://download.gluster.org/pub/gluster/glusterfs/LATEST/Debian/{{ ansible_distribution_release }}/amd64/apt {{ ansible_distribution_release }} main
+#    filename: /etc/apt/sources.list.d/gluster.list
+#    state: present
+
+
+- name: Add specified Proxmox repository into sources list
+  ansible.builtin.apt_repository:
+    repo: ppa:gluster/glusterfs-8
+    state: present
+
+
+#- install GlusterFS cilent
+- name: Install GlusterFS client
+  apt:
+    pkg:
+    - glusterfs-client
+
+- name: Create gv1 dir
+  ansible.builtin.file:
+    path: /gv1
+    state: directory
+
+# clever bit to add a line/block to fstab file but use a template as a basis and add a marker.
+- name: Manage fstab file
+  blockinfile:
+    path: /etc/fstab
+    block: "{{  lookup('template', 'virtual_machines_fstab_gluster.j2') }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK for Gluster Mount"
+  #when: "'baremetal_hosts' in group_names"
+
+- name: Mount All
+  command: mount -a

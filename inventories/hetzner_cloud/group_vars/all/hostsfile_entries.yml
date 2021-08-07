@@ -1,0 +1,15 @@
+hostsfile_entries:
+  - 10.55.0.220 wizz-node-1 mfsmaster metalogger cgiserver"
+  - 10.55.0.221 wizz-node-2 shadowmaster metalogger cgiserver"
+  - 10.55.0.222 wizz-node-3 shadowmaster metalogger cgiserver"
+  - 10.55.0.10 p10
+  - 10.55.0.11 p12
+  - 10.12.10.7 lm1
+  - 10.12.10.10 lm2
+  - 10.12.12.100 test1
+  - 10.20.66.5 ipa.wizznet.co.uk
+  - 10.21.66.5 ipa2.wizznet.co.uk
+  - 10.22.66.5 ipa3.wizznet.co.uk
+  - "172.16.0.20 wizz-node-1.wireguard.wizznet.co.uk"
+  - "172.16.0.21 wizz-node-2.wireguard.wizznet.co.uk"
+  - "172.16.0.22 wizz-node-3.wireguard.wizznet.co.uk"

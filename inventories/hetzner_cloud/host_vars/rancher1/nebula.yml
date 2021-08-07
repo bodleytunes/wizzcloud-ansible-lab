@@ -1,0 +1,23 @@
+nebula_port: 4242
+nebula_external_addr: "{{ ansible_default_ipv4.address }}"
+
+nebula_ip: "10.140.140.20"
+
+nebula_groups: "nebula,node,bare_metal_hosts,ovh,hub"
+
+# per host inbound rules
+nebula_inbound_rules: |
+  
+  - port: 443
+    proto: tcp
+    host: any
+
+  - port: 80
+    proto: tcp
+    host: any
+
+
+nebula_outbound_rules: |
+  - port: any
+    proto: any
+    host: any

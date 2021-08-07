@@ -1,0 +1,185 @@
+
+    # ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0.yml --tags day0_pre
+    # ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0.yml --tags install_required_packages
+    # ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0.yml --tags users
+    # ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0.yml --tags ssh_keys
+    # ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0.yml --tags zerotier_networking
+    # ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0.yml --tags storage_zfs
+    # ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0.yml --tags proxmox
+    # ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0.yml --tags docker_baremetal
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  strategy: free
+  tags: ['host_pre']
+  tasks:
+    - import_role:
+        name: day0_pre
+      tags: ['day0_pre']
+    - import_role:
+        name: users
+      tags: ['users']
+    - import_role:
+        name: ssh_keys
+      tags: ['ssh_keys']
+    - import_role:
+        name: install_required_packages
+      tags: ['install_required_packages']
+    - import_role:
+        name: zerotier_networking
+      tags: ['zerotier_networking']
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: false
+  strategy: linear
+  tags: ['storage_zfs']
+  tasks:
+    - import_role:
+        name: storage_zfs
+      tags: ['storage_zfs']
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: false
+  strategy: linear
+  tags: ['storage_proxmox']
+  tasks:
+    - import_role:
+        name: storage_proxmox
+      tags: ['storage_proxmox']
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  strategy: free
+  tags: ['wireguard']
+  tasks:
+    - import_role:
+        name: githubixx.ansible_role_wireguard
+      tags: ['wireguard']
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: true
+  tags: ['proxmox']
+  tasks:
+    - import_role:
+        name: proxmox
+      tags: ['proxmox']
+
+
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['docker_baremetal']
+  tasks:
+    - import_role:
+        name: docker
+      tags: 'docker_baremetal'
+
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  # serial is used to run in sequence - i.e. one host at a time
+  serial: 1  
+  tags: ['proxmox_clustering']
+  tasks:
+    - import_role:
+        name: proxmox_clustering
+      tags: ['proxmox_clustering']
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: false
+  strategy: free
+  tags: ['networking']
+  tasks:
+    - import_role:
+        name: networking_frr
+      tags: ['networking_frr']
+    - import_role:
+        name: networking
+      tags: ['networking']
+    - import_role:
+        name: firewall
+      tags: ['firewall']
+
+
+- hosts: baremetal_hosts
+  gather_facts: true
+  become: True
+  any_errors_fatal: false
+  strategy: free
+  tags: ['networking_interfaces']
+  tasks:
+    - import_role:
+        name: networking_interfaces
+      tags: ['networking_interfaces']
+
+
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['storage_glusterfs']
+  tasks:
+    - import_role:
+        name: storage_glusterfs
+      tags: 'storage_glusterfs'
+
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['storage_glusterfs_client']
+  tasks:
+    - import_role:
+        name: storage_glusterfs_client
+      tags: 'storage_glusterfs_client'
+
+
+- hosts: baremetal_hosts
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['storage_samba']
+  tasks:
+    - import_role:
+        name: storage_samba
+      tags: 'storage_samba'
+
+# after k3s we can install helm , rancher, jetstack cert
+- hosts: kubernetes_servers
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['post_k3s']
+  tasks:
+    - import_role:
+        name: k3s
+        tasks_from: install_rancher
+      tags: 'post_k3s'
+
+
+- hosts: kubernetes_servers
+  gather_facts: false
+  become: True
+  any_errors_fatal: true
+  tags: ['rancher']
+  tasks:
+    - import_role:
+        name: k3s
+        tasks_from: metallb
+    - import_role:
+        name: rancher
+      tags: 'rancher'

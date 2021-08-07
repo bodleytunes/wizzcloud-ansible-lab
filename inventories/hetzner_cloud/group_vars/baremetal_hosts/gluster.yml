@@ -1,0 +1,5 @@
+gluster:
+  volumes:
+    - name: gv1
+      folder: /gv1
+

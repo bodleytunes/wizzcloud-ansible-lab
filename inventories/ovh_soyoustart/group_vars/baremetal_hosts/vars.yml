@@ -1,0 +1,2 @@
+zt_token: "{{ vault_zt_token }}"
+zt_network_id: "{{ vault_zt_network_id }}"

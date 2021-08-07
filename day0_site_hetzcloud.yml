@@ -1,0 +1,7 @@
+# ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml
+
+- import_playbook: playbooks/day0/hetzner_cloud.yml
+  #tags: ["all"]
+
+- import_playbook: playbooks/run_once/vm_configuration_kubernetes.yml
+  tags: ['k3s_deploy']

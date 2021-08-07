@@ -38,3 +38,11 @@ ufw:
         dst_port: 10000
         proto: udp
         type: DNAT
+      - name: "To haproxy LB"
+        chain: PREROUTING
+        ingress_interface: "{{ ansible_default_ipv4.interface }}"
+        src: any
+        dst: 10.21.179.10
+        dst_port: 443
+        proto: tcp
+        type: DNAT

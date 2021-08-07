@@ -1,0 +1,90 @@
+- name: Install required packages
+  apt:
+    pkg:
+    - apt-transport-https
+
+- name: Add Rancher Key
+  ansible.builtin.apt_key:
+    url: https://baltocdn.com/helm/signing.asc
+    state: present
+
+- name: Add specified repository into sources list
+  ansible.builtin.apt_repository:
+    repo: deb https://baltocdn.com/helm/stable/debian/ all main
+    filename: /etc/apt/sources.list.d/helm-stable-debian.list
+    state: present
+
+- name: Install required packages
+  apt:
+    pkg:
+    - helm
+
+- name: rancher repo
+  command: helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+
+- name: rancher namespace
+  command: kubectl create namespace cattle-system
+  ignore_errors: true
+
+- name: jetstack
+  command: kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v{{ kubernetes.k3s.certmanager_version }}/cert-manager.crds.yaml
+  ignore_errors: true
+
+- name: jetstack namespace
+  command: kubectl create namespace cert-manager
+  ignore_errors: true
+
+- name: jetstack repo
+  command: helm repo add jetstack https://charts.jetstack.io
+  ignore_errors: true
+
+- name: jetstack repo
+  command: helm repo update
+  ignore_errors: true
+
+
+  # check certman
+- name: check certman
+  command: kubectl get namespaces cert-manager
+  retries: 3
+  delay: 2
+  register: result
+  until: result is succeeded
+  ignore_errors: true
+
+- name: install certmanager
+  command: helm install   cert-manager jetstack/cert-manager   --namespace cert-manager   --version v{{ kubernetes.k3s.certmanager_version }}
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  retries: 15
+  delay: 10
+  #when: result is not succeeded
+  register: cert_result
+  until: cert_result is succeeded
+  ignore_errors: true
+
+
+  # check rancher
+- name: check rancher
+  command: kubectl get namespaces cattle-system
+  retries: 3
+  delay: 2
+  register: result
+  until: result is succeeded
+  ignore_errors: true
+
+# this sometimes can faile due etcd busy
+- name: install rancher
+  command: helm install rancher rancher-stable/rancher   --namespace cattle-system   --set hostname={{ kubernetes.k3s.rancher_hostname }}
+  retries: 10
+  delay: 5
+  #when: result is not succeeded
+  register: result
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  until: result is succeeded
+  ignore_errors: true
+
+- name: install rancher status
+  command: kubectl -n cattle-system rollout status deploy/rancher
+  ignore_errors: true

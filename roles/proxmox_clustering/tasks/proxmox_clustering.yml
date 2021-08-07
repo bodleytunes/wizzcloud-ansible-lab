@@ -8,7 +8,7 @@
     root_password: "{{ user_passwords.root }}"
 
 - name: Create Proxmox Cluster
-  command: pvecm create {{ proxmox_cluster.cluster_name }} --link0 {{ wireguard_ip }}
+  command: pvecm create {{ proxmox_cluster.cluster_name }} --link0 {{ zt_ip }}
   register: result
   until: result is succeeded
   args:
@@ -31,7 +31,7 @@
 
 - name: Adding node to proxmox cluster
   expect:
-    command: pvecm add {{ proxmox_cluster.cluster_master_hostname }} --link0 {{ wireguard_ip }}
+    command: pvecm add {{ proxmox_cluster.cluster_master_hostname }} --link0 {{ zt_ip }}
     responses:
       'password for': "{{ root_password }}"
       '(?i)fingerprint': "yes"

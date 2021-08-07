@@ -1,0 +1,39 @@
+interfaces:
+  bridges:
+    vxlan_settings:
+      bridge_arp_nd_suppress: on
+      bridge_learning: off
+      bridge_multicast_flood: off
+      bridge_unicast_flood: off
+    evpn:
+      - name: evpn100
+        ip: 10.0.0.1
+        subnet: 10.0.0.0
+        mask: 255.255.255.0
+        cidr: 24
+        mtu: 1350
+        anycast_mac: 26:13:8e:83:01:00
+        bridge_ports: vxlan100
+        begin: 10.0.0.115
+        end: 10.0.0.175
+      - name: evpn101
+        ip: 10.1.1.1
+        subnet: 10.1.1.0
+        mask: 255.255.255.0
+        cidr: 24
+        mtu: 1350
+        anycast_mac: 26:13:8e:83:01:01
+        bridge_ports: vxlan101
+        begin: 10.1.1.115
+        end: 10.1.1.175
+    nebula:
+      - name: nebula1
+        subnet: 10.140.140.0
+        mask: 255.255.255.0
+        cidr: 24
+    vxlan_bridges:
+      - name: vxlan100
+        vxlan_id: 100
+      - name: vxlan101
+        vxlan_id: 101
+

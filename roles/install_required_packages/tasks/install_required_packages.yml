@@ -1,5 +1,6 @@
 - name: Install required packages
   apt:
+    update_cache: true
     pkg:
     - curl
     - sudo
@@ -43,3 +44,4 @@
     - byobu
     - zsh
     - syslog-ng
+    - python3-setuptools

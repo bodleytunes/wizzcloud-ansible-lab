@@ -1,0 +1,16 @@
+storage:
+  zfs:
+    zpools:
+      - name: zpool1
+        disks:
+          - /dev/disk/by-id/scsi-0HC_Volume_12795631
+#      - name: zpool2
+#        disks:
+#          - /dev/sdd
+#      - name: zpool3
+#        disks:
+#          - /dev/sdc
+  glusterfs:
+    peers:
+      - name: rancher2
+      - name: rancher3

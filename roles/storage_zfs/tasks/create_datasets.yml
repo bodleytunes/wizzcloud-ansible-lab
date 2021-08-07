@@ -1,0 +1,25 @@
+
+
+- name: Create ZFS Datasets - zpool1
+  community.general.zfs:
+    name: "{{ item.value }}"
+    state: present
+  #with_items: "{{ storage.zfs.zpools[0].datasets | dictsort }}"
+  with_items: "{{ group_storage.zfs.zpools[0].datasets | dict2items }}"
+  ignore_errors: true
+
+- name: Create ZFS Datasets - zpool2
+  community.general.zfs:
+    name: "{{ item.value }}"
+    state: present
+  #with_items: "{{ storage.zfs.zpools[0].datasets | dictsort }}"
+  with_items: "{{ group_storage.zfs.zpools[1].datasets | dict2items }}"
+  ignore_errors: true
+
+- name: Create ZFS Datasets - zpool3
+  community.general.zfs:
+    name: "{{ item.value }}"
+    state: present
+  #with_items: "{{ storage.zfs.zpools[0].datasets | dictsort }}"
+  with_items: "{{ group_storage.zfs.zpools[2].datasets | dict2items }}"
+  ignore_errors: true

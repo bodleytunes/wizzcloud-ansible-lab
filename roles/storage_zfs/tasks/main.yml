@@ -1,1 +1,6 @@
-- include_tasks: zfs.yml
+#- include_tasks: zfs.yml
+- include_tasks: install_zfs.yml
+- include_tasks: unmount_drives.yml
+#- include_tasks: wipe_drives.yml
+- include_tasks: create_zpool.yml
+- include_tasks: create_datasets.yml

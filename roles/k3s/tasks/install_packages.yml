@@ -1,0 +1,13 @@
+- name:
+  apt:
+    pkg:
+      - "{{item}}"
+  with_items: "{{ applications.apt }}"
+
+- name: Pre-req - Install openshift pip client
+  pip: 
+    name: openshift-client
+
+- name: Pre-req - Install openshift pip 
+  pip: 
+    name: openshift

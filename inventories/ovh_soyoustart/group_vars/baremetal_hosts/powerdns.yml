@@ -1,0 +1,6 @@
+pdns_master_ip: 172.5.0.20
+pdns_slave_ip: 172.5.0.21
+wipe: false
+c_state: '{{ "absent" if wipe | bool else "started" }}'
+i_state: present
+alpine: false

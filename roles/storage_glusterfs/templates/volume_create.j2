@@ -1,0 +1,3 @@
+gluster volume create {{volumes.0.name}} replica {{ num_of_replicas }} {% for host in hosts -%}{{host}}:/{{ gluster_zfs_dataset }}
+{%- if not loop.last %} {% endif %}
+{%- endfor %}

@@ -1,0 +1,20 @@
+systemd_dir: /etc/systemd/system
+master_ip: "{{ hostvars[groups['kubernetes_master'][0]]['ansible_host'] | default(groups['kubernetes_master'][0]) }}"
+extra_server_args: "--kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10 --disable traefik --disable servicelb"
+extra_agent_args: "--kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10 --disable traefik --disable servicelb"
+k3s_version: "stable"
+kubernetes:
+  k3s:
+    k3s_channel: stable
+    k3s_token: IM_ALAN_PARTRIDGE_AHA!
+    metal_lb_version: 0.10.3
+    rancher_hostname: rancher.wizznet.co.uk
+    k3s_server_ip: 10.180.0.2
+    certmanager_version: 1.4.1
+  kubernetes_folders:
+    - /bigdata
+  kubernetes_subfolders:
+    - /bigdata/rancher
+    - /bigdata/longhorn
+    - /bigdata/kubelet
+    - /bigdata/run_k3s

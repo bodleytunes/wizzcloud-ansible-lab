@@ -31,10 +31,11 @@
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - name: br-portainer
-        ipv4_address: 10.21.67.20
-    ports:
-      - "8000:8000"
-      - "9000:9000"
+        ipv4_address: 10.21.67.10
+# remove the nat ports as this is routed on its own bridge
+#    ports:
+#      - "8000:8000"
+#      - "9000:9000"
     shm_size: 1G
     memory: 2G
     cpus: 1

@@ -1,0 +1,29 @@
+# only gather facts during the run as otherwise they would have tried to be gathered before vm instanciation
+- name: Gathering facts
+  setup:
+
+- block:
+    # Day 0 tasks
+   # - include_role:
+   ##     name: common
+   #     tasks_from: hosts_dns
+
+  #  - include_tasks: filesystem_changes.yml
+
+  #  - include_tasks: pre_checks.yml
+
+    - include_tasks: install_packages.yml
+
+    - include_tasks: k3s.yml
+      # when: kube_installed.rc == 2
+      ignore_errors: true
+
+  #  - include_tasks: install_rancher.yml
+  #    when: " 'kubernetes_master' in group_names "
+
+    #- include_tasks: metallb.yml
+    #  when: " 'kube1' in inventory_hostname "
+
+    #- include_tasks: glusterfs.yml
+
+  when: "'upgrade_k3s' not in ansible_run_tags"

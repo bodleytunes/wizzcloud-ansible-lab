@@ -1,0 +1,18 @@
+
+
+- name: Gluster Peer Probe
+  command: gluster peer probe "{{ item.name }}"
+  with_items:
+    - "{{ storage.glusterfs.peers }}"
+  ignore_errors: true
+
+- name: Gluster Peer status
+  command: gluster peer status
+  retries: 30
+  delay: 3
+  register: result
+  until: result is succeeded
+  #register: status
+  #until: status.stdout.find("Connected") != -1
+  when: "'proxmox_master' in group_names"
+  ignore_errors: true

@@ -1,0 +1,30 @@
+iface_qos_max_limits: 500mbit
+interfaces:
+  storage:
+    storage_bridges:
+      - name: ens10
+        ip: 10.180.0.2
+        subnet: 10.180.0.0
+        mask: 255.255.255.0
+        cidr: 24
+        mtu: 1450
+  bridges:
+    container_bridges:
+      - name: lxdbr0
+        ip: 10.102.0.1
+        subnet: 10.102.0.0
+        mask: 255.255.255.0
+        cidr: 24
+        mtu: 1350
+        begin: 10.102.0.115
+        end: 10.102.0.175
+      - name: lxdbr1
+        ip: 10.202.0.1
+        subnet: 10.202.0.0
+        mask: 255.255.255.0
+        cidr: 24
+        mtu: 1350
+        begin: 10.202.0.115
+        end: 10.201.0.175
+    vxlan_host_settings:
+      vxlan_local_tunnelip: 10.55.0.222

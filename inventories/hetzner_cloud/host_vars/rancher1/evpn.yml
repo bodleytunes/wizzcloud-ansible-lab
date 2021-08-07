@@ -1,0 +1,8 @@
+evpn:
+  peers:
+    - name: wizz-node-2
+      ip: 172.16.0.21
+      bgp_peer_as: 21
+    - name: wizz-node-3
+      ip: 172.16.0.22
+      bgp_peer_as: 22

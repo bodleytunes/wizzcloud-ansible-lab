@@ -1,0 +1,3 @@
+wireguard_address: 172.16.0.21/24
+wireguard_ip: 172.16.0.21
+wireguard_endpoint: "{{nebula_external_addr}}"

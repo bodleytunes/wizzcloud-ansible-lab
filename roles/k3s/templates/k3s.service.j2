@@ -1,0 +1,11 @@
+{% if "kubernetes_master" in group_names %}
+
+{% include './templates/master/k3s.service.j2' %}
+
+{% endif %}
+
+{% if "kubernetes_nodes" in group_names %}
+
+{% include './templates/node/k3s.service.j2' %}
+
+{% endif %}

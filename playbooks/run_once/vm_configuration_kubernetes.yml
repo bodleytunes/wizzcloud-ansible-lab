@@ -4,7 +4,7 @@
   tags: ['vm_configuration_kubernetes']
   tasks:
     - import_role:
-        name: vm_networking
+        name: k3s
   #  - include_role: # loop through to pull in multiple tasks (only works with include)
   #      name: networking
   #      tasks_from: '{{ item }}'
@@ -18,7 +18,7 @@
   tags: ['vm_configuration_kubernetes']    
   tasks:
     - import_role:
-        name: vm_configuration_kubernetes
+        name: k3s
 
 
 - hosts: kubernetes_servers
@@ -27,14 +27,14 @@
   tags: ['vm_configuration_kubernetes']
   tasks:    
     - import_role:
-        name: vm_configuration_kubernetes
+        name: k3s
         tasks_from: install_rancher
       when: " 'kube1' in inventory_hostname "
     - import_role:
-        name: vm_configuration_kubernetes
+        name: k3s
         tasks_from: metallb
       when: " 'kube1' in inventory_hostname "
     - import_role:
-        name: vm_configuration_kubernetes
+        name: k3s
         tasks_from: glusterfs
   

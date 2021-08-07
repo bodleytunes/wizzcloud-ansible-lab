@@ -1,0 +1,11 @@
+{% if "baremetal_hosts" in group_names %}
+
+{% include './templates/networking/baremetal_hosts_interfaces.j2' %}
+
+{% endif %}
+
+{% if "load_balancers" in group_names %}
+
+{% include './templates/networking/load_balancers_interfaces.j2' %}
+
+{% endif %}
