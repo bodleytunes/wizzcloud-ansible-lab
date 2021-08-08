@@ -1,4 +1,4 @@
 bgp:
-  bgp_as: 21
+  bgp_as: 221
   aggregate_network: 10.21.0.0
   aggregate_mask: 255.255.0.0

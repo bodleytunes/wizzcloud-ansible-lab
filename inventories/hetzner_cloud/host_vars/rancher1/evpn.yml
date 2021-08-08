@@ -1,8 +1,8 @@
 evpn:
   peers:
-    - name: wizz-node-2
-      ip: 172.16.0.21
-      bgp_peer_as: 21
-    - name: wizz-node-3
-      ip: 172.16.0.22
-      bgp_peer_as: 22
+    - name: rancher3
+      ip: 10.55.0.222
+      bgp_peer_as: 222
+    - name: rancher2
+      ip: 10.55.0.221
+      bgp_peer_as: 221

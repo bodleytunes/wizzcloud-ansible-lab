@@ -31,6 +31,11 @@ interfaces:
         subnet: 10.140.140.0
         mask: 255.255.255.0
         cidr: 24
+    hetzcloud:
+      - name: hetzcloud
+        subnet: 10.180.0.0
+        mask: 255.255.255.0
+        cidr: 24
     vxlan_bridges:
       - name: vxlan100
         vxlan_id: 100

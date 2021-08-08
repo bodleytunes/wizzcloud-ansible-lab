@@ -49,6 +49,42 @@ Examples:
 
 ###### update august 2021
 
+###### Simple rancher / k3s only install
+
+```lua
+ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags install_required_packages --limit rancher3
+ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags users --limit rancher3
+ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags zerotier_networking --limit rancher3
+ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags storage_zfs --limit rancher3
+ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags storage_glusterfs --limit rancher3
+ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags storage_glusterfs_client --limit rancher3
+ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags k3s_deploy --limit rancher3
+ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags post_k3s --limit rancher3
+ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags rancher --limit rancher3
+```
+
+##### expose rancher
+
+```
+root@rancher1:~# cat lb.yml
+
+apiVersion: apiversion extensions/v1beta1
+kind: Ingress
+metadata:
+  name: rancher
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: rancher.wizznet.co.uk
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: rancher
+          servicePort: 443
+```
+
 ```lua
 ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags install_required_packages --limit rancher3
 ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_frr --limit rancher3

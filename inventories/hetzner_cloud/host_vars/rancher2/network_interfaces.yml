@@ -28,3 +28,9 @@ interfaces:
         end: 10.201.0.175
     vxlan_host_settings:
       vxlan_local_tunnelip: 10.55.0.221
+host_interfaces:
+  hetzunique:
+    - name: hetzunique
+      subnet: 10.180.0.3
+      mask: 255.255.255.255
+      cidr: 32
