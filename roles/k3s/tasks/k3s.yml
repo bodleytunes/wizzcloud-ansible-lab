@@ -16,7 +16,7 @@
 
 - name: install K3s Master
   shell: |
-    /root/k3s.sh --cluster-init  --node-ip {{ kubernetes.k3s.node_ip }} --kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10
+    /root/k3s.sh --cluster-init  --node-ip {{ kubernetes.k3s.node_ip }} --kubelet-arg node-status-update-frequency=4s --kube-controller-manager-arg node-monitor-period=2s --kube-controller-manager-arg node-monitor-grace-period=16s --kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10
   environment:
     #INSTALL_K3S_VERSION: "{{ kubernetes.k3s.k3s_version }}"
     INSTALL_K3S_CHANNEL: stable
@@ -31,7 +31,7 @@
 
 - name: install K3s Slaves
   shell: |
-    /root/k3s.sh --server https://{{ kubernetes.k3s.k3s_server_ip }}:6443  --node-ip {{ kubernetes.k3s.node_ip}} --kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10
+    /root/k3s.sh --server https://{{ kubernetes.k3s.k3s_server_ip }}:6443  --node-ip {{ kubernetes.k3s.node_ip}} --kubelet-arg node-status-update-frequency=4s --kube-controller-manager-arg node-monitor-period=2s --kube-controller-manager-arg node-monitor-grace-period=16s --kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10
   environment:
     #INSTALL_K3S_VERSION: "{{ kubernetes.k3s.k3s_version }}"
     INSTALL_K3S_CHANNEL: stable
