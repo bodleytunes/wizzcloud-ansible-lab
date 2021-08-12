@@ -63,20 +63,15 @@
 - name: Allow all in to specific interfaces
   community.general.ufw:
     rule: allow
-    interface: "{{ item.interface }}"
+    interface: "{{ item.name }}"
     direction: in
-  loop:
-    - interface: zt+
-    - interface: lxdbr+
-    - interface: evpn+
-    - interface: nebula+
-    - interface: br+
-    - interface: wg+
+  loop: '{{ ufw.interface_based.rules}}'
   when: "'baremetal_hosts' in group_names"
   register: ufw_output
   retries: 5
   delay: 5
   until: ufw_output is succeeded
+
 
 
 - name: allow proxmox api for terraform

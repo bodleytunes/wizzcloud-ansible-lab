@@ -5,6 +5,9 @@
 - name: Gather instance facts
   setup:
 
+- debug: var=wg_hosts
+- debug: var=wg_all_other_peer_list
+
 # Installing WireGuard [[[1
 - include_tasks: "{{ item }}"
   with_first_found:

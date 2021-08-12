@@ -1,3 +1,52 @@
-wireguard_allowed_ips: 0.0.0.0/0, 172.16.0.0/24
+#wireguard_allowed_ips: 0.0.0.0/0, 172.16.0.0/24
+#wireguard_allowed_ips: "{{ groups['wireguard_ip_list'] }}"
+wireguard_allowed_ips: 172.16.0.20/32,172.16.0.21/32,172.16.0.22/32
+
 wireguard_postup: 
   - 'tc qdisc add dev wg0 root cake diffserv4 bandwidth {{ iface_qos_max_limits | default("500mbit") }}'
+
+wireguard_dns: "1.1.1.1,8.8.4.4,9.9.9.9"
+
+#######################################
+# General settings
+#######################################
+
+# Directory to store WireGuard configuration on the remote hosts
+wireguard_remote_directory: "{{ '/etc/wireguard' if not ansible_os_family == 'Darwin' else '/opt/local/etc/wireguard' }}"
+
+# The default port WireGuard will listen if not specified otherwise.
+wireguard_port: "51820"
+
+# The default interface name that WireGuard should use if not specified otherwise.
+wireguard_interface: "wg0"
+
+# The default owner of the wg.conf file
+wireguard_conf_owner: root
+
+# The default group of the wg.conf file
+wireguard_conf_group: "{{ 'root' if not ansible_os_family == 'Darwin' else 'wheel' }}"
+
+# The default mode of the wg.conf file
+wireguard_conf_mode: 0600
+
+
+#######################################
+# Settings only relevant for Ubuntu
+#######################################
+
+# Set to "false" if package cache should not be updated
+wireguard_ubuntu_update_cache: "true"
+
+# Set package cache valid time
+wireguard_ubuntu_cache_valid_time: "3600"
+
+# This is sensitive: encrypt it with a tool like Ansible Vault.
+# If not set, a new one is generated on a blank configuration.
+# wireguard_private_key:
+
+#wireguard_endpoint: "host1.domain.tld"
+wireguard_persistent_keepalive: "30"
+#wireguard_fwmark: "1234"
+#wireguard_mtu: "1492"
+wireguard_table: "5000"
+

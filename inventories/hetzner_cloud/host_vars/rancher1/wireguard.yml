@@ -1,3 +1,6 @@
 wireguard_address: 172.16.0.20/24
 wireguard_ip: 172.16.0.20
-wireguard_endpoint: "{{nebula_external_addr}}"
+wireguard_endpoint: "{{ ansible_default_ipv4.address }}"
+wg_hosts: "{{ groups['baremetal_hosts'] }}"
+wg_all_other_peers_list: "{% set wg_peer_ip_list = [] %} {% for host in groups['baremetal_hosts'] %}{% if ansible_hostname != host %} {{ wg_peer_ip_list.append(host) }}  {% endif %}{% endfor %}{{ wg_peer_ip_list }}"
+
