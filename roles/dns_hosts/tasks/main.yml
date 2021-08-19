@@ -1,0 +1,34 @@
+- name: Gather Facts
+  setup: ~
+
+
+- name: Set Hosts File
+  blockinfile:
+    path: /etc/hosts
+    block: "{{  lookup('template', 'hosts') }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK for hostsfile dns entries"
+
+# remove the 127.0.1.1 entry
+- name: Remove 127.0.1.1
+  lineinfile:
+    dest: /etc/hosts
+    # regexp: '.*{{ item }}$'
+    regexp: '127.0.1.1'
+    state: absent
+    # line: "{{ hostvars[item].ansible_default_ipv4.address }} {{ LOCAL_HOSTNAME }} {{ LOCAL_HOSTNAME }}.{{ LOCAL_DOMAIN_NAME }}"
+    # state: present
+  #when: hostvars[item].ansible_default_ipv4.address is defined
+  #with_items: "{{ groups['dbservers'] }}"
+
+# remove cloud-init access to /etc/hosts
+- name: Stop Cloud-init from messing everything up - remove ability to managed /etc/hosts
+  lineinfile:
+    dest: /etc/cloud/cloud.cfg
+    # regexp: '.*{{ item }}$'
+    regexp: '- update_etc_hosts'
+    state: absent
+
+# set hostname
+- name: Set a hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"

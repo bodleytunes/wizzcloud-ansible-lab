@@ -1,0 +1,8 @@
+hostsfile_entries: >-
+  {% set peers = [] %}
+  {% for host in groups['baremetal_hosts'] %}
+  {% if ansible_hostname != host %}
+  {{ peers.append(host) }}
+  {% endif %}
+  {% endfor %} 
+  {{ peers }} 

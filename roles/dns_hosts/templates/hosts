@@ -1,0 +1,5 @@
+  {% for host in groups['baremetal_hosts'] %}
+  {% if ansible_hostname != host %}
+  {{ host }} {{ hostvars[host]['ansible_all_ipv4']['addresses'][0] }}
+  {% endif %}
+  {% endfor %} 

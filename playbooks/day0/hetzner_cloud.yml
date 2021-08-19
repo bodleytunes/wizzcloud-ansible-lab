@@ -30,6 +30,9 @@
     - import_role:
         name: zerotier_networking
       tags: ['zerotier_networking']
+    - import_role:
+        name: dns_hosts
+      tags: ['dns_hosts']
 
 - hosts: baremetal_hosts
   gather_facts: true
