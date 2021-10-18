@@ -78,19 +78,19 @@ ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud
 ```
 
 ```lua
-426  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags install_required_packages
-  427  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_frr
-  428  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags users
-  429  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags zerotier_networking
-  432  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags vm_configuration_kubernetes
+  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags install_required_packages
+    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_frr
+    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags users
+    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags zerotier_networking
+    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags vm_configuration_kubernetes
 
-  440  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking
-  441  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_interfaces
-  452  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags k3s_deploy -vv
-  453  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags k3s_deploy
-  454  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags post_k3s
-  455  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags rancher
-  456  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_interfaces
+    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking
+    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_interfaces
+    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags k3s_deploy -vv
+    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags k3s_deploy
+    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags post_k3s
+    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags rancher
+    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_interfaces
 ```
 
 ###### Run the whole playbook
