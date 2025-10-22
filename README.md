@@ -1,227 +1,697 @@
-Starting a new version of the ovh cloud deployment lab but based entirely on Ansible rather than using mostly saltstack.
+# WizzCloud Ansible Lab
 
-###### Overview
+Enterprise-scale Ansible automation for deploying and managing hybrid cloud infrastructure across multiple cloud providers (OVH SoyouStart and Hetzner Cloud).
 
-- Deploys servers from bare metal debian 10 buster
-- Install packages, proxmox etc
-- Setup Linux networking and bridges using ifupdown2
-- Setup encrypted overlay networking via Zerotier-One
-- Setup encryption P2P overlay between nodes using Slack Nebula (similar to ZT)
-- Setup encrypted P2P overlay between nodes using Wireguard (useing wireguard role from https://github.com/githubixx/ansible-role-wireguard)
-- Custom python ansible execution module to setup the zerotier Networking, add networks / routes etc
-- Custom python ansible execution module to deal with OVH API
-- Custom Python ansible execution module to control proxmox cli
-- Experiments with Linux TC (traffic control) and cake tins for video traffic
-- IPtables mangle rules to mark traffic with dscp codes.
-- Using exec module to interact with proxmox-ve api for networking etc ( using https://github.com/robinelfrink/ansible-proxmox-api )
-- Setup inter-host bridge evpn/vxlan overlay via FRR / Free range routing (encapped through Zerotier-one)
-- Setup Proxmox cluster
-- Kernel Modules
-- Disk Partitioning: ZFS zpools and datasets
-- LXD system container install via snap / configure lxc related bridges
-- UFW firewall and NAT ingress rules
-- Haproxy Load balancers with Anycast Loopbacks advertised into BGP
-- S3FS Backups to backblaze - S3FS Fuse mounts to directory
-- GlusterFS shared storage for stateful apps/storage in rancher/k3s
-- LizardFS shared storage for plex/media programs
-- Install Linstor DRBD replicated storage
-- Users, SSH Keys, login policy
-- Terraform and cloud init templates/images to deploy initial VM's in proxmox
-- Deploy K3s (lightweight kubernetes)
-- Install Rancher to control K3s
-- Deploy k3s/rancher workloads via ansible k8s module. (plex and sabnzbd)
-- Install FreeIPA server and replica on main nodes for DNS and IDM
-- Install FreeIPA client and enroll virtual machines
-- Install Gravitational Teleport auth, proxy and clients for an alternative to SSH and key based auth
-- Gravitational Auth server advertises and listens on anycast loopback. This done via BGP as its 10.0.0.6 address is unreachable from non local baremetal host due to anycast MAC addresses on shared evpn stretched segment causing reply issues (basically if the remote gw sends a frame with its anycast mac as the src, the reply will return to the local gw and thus is blackholed).
+## Table of Contents
 
-Examples:
+- [Overview](#overview)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [Deployment Guide](#deployment-guide)
+- [Day-N Operations](#day-n-operations)
+- [Configuration](#configuration)
+- [Documentation](#documentation)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
 
-###### update july 2021 - more scalable subfoldered inventories (per environment / site)
+## Overview
 
-####### Hetz Cloud
+**WizzCloud Ansible Lab** is a comprehensive Infrastructure-as-Code (IaC) solution that automates the deployment and management of a sophisticated hybrid cloud environment. The project transforms bare-metal Debian servers into a fully-functional private cloud infrastructure with hypervisors, virtual machines, Kubernetes clusters, distributed storage, and advanced networking.
 
-`ansible-playbook -i inventories/hetzner_cloud/inventory.ini day0_site_hetzcloud.yml --tags zerotier_networking`
+### What This Project Does
 
-####### Soyoustart
+- **Day 0 Deployment**: Automated bare-metal server provisioning from fresh Debian installation to production-ready infrastructure
+- **Day N Operations**: Ongoing operational tasks including updates, configuration changes, and infrastructure modifications
+- **Multi-Cloud Support**: Deploys across OVH SoyouStart and Hetzner Cloud providers
+- **Complete Stack**: Manages everything from bare metal to containerized applications
 
-`ansible-playbook -i inventories/ovh_soyoustart/inventory.ini day0.yml --tags elasticsearch`
+### Key Technologies
 
-###### update august 2021
+- **Hypervisor**: Proxmox VE clustering
+- **Networking**: FRR BGP/EVPN, Nebula, ZeroTier, Wireguard overlays
+- **Storage**: ZFS, GlusterFS, LINSTOR, S3FS
+- **Orchestration**: Kubernetes (K3s) with Rancher
+- **Identity**: FreeIPA for DNS and identity management
+- **Access**: Gravitational Teleport for SSH replacement
+- **VPN**: Pritunl/OpenVPN for remote access
 
-```lua
-ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags install_required_packages --limit rancher3
-ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_frr --limit rancher3
-ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags users --limit rancher3
-ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags zerotier_networking --limit rancher3
-ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags vm_configuration_kubernetes --limit rancher3
-ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking --limit rancher3
-ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_interfaces --limit rancher3
-ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags k3s_deploy --limit rancher3
-ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags post_k3s --limit rancher3
-ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags rancher --limit rancher3
-ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_interfaces --limit rancher3
-```
+## Features
 
-```lua
-ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags install_required_packages
-  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_frr
-  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags users
-  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags zerotier_networking
-  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags vm_configuration_kubernetes
-  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking
-  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_interfaces
-  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags k3s_deploy
-  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags post_k3s
-  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags rancher
-  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_interfaces
-```
+### Infrastructure Management
 
-```lua
-  ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags install_required_packages
-    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_frr
-    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags users
-    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags zerotier_networking
-    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags vm_configuration_kubernetes
+- **Bare-Metal Provisioning**: Deploy from fresh Debian 10 Buster installations
+- **Hypervisor Clustering**: Proxmox VE cluster setup with high availability
+- **VM Orchestration**: Terraform-based VM deployment with cloud-init
+- **Container Platform**: K3s Kubernetes with Rancher management
 
-    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking
-    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_interfaces
-    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags k3s_deploy -vv
-    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags k3s_deploy
-    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags post_k3s
-    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags rancher
-    ansible-playbook -i inventories/hetzner_cloud/inventory.ini  day0_site_hetzcloud.yml --tags networking_interfaces
-```
+### Advanced Networking
 
-###### Run the whole playbook
+- **Multiple Overlay Networks**:
+  - Slack Nebula for P2P encrypted mesh networking
+  - ZeroTier-One for encrypted overlay tunneling
+  - Wireguard for site-to-site VPN
+- **BGP Routing**: FRR (Free Range Routing) with EVPN/VXLAN overlays
+- **Traffic Management**: Linux TC with CAKE QoS for video traffic optimization
+- **Anycast Load Balancing**: HAProxy with BGP anycast advertisements
+- **DSCP Marking**: IPtables mangle rules for traffic prioritization
 
-```
-ansible-playbook -i inventory.ini day0.yml --tags ovh_wipe
-ansible-playbook -i inventory.ini day0.yml
-```
+### Storage Solutions
 
-##### Run plays (groups of roles)
+- **ZFS**: High-performance zpools and datasets
+- **GlusterFS**: Distributed storage for stateful Kubernetes applications
+- **LINSTOR**: DRBD-based replicated block storage
+- **S3FS**: Cloud backup integration with Backblaze
+- **LizardFS**: Media storage for Plex and streaming applications
+- **Samba**: SMB/CIFS file sharing
+
+### Identity & Access
+
+- **FreeIPA**: Centralized identity management with master and replica nodes
+- **Gravitational Teleport**: Modern SSH replacement with certificate-based authentication
+- **SSH Key Management**: Centralized key distribution and management
+- **Pritunl/OpenVPN**: Secure remote access VPN
+
+### Security & Compliance
+
+- **UFW Firewall**: Comprehensive firewall rules and NAT configurations
+- **Encrypted Overlays**: All inter-node communication encrypted
+- **Certificate Management**: Automated cert management with Cert-Manager
+- **SSSD Integration**: System Security Services Daemon for authentication
+
+### Custom Modules
+
+The project includes 16 custom Python Ansible modules for specialized operations:
+
+- **ZeroTier API**: Complete ZeroTier network management
+- **Proxmox API**: VM and hypervisor control
+- **OVH API**: Dedicated server management and provisioning
+- **GlusterFS**: Distributed storage operations
+
+## Architecture
+
+### Infrastructure Layers
 
 ```
-ansible-playbook -i inventory.ini day0.yml --tags phase1
-ansible-playbook -i inventory.ini day0.yml --tags phase2
-etc..
+┌─────────────────────────────────────────────────────────────┐
+│                     Applications Layer                       │
+│  (Rancher, K3s, Plex, Elasticsearch, Docker Services)       │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│                  Orchestration Layer                         │
+│        (Kubernetes K3s, Docker, Terraform, FreeIPA)         │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│                  Virtualization Layer                        │
+│              (Proxmox VE Cluster, LXD, VMs)                 │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│                    Storage Layer                             │
+│         (ZFS, GlusterFS, LINSTOR, S3FS, Samba)             │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│                    Network Layer                             │
+│    (FRR BGP, Nebula, ZeroTier, Wireguard, EVPN/VXLAN)      │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│                   Bare-Metal Layer                           │
+│         (Debian 10 Buster on OVH/Hetzner Servers)          │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-##### Run specific Roles
+### Network Architecture
 
-```
- ansible-playbook -i inventory.ini day0.yml --tags proxmox
- ansible-playbook -i inventory.ini day0.yml --tags users
- ansible-playbook -i inventory.ini day0.yml --tags networking
- ansible-playbook -i inventory.ini day0.yml --tags firewall
-```
+The project implements a sophisticated multi-overlay network architecture:
 
-##### Terraform
+1. **Physical Layer**: Bare-metal servers with public IPs
+2. **Overlay Layer 1**: ZeroTier/Nebula encrypted mesh for inter-site connectivity
+3. **Overlay Layer 2**: BGP/EVPN VXLAN for VM networking (encapsulated through ZeroTier)
+4. **Overlay Layer 3**: Wireguard point-to-point tunnels for specific use cases
+5. **Anycast Layer**: BGP-advertised anycast IPs for load balancing and high availability
 
-###### Deploy (Apply)
+See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for detailed architecture documentation.
 
-`ansible-playbook -i inventory.ini day0.yml --tags terraform_deploy`
+## Prerequisites
 
-###### Destroy
+### Required Software
 
-`ansible-playbook -i inventory.ini day0.yml --tags terraform_destroy`
+- **Control Machine**:
+  - Ansible >= 4.0.0
+  - Python >= 3.7
+  - Terraform (for VM provisioning)
+  - Git
 
-##### Day N operational tasks
+- **Target Servers**:
+  - Debian 10 Buster (fresh installation)
+  - SSH access as root
+  - Internet connectivity
 
-###### Regenerate Nebula Certs
+### Cloud Provider Accounts
 
-If you modify the groups the node belongs to you will have to regen and load new certs on the nodes - this is an adhoc run via a tag
-`ansible-playbook -i inventory.ini day0.yml --tags regen_certs`
+- **OVH SoyouStart**: API credentials required for server management
+- **Hetzner Cloud**: Account and API access for cloud deployments
+- **ZeroTier**: Account and API token for overlay networking
+- **Backblaze** (optional): S3-compatible storage for backups
 
-###### Reconfigure the routing Daemon (FRR)
+### Network Requirements
 
-If you make modificaations to the templates or to the vars they consume then run this to reconfigure the routing
-`ansible-playbook -i inventory.ini day0.yml --tags reconfigure_frr_routing`
+- Public IP addresses for bare-metal servers
+- Ability to configure BGP routing (provider-dependent)
+- DNS domain for FreeIPA and services
 
-###### Dist upgrade baremetal hosts + vm's
+## Quick Start
 
-`ansible-playbook -i inventory.ini operations.yml --tags dist_upgrade`
+### 1. Clone the Repository
 
-###### Setup s3fs backup storage device in proxmox
-
-`ansible-playbook -i inventory.ini operations.yml --tags setup_s3fs`
-
-###### Configure Teleport
-
-`ansible-playbook -i inventory.ini adhoc.yml --tags configure_teleport_auth_server`
-
-`ansible-playbook -i inventory.ini adhoc.yml --tags configure_teleport_proxy_server`
-
-`ansible-playbook -i inventory.ini adhoc.yml --tags configure_teleport_clients`
-
-###### Extra Notes for kubernetes quorum node on Raspberry Pi4
-
-###### on pi4 list
-
-## cat /boot/cmdline.txt
-
-```
- console=tty1 root=PARTUUID=ad09722e-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait net.ifnames=0 cgroup_memory=1 cgroup_enable=memory cgroup_enable=cpuset
+```bash
+git clone https://github.com/bodleytunes/wizzcloud-ansible-lab.git
+cd wizzcloud-ansible-lab
 ```
 
-###### k3s install on pi4
+### 2. Install Dependencies
 
-`curl -fL https://get.k3s.io | INSTALL_K3S_CHANNEL=stable K3S_TOKEN=token_goes_here sh -s - --server https://10.100.0.100:6443 --node-ip 10.55.0.11 --node-taint k3s-controlplane=true:NoExecute --disable traefik --disable servicelb`
+```bash
+# Install Ansible and Python dependencies
+pip install -r requirements.txt
 
-###### Add a new VM after deployment (Day N Operations)
+# Install Ansible Galaxy roles
+ansible-galaxy install -r requirements.yml
 
-add to inventory.ini
-add to correct groups in inventory e.g. ipa_clients requires a group that the vm belongs to.
+# Or use the Makefile
+make install
+```
 
-`pritunl.wizznet.co.uk ansible_host=10.0.0.7 ansible_user=jon`
+### 3. Configure Vault Password
 
-run dist-upgrade
+```bash
+# Create vault password file
+echo "your-vault-password" > /root/.vault_password
+chmod 600 /root/.vault_password
+```
 
-`ansible-playbook -i inventory.ini operations.yml --tags dist_upgrade`
+### 4. Configure Inventory
 
-run vm_networking
+Edit the inventory for your environment:
 
-`ansible-playbook -i inventory.ini day0.yml --tags vm_networking`
+```bash
+# For OVH SoyouStart
+vi inventories/ovh_soyoustart/inventory.ini
 
-join IPA / IDM
+# For Hetzner Cloud
+vi inventories/hetzner_cloud/inventory.ini
+```
 
-`ansible-playbook -i inventory.ini day0.yml --tags freeipa_client`
+### 5. Configure Variables
 
-join Teleport SSH
+Update group variables with your environment-specific settings:
 
-`ansible-playbook -i inventory.ini operations.yml --tags configure_teleport_clients`
+```bash
+# Edit global variables
+vi inventories/ovh_soyoustart/group_vars/all/global.yml
 
-###### VM Post Ops
+# Edit OVH API credentials (encrypted)
+ansible-vault edit inventories/ovh_soyoustart/group_vars/ovh/vault.yml
+```
 
-`ansible-playbook -i inventory.ini post_operations_vm.yml`
+### 6. Deploy Infrastructure
 
-###### VM Add k3s host
+**Full Deployment (All Phases)**:
 
-`ansible-playbook -i inventory.ini day0.yml --tags vm_configuration_kubernetes`
+```bash
+ansible-playbook -i inventories/ovh_soyoustart/inventory.ini day0.yml
+```
 
-###### example deployment using day0 playbook but running groups of roles
+**Phased Deployment (Recommended for first-time deployment)**:
+
+```bash
+# Phase 1: Base system and hypervisor setup
+ansible-playbook -i inventories/ovh_soyoustart/inventory.ini day0.yml --tags phase1
+
+# Phase 2: Networking, storage, and applications
+ansible-playbook -i inventories/ovh_soyoustart/inventory.ini day0.yml --tags phase2
+```
+
+## Project Structure
 
 ```
-ansible-playbook -i inventory.ini day0.yml --tags host_pre
-ansible-playbook -i inventory.ini day0.yml --tags freeipa
-ansible-playbook -i inventory.ini day0.yml --tags wireguard
+wizzcloud-ansible-lab/
+├── playbooks/              # Organized playbook modules
+│   ├── day0/               # Initial deployment playbooks
+│   ├── operational/        # Day-N operational tasks
+│   └── run_once/           # One-time configuration playbooks
+├── roles/                  # 43 Ansible roles
+│   ├── proxmox/            # Proxmox hypervisor installation
+│   ├── networking/         # Network configuration
+│   ├── storage_*/          # Storage system roles
+│   ├── k3s/                # Kubernetes deployment
+│   ├── freeipa/            # Identity management
+│   └── ...                 # See ROLES.md for complete list
+├── inventories/            # Multi-environment inventories
+│   ├── ovh_soyoustart/     # OVH SoyouStart environment
+│   │   ├── inventory.ini   # Host definitions
+│   │   ├── group_vars/     # Group-specific variables
+│   │   └── host_vars/      # Host-specific variables
+│   └── hetzner_cloud/      # Hetzner Cloud environment
+├── plugins/modules/        # Custom Python Ansible modules
+│   ├── zt_*.py             # ZeroTier management modules
+│   ├── pve_*.py            # Proxmox API modules
+│   ├── ovh_*.py            # OVH API modules
+│   └── gluster_func.py     # GlusterFS operations
+├── terraform/              # VM provisioning configurations
+├── docker/                 # Docker utilities and configs
+├── validation/             # Testing and validation files
+├── docs/                   # Detailed documentation
+│   ├── ARCHITECTURE.md     # Architecture documentation
+│   ├── ROLES.md            # Role reference guide
+│   ├── DEPLOYMENT.md       # Detailed deployment guide
+│   └── OPERATIONS.md       # Day-N operations guide
+├── ansible.cfg             # Ansible configuration
+├── day0.yml                # Primary deployment playbook
+├── day0_site_hetzcloud.yml # Hetzner-specific playbook
+├── Makefile                # Build automation
+└── pyproject.toml          # Python dependencies
+```
+
+See [ROLES.md](docs/ROLES.md) for complete role documentation.
+
+## Deployment Guide
+
+### Tag-Based Deployment
+
+The project uses Ansible tags for granular control over deployment:
+
+#### Core Infrastructure Tags
+
+```bash
+# Install required packages
+ansible-playbook -i inventory.ini day0.yml --tags install_required_packages
+
+# Setup Proxmox hypervisor
+ansible-playbook -i inventory.ini day0.yml --tags proxmox
+
+# Configure Proxmox clustering
 ansible-playbook -i inventory.ini day0.yml --tags proxmox_clustering
+
+# Setup users and SSH keys
+ansible-playbook -i inventory.ini day0.yml --tags users,ssh_keys
+```
+
+#### Networking Tags
+
+```bash
+# Configure base networking
 ansible-playbook -i inventory.ini day0.yml --tags networking
-ansible-playbook -i inventory.ini day0.yml --tags lxd
-ansible-playbook -i inventory.ini day0.yml --tags dhcp_servers
-ansible-playbook -i inventory.ini day0.yml --tags storage
-ansible-playbook -i inventory.ini day0.yml --tags vm_pre
-ansible-playbook -i inventory.ini day0.yml --tags vm_deploy
-ansible-playbook -i inventory.ini day0.yml --tags vm_post
-ansible-playbook -i inventory.ini day0.yml --tags gravitational_teleport
-ansible-playbook -i inventory.ini day0.yml --tags freeipa_client
-ansible-playbook -i inventory.ini day0.yml --tags docker
-ansible-playbook -i inventory.ini day0.yml --tags pritunl_server
+
+# Setup network interfaces
+ansible-playbook -i inventory.ini day0.yml --tags networking_interfaces
+
+# Configure FRR BGP routing
+ansible-playbook -i inventory.ini day0.yml --tags networking_frr
+
+# Setup ZeroTier overlay
+ansible-playbook -i inventory.ini day0.yml --tags zerotier_networking
+
+# Setup Nebula overlay
+ansible-playbook -i inventory.ini day0.yml --tags networking_nebula
+
+# Configure Wireguard
+ansible-playbook -i inventory.ini day0.yml --tags wireguard
+```
+
+#### Storage Tags
+
+```bash
+# Configure ZFS
+ansible-playbook -i inventory.ini day0.yml --tags storage_zfs
+
+# Setup GlusterFS
+ansible-playbook -i inventory.ini day0.yml --tags storage_glusterfs
+
+# Configure LINSTOR
+ansible-playbook -i inventory.ini day0.yml --tags storage_linstor
+```
+
+#### Kubernetes Tags
+
+```bash
+# Deploy K3s cluster
 ansible-playbook -i inventory.ini day0.yml --tags k3s_deploy
+
+# Configure Kubernetes VMs
+ansible-playbook -i inventory.ini day0.yml --tags vm_configuration_kubernetes
+
+# Deploy Rancher
+ansible-playbook -i inventory.ini day0.yml --tags rancher
+
+# Deploy K3s applications
 ansible-playbook -i inventory.ini day0.yml --tags k3s_apps
 ```
 
-###### Run the entire playbook
+#### Identity & Access Tags
 
-`ansible-playbook -i inventory.ini day0.yml`
+```bash
+# Setup FreeIPA server
+ansible-playbook -i inventory.ini day0.yml --tags freeipa
+
+# Enroll FreeIPA clients
+ansible-playbook -i inventory.ini day0.yml --tags freeipa_client
+
+# Configure Teleport
+ansible-playbook -i inventory.ini day0.yml --tags gravitational_teleport
+```
+
+### Hetzner Cloud Deployment
+
+For Hetzner Cloud-specific deployments:
+
+```bash
+# Full Hetzner deployment
+ansible-playbook -i inventories/hetzner_cloud/inventory.ini day0_site_hetzcloud.yml
+
+# Tagged deployment for specific components
+ansible-playbook -i inventories/hetzner_cloud/inventory.ini day0_site_hetzcloud.yml --tags zerotier_networking
+ansible-playbook -i inventories/hetzner_cloud/inventory.ini day0_site_hetzcloud.yml --tags k3s_deploy
+```
+
+### Host-Specific Deployment
+
+Deploy to specific hosts using the `--limit` flag:
+
+```bash
+# Deploy to a single host
+ansible-playbook -i inventory.ini day0.yml --limit rancher3
+
+# Deploy to a group of hosts
+ansible-playbook -i inventory.ini day0.yml --limit baremetal_hosts
+
+# Combine with tags for specific operations
+ansible-playbook -i inventory.ini day0.yml --tags networking --limit rancher1,rancher2
+```
+
+See [DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed deployment scenarios and best practices.
+
+## Day-N Operations
+
+### System Maintenance
+
+```bash
+# Dist-upgrade all hosts
+ansible-playbook -i inventory.ini playbooks/operational/general_operations.yml --tags dist_upgrade
+
+# Reboot hosts
+ansible-playbook -i inventory.ini playbooks/operational/general_operations.yml --tags reboot_hosts
+```
+
+### Network Operations
+
+```bash
+# Reconfigure FRR routing
+ansible-playbook -i inventory.ini day0.yml --tags reconfigure_frr_routing
+
+# Regenerate Nebula certificates
+ansible-playbook -i inventory.ini day0.yml --tags regen_certs
+
+# Update firewall rules
+ansible-playbook -i inventory.ini playbooks/operational/firewall_operations.yml
+```
+
+### Storage Operations
+
+```bash
+# Setup S3FS backup storage
+ansible-playbook -i inventory.ini playbooks/operational/storage_operations.yml --tags setup_s3fs
+
+# Expand GlusterFS volumes
+ansible-playbook -i inventory.ini playbooks/operational/storage_operations.yml --tags expand_gluster
+```
+
+### Kubernetes Operations
+
+```bash
+# Upgrade K3s cluster
+ansible-playbook -i inventory.ini playbooks/operational/upgrade_k3s.yml
+
+# Add new K3s node
+ansible-playbook -i inventory.ini day0.yml --tags vm_configuration_kubernetes --limit new_node
+```
+
+### VM Management
+
+```bash
+# Add new VM (Day-N workflow)
+# 1. Add to inventory
+# 2. Run dist-upgrade
+ansible-playbook -i inventory.ini playbooks/operational/general_operations.yml --tags dist_upgrade --limit new_vm
+
+# 3. Configure VM networking
+ansible-playbook -i inventory.ini day0.yml --tags vm_networking --limit new_vm
+
+# 4. Enroll in FreeIPA
+ansible-playbook -i inventory.ini day0.yml --tags freeipa_client --limit new_vm
+
+# 5. Configure Teleport client
+ansible-playbook -i inventory.ini playbooks/operational/general_operations.yml --tags configure_teleport_clients --limit new_vm
+```
+
+### Teleport Configuration
+
+```bash
+# Configure Teleport auth server
+ansible-playbook -i inventory.ini playbooks/run_once/configure_teleport_servers.yml --tags configure_teleport_auth_server
+
+# Configure Teleport proxy server
+ansible-playbook -i inventory.ini playbooks/run_once/configure_teleport_servers.yml --tags configure_teleport_proxy_server
+
+# Configure Teleport clients
+ansible-playbook -i inventory.ini playbooks/run_once/configure_teleport_servers.yml --tags configure_teleport_clients
+```
+
+### Terraform Operations
+
+```bash
+# Deploy VMs via Terraform
+ansible-playbook -i inventory.ini day0.yml --tags terraform_deploy
+
+# Destroy VMs via Terraform
+ansible-playbook -i inventory.ini day0.yml --tags terraform_destroy
+```
+
+See [OPERATIONS.md](docs/OPERATIONS.md) for complete operational procedures.
+
+## Configuration
+
+### Ansible Configuration
+
+The project uses optimized Ansible settings in `ansible.cfg`:
+
+- **Fact Caching**: JSON file caching with 7200-second TTL for performance
+- **Parallel Execution**: 50 forks for faster deployments
+- **Custom Modules**: Plugin directory for custom Python modules
+- **SSH Optimization**: Pipelining and ControlMaster for faster connections
+- **Vault Integration**: Automatic vault password file usage
+
+### Inventory Configuration
+
+Inventories are organized by environment with clear separation:
+
+```
+inventories/
+├── ovh_soyoustart/
+│   ├── inventory.ini       # Host definitions
+│   └── group_vars/         # Environment-specific variables
+└── hetzner_cloud/
+    ├── inventory.ini
+    └── group_vars/
+```
+
+### Variable Hierarchy
+
+Variables are organized in a clear hierarchy:
+
+1. **Global Variables**: `group_vars/all/` - Apply to all hosts
+2. **Group Variables**: `group_vars/<group_name>/` - Apply to specific groups
+3. **Host Variables**: `host_vars/<hostname>/` - Host-specific overrides
+4. **Vault Variables**: `vault.yml` files - Encrypted sensitive data
+
+### Makefile Usage
+
+The included Makefile provides convenient shortcuts:
+
+```bash
+# View inventory
+make inventory-graph env=inventories/ovh_soyoustart/inventory.ini
+
+# Run playbook with tags
+make run playbook=day0 env=inventories/ovh_soyoustart/inventory.ini tag=networking
+
+# Debug host variables
+make debug host=rancher1 env=inventories/hetzner_cloud/inventory.ini
+
+# Dry run
+make dry-run playbook=day0 env=inventories/ovh_soyoustart/inventory.ini
+```
+
+## Documentation
+
+Detailed documentation is available in the `docs/` directory:
+
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)**: Complete architecture overview with diagrams
+- **[ROLES.md](docs/ROLES.md)**: Detailed role reference and descriptions
+- **[DEPLOYMENT.md](docs/DEPLOYMENT.md)**: Step-by-step deployment procedures
+- **[OPERATIONS.md](docs/OPERATIONS.md)**: Day-N operational procedures
+- **[NETWORKING.md](docs/NETWORKING.md)**: Network architecture and configuration
+- **[STORAGE.md](docs/STORAGE.md)**: Storage systems configuration and management
+
+## Troubleshooting
+
+### Common Issues
+
+**SSH Connection Failures**
+
+```bash
+# Verify SSH connectivity
+ansible -i inventory.ini all -m ping
+
+# Check SSH config
+cat /root/.ssh/config
+
+# Increase verbosity
+ansible-playbook -i inventory.ini day0.yml -vvv
+```
+
+**Proxmox Clustering Issues**
+
+```bash
+# Verify cluster status on Proxmox nodes
+pvecm status
+
+# Check network connectivity between nodes
+ansible -i inventory.ini proxmox_nodes -m shell -a "pvecm nodes"
+```
+
+**ZeroTier Network Issues**
+
+```bash
+# Verify ZeroTier status
+ansible -i inventory.ini all -m shell -a "zerotier-cli status"
+
+# Check network membership
+ansible -i inventory.ini all -m shell -a "zerotier-cli listnetworks"
+```
+
+**FreeIPA Client Enrollment Failures**
+
+```bash
+# Manual enrollment
+ansible -i inventory.ini ipa_clients -m shell -a "ipa-client-install --uninstall"
+ansible-playbook -i inventory.ini day0.yml --tags freeipa_client
+```
+
+**K3s Deployment Issues**
+
+```bash
+# Check K3s status
+ansible -i inventory.ini kubernetes_servers -m shell -a "systemctl status k3s"
+
+# View K3s logs
+ansible -i inventory.ini kubernetes_servers -m shell -a "journalctl -u k3s -n 100"
+```
+
+### Debug Mode
+
+Run playbooks in debug mode for detailed output:
+
+```bash
+# Verbose mode
+ansible-playbook -i inventory.ini day0.yml -v
+
+# Very verbose (connection debugging)
+ansible-playbook -i inventory.ini day0.yml -vv
+
+# Maximum verbosity
+ansible-playbook -i inventory.ini day0.yml -vvv
+```
+
+### Ansible Facts
+
+Debug host facts and variables:
+
+```bash
+# Gather and save facts
+ansible -i inventory.ini all -m setup --tree out/
+
+# View specific host facts
+ansible -i inventory.ini rancher1 -m setup
+
+# Debug hostvars
+ansible -i inventory.ini rancher1 -m debug -a "var=hostvars[inventory_hostname]"
+```
+
+## Performance Optimization
+
+The project includes several performance optimizations:
+
+- **Fact Caching**: Reduces repeated fact gathering (7200s TTL)
+- **SSH Pipelining**: Reduces SSH overhead
+- **ControlMaster**: Reuses SSH connections
+- **Parallel Execution**: 50 forks for concurrent host operations
+- **Strategy Free**: Optional parallel execution strategy
+- **Conditional Tasks**: Skip unnecessary tasks based on host state
+
+## Security Considerations
+
+- **Vault Encryption**: All sensitive data stored in Ansible Vault
+- **SSH Key Authentication**: Password authentication disabled
+- **Encrypted Overlays**: All inter-node traffic encrypted (Nebula/ZeroTier/Wireguard)
+- **Firewall Rules**: UFW configured on all hosts
+- **Certificate-Based Auth**: Teleport replaces traditional SSH
+- **SSSD Integration**: Centralized authentication via FreeIPA
+
+## Contributing
+
+Contributions are welcome! Please follow these guidelines:
+
+1. Fork the repository
+2. Create a feature branch
+3. Test your changes thoroughly
+4. Update documentation as needed
+5. Submit a pull request
+
+## License
+
+This project is licensed under the terms specified in the repository.
+
+## Support
+
+For issues and questions:
+
+- Open an issue on GitHub
+- Review existing documentation in `docs/`
+- Check Ansible logs: `/var/log/ansible.log`
+
+## Acknowledgments
+
+- **External Roles**:
+  - [ansible-role-wireguard](https://github.com/githubixx/ansible-role-wireguard) by githubixx
+  - [ansible-role-dhcp](https://github.com/bertvv/ansible-role-dhcp) by bertvv
+- **Ansible Proxmox API**: Based on [ansible-proxmox-api](https://github.com/robinelfrink/ansible-proxmox-api)
+- **Ansible Makefile**: Based on ANSIBLE-MAKEFILE v0.16.0 by Paul(r)B.r
+
+## Project Statistics
+
+- **Total Roles**: 43 specialized roles
+- **Custom Modules**: 16 Python modules (1,750+ lines)
+- **Playbooks**: 10+ playbooks for various operations
+- **Supported Clouds**: 2 cloud providers (OVH, Hetzner)
+- **Technologies Integrated**: 20+ infrastructure technologies
+
+---
+
+**Built with Ansible** | **Automating Cloud Infrastructure**
